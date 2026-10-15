@@ -1,0 +1,422 @@
+---
+// AGS Green Sorb Showcase Component - Real Catalog Data & Imagery
+
+const visualDemos = [
+  {
+    image: '/images/products/meat-fish-poultry-demo.jpg',
+    tag: 'Red Meat, Fish & Poultry',
+    title: 'Purge & Fluid Absorption Demo',
+    description: 'Wicks exuded moisture away from fresh cuts, inhibiting bacterial growth without drying out product tissue.',
+    slug: 'purge-fluid-absorption-demo'
+  },
+  {
+    image: '/images/products/white-black-pads.jpg',
+    tag: 'White & Black Formats',
+    title: 'Sterile White & Jet Black Gourmet Pads',
+    description: 'Ultrasonic hemmed borders with SAP gel retention. Black pads conceal blood purge in premium beef cases.',
+    slug: 'sterile-white-jet-black-gourmet-pads'
+  },
+  {
+    image: '/images/products/fruit-punnet-colored-pads.jpg',
+    tag: 'Punnets & Multi-Color',
+    title: 'Fruit & Berry Punnets (Custom Colors)',
+    description: 'Perforated cushioning pads available in Crisp White, Yellow, Peach, Red, and Black to suit packaging branding.',
+    slug: 'fruit-berry-punnets-custom-colors'
+  },
+  {
+    image: '/images/products/seafood-pads.jpg',
+    tag: 'Prepacked Trays & MAP',
+    title: 'Prepacked Trays, Vacuum & Shrink Bags',
+    description: 'Improves shelf presentation, extends product shelf-life, and maintains tray freshness under refrigeration.',
+    slug: 'prepacked-trays-vacuum-shrink-bags'
+  }
+];
+
+---
+
+<section class="section-ags-showcase" id="ags-soaker-pads">
+  <div class="container-apparel">
+    
+    <!-- Section Header -->
+    <div class="ags-header">
+      <div class="ags-badge">
+        <span class="badge-dot"></span>
+        <span>OFFICIAL PRODUCT SPECIFICATIONS</span>
+      </div>
+      <h2 class="ags-headline">AGS Green Sorb™ & Multi-Ply Absorbent Soaker Pads</h2>
+      <p class="ags-lead">
+        Soaker pads absorb excess moisture exuded from fresh food such as <strong>Red Meat, Fish, Poultry, Fruit and Berries</strong> that are prepacked in <strong>Trays, Punnets, Vacuum or Shrink Bags</strong>. The removal of excess moisture improves presentation to consumers, extends shelf-life, and significantly reduces bacterial growth.
+      </p>
+    </div>
+
+    <!-- 4-Image Application Visual Gallery -->
+    <div class="ags-visual-grid">
+      {visualDemos.map((demo) => (
+        <div class="ags-visual-card">
+          <div class="ags-visual-media">
+            <img src={demo.image} alt={demo.title} class="ags-visual-img" loading="lazy" />
+            <span class="ags-visual-tag">{demo.tag}</span>
+          </div>
+          <div class="ags-visual-body">
+            <h3 class="ags-visual-title">{demo.title}</h3>
+            <p class="ags-visual-desc">{demo.description}</p>
+            <div class="card-btn-group">
+              <a href={`/products/${demo.slug}`} class="btn-card-outline">
+                View Specs
+              </a>
+              <a href={`/enquiry?product=${encodeURIComponent(demo.title)}`} class="btn-card-primary">
+                Sample & Quote
+              </a>
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
+
+    <!-- Technology Split Cards: Green Sorb vs 4/6 Ply -->
+    <div class="ags-tech-split">
+      <div class="ags-tech-card tech-greensorb">
+        <div class="tech-card-header">
+          <span class="tech-pill pill-gold">EXTRAORDINARY PERFORMANCE</span>
+          <h3>AGS Green Sorb™ Soaker Pads</h3>
+        </div>
+        <p class="tech-card-text">
+          Offer extraordinary performance — the <strong>Super Absorbent Polymer Crystals</strong> and absorbent backing absorb moisture very quickly and retain all the moisture they absorb — <em>even when under much greater pressure</em> that would be applied in normal commercial use and stacking.
+        </p>
+        <ul class="tech-perks">
+          <li>✓ High-density SAP crystal matrix</li>
+          <li>✓ Permanent gel lock under 5kg+ compressive load</li>
+          <li>✓ Ideal for beef cuts, seafood exports & poultry</li>
+        </ul>
+      </div>
+
+      <div class="ags-tech-card tech-ply">
+        <div class="tech-card-header">
+          <span class="tech-pill pill-blue">ECONOMIC RAPID ABSORPTION</span>
+          <h3>AGS 4 & 6 Ply Multi-Layer Pads</h3>
+        </div>
+        <p class="tech-card-text">
+          Offer an economic choice and a very rapid absorption rate. Our <strong>unique production converting method</strong> ensures complete structural integrity of the product so that the layers <em>do not separate or delaminate</em> when in wet commercial use.
+        </p>
+        <ul class="tech-perks">
+          <li>✓ Fast capillary wicking speed</li>
+          <li>✓ Zero layer separation when wet</li>
+          <li>✓ High-value bulk solution for high-volume retail</li>
+        </ul>
+      </div>
+    </div>
+
+
+
+  </div>
+</section>
+
+<style>
+  .section-ags-showcase {
+    background: #FFFFFF;
+    padding: 80px 0;
+    border-top: 1px solid #E2E8F0;
+    border-bottom: 1px solid #E2E8F0;
+  }
+
+  .container-apparel {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 24px;
+  }
+
+  /* Header */
+  .ags-header {
+    text-align: center;
+    max-width: 860px;
+    margin: 0 auto 50px;
+  }
+
+  .ags-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: #FEF3C7;
+    border: 1px solid #FDE68A;
+    color: #92400E;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    padding: 4px 12px;
+    border-radius: 20px;
+    margin-bottom: 16px;
+    font-family: var(--font-mono, monospace);
+  }
+
+  .badge-dot {
+    width: 6px;
+    height: 6px;
+    background: #D97706;
+    border-radius: 50%;
+  }
+
+  .ags-headline {
+    font-family: var(--font-serif, 'Outfit', 'Plus Jakarta Sans', sans-serif);
+    font-size: 38px;
+    line-height: 1.2;
+    color: #0F172A;
+    font-weight: 800;
+    margin-bottom: 16px;
+    letter-spacing: -0.02em;
+  }
+
+  .ags-lead {
+    font-family: var(--font-sans, 'Inter', sans-serif);
+    font-size: 15.5px;
+    line-height: 1.7;
+    color: #475569;
+  }
+
+  .ags-lead strong {
+    color: #0F172A;
+  }
+
+  /* 4-Image Grid */
+  .ags-visual-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+    margin-bottom: 50px;
+  }
+
+  .ags-visual-card {
+    background: #FFFFFF;
+    border: 1px solid #E2E8F0;
+    border-radius: 8px;
+    overflow: hidden;
+    transition: transform 0.2s, box-shadow 0.2s;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .ags-visual-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 24px rgba(15, 23, 42, 0.08);
+  }
+
+  .ags-visual-media {
+    position: relative;
+    height: 190px;
+    background: #F8FAFC;
+    overflow: hidden;
+  }
+
+  .ags-visual-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s;
+  }
+
+  .ags-visual-card:hover .ags-visual-img {
+    transform: scale(1.05);
+  }
+
+  .ags-visual-tag {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background: #1E2238;
+    color: #FFFFFF;
+    font-size: 10.5px;
+    font-weight: 700;
+    padding: 3px 8px;
+    border-radius: 4px;
+    letter-spacing: 0.03em;
+    z-index: 2;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+  }
+
+  .ags-visual-body {
+    padding: 16px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .ags-visual-title {
+    font-family: var(--font-sans, 'Inter', sans-serif);
+    font-size: 14.5px;
+    font-weight: 700;
+    color: #0F172A;
+    margin-bottom: 6px;
+    line-height: 1.35;
+    min-height: 40px;
+    display: flex;
+    align-items: flex-start;
+  }
+
+  .ags-visual-desc {
+    font-size: 12.5px;
+    color: #64748B;
+    line-height: 1.5;
+    flex: 1;
+    margin-bottom: 14px;
+    min-height: 56px;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .card-btn-group {
+    display: flex;
+    gap: 8px;
+    margin-top: auto;
+  }
+
+  .btn-card-outline {
+    flex: 1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px 10px;
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    color: #2563EB;
+    background: #FFFFFF;
+    border: 1px solid #CBD5E1;
+    border-radius: 6px;
+    text-decoration: none;
+    text-align: center;
+    transition: all 0.15s ease;
+  }
+
+  .btn-card-outline:hover {
+    background: #EFF6FF;
+    border-color: #BFDBFE;
+    color: #1D4ED8;
+  }
+
+  .btn-card-primary {
+    flex: 1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px 12px;
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    color: #FFFFFF;
+    background: #800000;
+    border: none;
+    border-radius: 6px;
+    text-decoration: none;
+    text-align: center;
+    white-space: nowrap;
+    transition: all 0.15s ease;
+  }
+
+  .btn-card-primary:hover {
+    background: #660000;
+  }
+
+  /* Tech Split Cards */
+  .ags-tech-split {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    margin-bottom: 50px;
+  }
+
+  .ags-tech-card {
+    border-radius: 8px;
+    padding: 32px 28px;
+    border: 1px solid #E2E8F0;
+  }
+
+  .tech-greensorb {
+    background: linear-gradient(135deg, #F0FDF4 0%, #FFFFFF 100%);
+    border-color: #BBF7D0;
+  }
+
+  .tech-ply {
+    background: linear-gradient(135deg, #F0F9FF 0%, #FFFFFF 100%);
+    border-color: #BAE6FD;
+  }
+
+  .tech-card-header {
+    margin-bottom: 12px;
+  }
+
+  .tech-pill {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    padding: 3px 8px;
+    border-radius: 4px;
+    margin-bottom: 8px;
+    font-family: var(--font-mono, monospace);
+  }
+
+  .pill-gold {
+    background: #FEF3C7;
+    color: #92400E;
+  }
+
+  .pill-blue {
+    background: #E0F2FE;
+    color: #0369A1;
+  }
+
+  .tech-card-header h3 {
+    font-family: var(--font-serif, 'Outfit', 'Plus Jakarta Sans', sans-serif);
+    font-size: 22px;
+    color: #0F172A;
+    font-weight: 800;
+    letter-spacing: -0.015em;
+  }
+
+  .tech-card-text {
+    font-size: 14px;
+    line-height: 1.65;
+    color: #334155;
+    margin-bottom: 18px;
+  }
+
+  .tech-perks {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #1E293B;
+  }
+
+
+
+  /* Responsive */
+  @media (max-width: 1024px) {
+    .ags-visual-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (max-width: 768px) {
+    .section-ags-showcase {
+      padding: 50px 0;
+    }
+    .ags-headline {
+      font-size: 28px;
+    }
+    .ags-tech-split {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 540px) {
+    .ags-visual-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

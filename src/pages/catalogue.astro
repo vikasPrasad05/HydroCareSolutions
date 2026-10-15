@@ -1,0 +1,724 @@
+---
+import Layout from '../layouts/Layout.astro';
+import ProductCard from '../components/ProductCard.astro';
+import { getAllProducts } from '../lib/store';
+
+const products = await getAllProducts();
+const activeProducts = products.filter(p => p.is_active);
+
+function getCategoryKey(cat: string) {
+  const c = (cat || '').toLowerCase();
+  if (c.includes('meat') || c.includes('poultry') || c.includes('black') || c.includes('white')) return 'meat';
+  if (c.includes('seafood') || c.includes('marine') || c.includes('fishery')) return 'seafood';
+  if (c.includes('fruit') || c.includes('produce') || c.includes('berry') || c.includes('punnet')) return 'fruit';
+  if (c.includes('industrial') || c.includes('cold') || c.includes('ice') || c.includes('tray') || c.includes('vacuum') || c.includes('map')) return 'cold-chain';
+  return 'other';
+}
+
+const meatCount = activeProducts.filter(p => getCategoryKey(p.category) === 'meat').length;
+const seafoodCount = activeProducts.filter(p => getCategoryKey(p.category) === 'seafood').length;
+const fruitCount = activeProducts.filter(p => getCategoryKey(p.category) === 'fruit').length;
+const coldChainCount = activeProducts.filter(p => getCategoryKey(p.category) === 'cold-chain').length;
+---
+
+<Layout 
+  title="All Products — HydroCare Solutions Wholesale B2B Catalog"
+  description="Explore our food-grade absorbent pad lines: Fresh Meat & Poultry Drip Pads, Marine Seafood Pads, Fruit & Berry Cushioning Pads, and Cold Chain Ice Pads."
+  currentPath="/catalogue"
+>
+  <div class="catalog-page-wrapper">
+    <div class="catalog-content-container">
+
+      <!-- Top Header Row matching screenshot -->
+      <header class="catalog-top-bar">
+        <div class="top-bar-left">
+          <h1 class="catalog-main-title">All Products</h1>
+          <p class="catalog-found-subtitle">
+            <span id="productCounterVal">{activeProducts.length}</span> products found
+          </p>
+        </div>
+
+        <div class="top-bar-right">
+          <div class="sort-by-group">
+            <label for="catalogSortSelect" class="sort-by-label">Sort by:</label>
+            <div class="sort-select-wrapper">
+              <select id="catalogSortSelect" class="sort-select-input">
+                <option value="default">Default</option>
+                <option value="moq-asc">MOQ: Low to High</option>
+                <option value="name-asc">Name: A to Z</option>
+              </select>
+              <svg class="select-chevron-icon" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="6 9 12 15 18 9"></polyline>
+              </svg>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <!-- Main Layout: Sidebar on Left, 3-Column Products Grid on Right -->
+      <div class="catalog-grid-layout">
+        
+        <!-- Left Column: Filters Sidebar Card -->
+        <aside class="catalog-sidebar">
+          <div class="filters-card">
+            
+            <!-- Filters Header Row -->
+            <div class="filters-top-header">
+              <span class="filters-heading-text">FILTERS</span>
+              <button type="button" class="btn-clear-filters" id="clearAllBtn">Clear All</button>
+            </div>
+
+            <div class="filter-divider"></div>
+
+            <!-- Categories Section -->
+            <div class="filter-block">
+              <div class="filter-block-header">
+                <span class="filter-block-title">CATEGORIES</span>
+                <span class="filter-arrow-symbol">&#9662;</span>
+              </div>
+
+              <div class="categories-scroll-list custom-red-scrollbar" id="categoryOptions">
+                <button type="button" class="category-row-btn active" data-cat="all">
+                  <span class="cat-name">All Products</span>
+                  <span class="cat-qty">{activeProducts.length}</span>
+                </button>
+                <button type="button" class="category-row-btn" data-cat="meat">
+                  <span class="cat-name">Meat & Poultry</span>
+                  <span class="cat-qty">{meatCount}</span>
+                </button>
+                <button type="button" class="category-row-btn" data-cat="seafood">
+                  <span class="cat-name">Seafood & Marine</span>
+                  <span class="cat-qty">{seafoodCount}</span>
+                </button>
+                <button type="button" class="category-row-btn" data-cat="fruit">
+                  <span class="cat-name">Fruit & Vegetables</span>
+                  <span class="cat-qty">{fruitCount}</span>
+                </button>
+                <button type="button" class="category-row-btn" data-cat="cold-chain">
+                  <span class="cat-name">Cold Chain & Ice Pads</span>
+                  <span class="cat-qty">{coldChainCount}</span>
+                </button>
+              </div>
+            </div>
+
+            <div class="filter-divider"></div>
+
+
+
+            <!-- Additional Collapsible Filters Matching Layout -->
+            <div class="filter-block">
+              <div class="filter-accordion-row">
+                <span class="filter-block-title">ABSORPTION CAPACITY</span>
+                <span class="filter-arrow-symbol">&#8250;</span>
+              </div>
+            </div>
+
+            <div class="filter-divider"></div>
+
+            <div class="filter-block">
+              <div class="filter-accordion-row">
+                <span class="filter-block-title">CERTIFICATION GRADE</span>
+                <span class="filter-arrow-symbol">&#8250;</span>
+              </div>
+            </div>
+
+            <div class="filter-divider"></div>
+
+            <div class="filter-block">
+              <div class="filter-accordion-row">
+                <span class="filter-block-title">SELLER LOCATION</span>
+                <span class="filter-arrow-symbol">&#8250;</span>
+              </div>
+            </div>
+
+          </div>
+        </aside>
+
+        <!-- Right Column: 3-Column Products Grid -->
+        <main class="catalog-main-content">
+          <div class="products-three-col-grid" id="productsCatalogContainer">
+            {activeProducts.map((product) => {
+              const catKey = getCategoryKey(product.category);
+              return (
+                <div 
+                  class="catalog-product-item"
+                  data-category={catKey}
+                  data-moq={product.moq}
+                  data-name={product.name}
+                  data-id={product.id}
+                >
+                  <ProductCard product={product} />
+                </div>
+              );
+            })}
+          </div>
+
+          <!-- Empty State (No Products Matching Filters) -->
+          <div class="empty-filter-state" id="emptyFilterState" style="display: none;">
+            <div class="empty-icon-circle">
+              <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#94A3B8" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="11" cy="11" r="8"></circle>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+              </svg>
+            </div>
+            <h3 class="empty-state-heading">No Products Found</h3>
+            <p class="empty-state-text">No products match your current filter settings. Try selecting another category or resetting filters.</p>
+            <button type="button" class="btn-reset-empty-filters" id="resetFromEmptyBtn">Clear All Filters</button>
+          </div>
+        </main>
+
+      </div>
+    </div>
+  </div>
+</Layout>
+
+<style>
+  /* ========================================================= */
+  /* CATALOGUE PAGE STYLING (MATCHING REFERENCE SCREENSHOT)    */
+  /* ========================================================= */
+
+  .catalog-page-wrapper {
+    background-color: #FAFAFA;
+    min-height: 85vh;
+    padding: 32px 0 72px;
+  }
+
+  .catalog-content-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 24px;
+  }
+
+  /* --------------------------------------------------------- */
+  /* Top Bar: Title & Sort Dropdown                           */
+  /* --------------------------------------------------------- */
+  .catalog-top-bar {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    margin-bottom: 28px;
+    padding-bottom: 4px;
+  }
+
+  .catalog-main-title {
+    font-family: 'Outfit', 'Plus Jakarta Sans', sans-serif;
+    font-size: 34px;
+    font-weight: 800;
+    color: #1E293B;
+    margin: 0 0 6px;
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+  }
+
+  .catalog-found-subtitle {
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    font-size: 13px;
+    color: #64748B;
+    margin: 0;
+    font-weight: 400;
+  }
+
+  .sort-by-group {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .sort-by-label {
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    font-size: 13px;
+    color: #475569;
+    font-weight: 500;
+  }
+
+  .sort-select-wrapper {
+    position: relative;
+    display: inline-block;
+  }
+
+  .sort-select-input {
+    appearance: none;
+    -webkit-appearance: none;
+    background: #FFFFFF;
+    border: 1px solid #CBD5E1;
+    border-radius: 6px;
+    padding: 7px 34px 7px 14px;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    color: #1E293B;
+    cursor: pointer;
+    outline: none;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+  }
+
+  .sort-select-input:hover {
+    border-color: #94A3B8;
+  }
+
+  .sort-select-input:focus {
+    border-color: #7F2619;
+    box-shadow: 0 0 0 2px rgba(127, 38, 25, 0.12);
+  }
+
+  .select-chevron-icon {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none;
+    color: #64748B;
+  }
+
+  /* --------------------------------------------------------- */
+  /* Main 2-Column Layout                                     */
+  /* --------------------------------------------------------- */
+  .catalog-grid-layout {
+    display: flex;
+    gap: 28px;
+    align-items: flex-start;
+  }
+
+  /* --------------------------------------------------------- */
+  /* Left Column: Filters Sidebar                             */
+  /* --------------------------------------------------------- */
+  .catalog-sidebar {
+    width: 260px;
+    flex-shrink: 0;
+    position: sticky;
+    top: 96px;
+    align-self: flex-start;
+    z-index: 20;
+  }
+
+  .filters-card {
+    background: #FFFFFF;
+    border: 1px solid #ECEFF3;
+    border-radius: 12px;
+    padding: 20px 18px;
+    box-shadow: 0 2px 10px rgba(15, 23, 42, 0.03);
+    max-height: calc(100vh - 116px);
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: #CBD5E1 transparent;
+  }
+
+  .filters-card::-webkit-scrollbar {
+    width: 4px;
+  }
+
+  .filters-card::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .filters-card::-webkit-scrollbar-thumb {
+    background: #CBD5E1;
+    border-radius: 4px;
+  }
+
+  .filters-card::-webkit-scrollbar-thumb:hover {
+    background: #94A3B8;
+  }
+
+  .filters-top-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .filters-heading-text {
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    color: #1E293B;
+    text-transform: uppercase;
+  }
+
+  .btn-clear-filters {
+    background: transparent;
+    border: none;
+    padding: 0;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    color: #842A1F;
+    cursor: pointer;
+    transition: color 0.15s ease;
+  }
+
+  .btn-clear-filters:hover {
+    color: #B91C1C;
+    text-decoration: underline;
+  }
+
+  .filter-divider {
+    height: 1px;
+    background: #F1F5F9;
+    margin: 16px 0;
+  }
+
+  .filter-block {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .filter-block-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 12px;
+    cursor: default;
+  }
+
+  .filter-block-title {
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    font-size: 11.5px;
+    font-weight: 700;
+    color: #1E293B;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+  }
+
+  .filter-arrow-symbol {
+    font-size: 13px;
+    color: #64748B;
+    line-height: 1;
+  }
+
+  .filter-accordion-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+    padding: 4px 0;
+  }
+
+  .filter-accordion-row:hover .filter-block-title {
+    color: #842A1F;
+  }
+
+  /* Categories Vertical List */
+  .categories-scroll-list {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    max-height: 220px;
+    overflow-y: auto;
+    padding-right: 6px;
+  }
+
+  /* Custom Red Scrollbar matching reference screenshot */
+  .custom-red-scrollbar::-webkit-scrollbar {
+    width: 4px;
+  }
+
+  .custom-red-scrollbar::-webkit-scrollbar-track {
+    background: #F8FAFC;
+    border-radius: 4px;
+  }
+
+  .custom-red-scrollbar::-webkit-scrollbar-thumb {
+    background: #842A1F;
+    border-radius: 4px;
+  }
+
+  .category-row-btn {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 7px 8px;
+    border-radius: 5px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    text-align: left;
+    transition: all 0.15s ease;
+  }
+
+  .category-row-btn:hover {
+    background: #F8FAFC;
+  }
+
+  .category-row-btn .cat-name {
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    font-size: 12.5px;
+    font-weight: 500;
+    color: #475569;
+    transition: color 0.15s ease;
+  }
+
+  .category-row-btn .cat-qty {
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    font-size: 11px;
+    color: #94A3B8;
+    font-weight: 500;
+  }
+
+  .category-row-btn.active {
+    background: #F8FAFC;
+  }
+
+  .category-row-btn.active .cat-name {
+    color: #1E293B;
+    font-weight: 700;
+  }
+
+  .category-row-btn.active .cat-qty {
+    color: #842A1F;
+    font-weight: 700;
+  }
+
+
+
+  /* --------------------------------------------------------- */
+  /* Right Column: 3-Column Products Grid                      */
+  /* --------------------------------------------------------- */
+  .catalog-main-content {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .products-three-col-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 32px 20px;
+  }
+
+  .catalog-product-item {
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Empty State */
+  .empty-filter-state {
+    background: #FFFFFF;
+    border: 1px dashed #CBD5E1;
+    border-radius: 12px;
+    padding: 56px 24px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .empty-icon-circle {
+    width: 68px;
+    height: 68px;
+    border-radius: 50%;
+    background: #F8FAFC;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 16px;
+  }
+
+  .empty-state-heading {
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    color: #1E293B;
+    margin: 0 0 6px;
+  }
+
+  .empty-state-text {
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    font-size: 13.5px;
+    color: #64748B;
+    margin: 0 0 20px;
+    max-width: 380px;
+    line-height: 1.45;
+  }
+
+  .btn-reset-empty-filters {
+    padding: 9px 20px;
+    background: #842A1F;
+    color: #FFFFFF;
+    border: none;
+    border-radius: 6px;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.15s ease;
+  }
+
+  .btn-reset-empty-filters:hover {
+    background: #6E2219;
+  }
+
+  /* --------------------------------------------------------- */
+  /* Responsive Breakpoints                                    */
+  /* --------------------------------------------------------- */
+  @media (max-width: 1140px) {
+    .products-three-col-grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 18px;
+    }
+  }
+
+  @media (max-width: 860px) {
+    .catalog-grid-layout {
+      display: block;
+    }
+
+    /* On mobile view, hide the sidebar filters so products appear directly */
+    .catalog-sidebar {
+      display: none !important;
+    }
+
+    .products-three-col-grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+    }
+  }
+
+  @media (max-width: 580px) {
+    .catalog-top-bar {
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .catalog-main-title {
+      font-size: 20px;
+    }
+
+    .products-three-col-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
+
+<script>
+  function setupCatalogInteractions() {
+    const gridContainer = document.getElementById('productsCatalogContainer');
+    const emptyState = document.getElementById('emptyFilterState');
+    const counterVal = document.getElementById('productCounterVal');
+    const categoryBtns = document.querySelectorAll('.category-row-btn');
+    const minPriceInput = document.getElementById('minPriceBox') as HTMLInputElement | null;
+    const maxPriceInput = document.getElementById('maxPriceBox') as HTMLInputElement | null;
+    const applyPriceBtn = document.getElementById('applyPriceBtn');
+    const clearAllBtn = document.getElementById('clearAllBtn');
+    const resetEmptyBtn = document.getElementById('resetFromEmptyBtn');
+    const sortSelect = document.getElementById('catalogSortSelect') as HTMLSelectElement | null;
+
+    if (!gridContainer) return;
+
+    // Cache initial card elements
+    const cardElements = Array.from(gridContainer.querySelectorAll('.catalog-product-item')) as HTMLElement[];
+
+    let activeCategory = 'all';
+    let filterMinPrice: number | null = null;
+    let filterMaxPrice: number | null = null;
+
+    // Check URL search params for initial category (e.g. ?category=meat)
+    const urlParams = new URLSearchParams(window.location.search);
+    const initialCat = urlParams.get('category');
+    if (initialCat) {
+      const matchingBtn = document.querySelector(`.category-row-btn[data-cat="${initialCat}"]`);
+      if (matchingBtn) {
+        categoryBtns.forEach(b => b.classList.remove('active'));
+        matchingBtn.classList.add('active');
+        activeCategory = initialCat;
+      }
+    }
+
+    function applyFiltersAndSort() {
+      let visibleCount = 0;
+
+      cardElements.forEach(item => {
+        const itemCat = item.getAttribute('data-category') || '';
+        const matchesCat = activeCategory === 'all' || itemCat === activeCategory;
+
+        if (matchesCat) {
+          item.style.display = '';
+          visibleCount++;
+        } else {
+          item.style.display = 'none';
+        }
+      });
+
+      // Update counter
+      if (counterVal) {
+        counterVal.textContent = visibleCount.toString();
+      }
+
+      // Show/Hide empty state
+      if (emptyState) {
+        if (visibleCount === 0) {
+          emptyState.style.display = 'flex';
+          gridContainer.style.display = 'none';
+        } else {
+          emptyState.style.display = 'none';
+          gridContainer.style.display = 'grid';
+        }
+      }
+    }
+
+    function applySorting() {
+      if (!sortSelect) return;
+      const sortValue = sortSelect.value;
+
+      const sorted = [...cardElements].sort((a, b) => {
+        const moqA = parseInt(a.getAttribute('data-moq') || '0', 10);
+        const moqB = parseInt(b.getAttribute('data-moq') || '0', 10);
+        const nameA = a.getAttribute('data-name') || '';
+        const nameB = b.getAttribute('data-name') || '';
+
+        if (sortValue === 'moq-asc') return moqA - moqB;
+        if (sortValue === 'name-asc') return nameA.localeCompare(nameB);
+        return 0; // default
+      });
+
+      // Re-append sorted cards to the container
+      sorted.forEach(el => gridContainer.appendChild(el));
+    }
+
+    // Category click handler
+    categoryBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        categoryBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        activeCategory = btn.getAttribute('data-cat') || 'all';
+        applyFiltersAndSort();
+      });
+    });
+
+    // Clear filters handler
+    function resetAllFilters() {
+      activeCategory = 'all';
+
+      categoryBtns.forEach(b => {
+        if (b.getAttribute('data-cat') === 'all') b.classList.add('active');
+        else b.classList.remove('active');
+      });
+
+      if (sortSelect) sortSelect.value = 'default';
+
+      applySorting();
+      applyFiltersAndSort();
+    }
+
+    if (clearAllBtn) clearAllBtn.addEventListener('click', resetAllFilters);
+    if (resetEmptyBtn) resetEmptyBtn.addEventListener('click', resetAllFilters);
+
+    // Sort select handler
+    if (sortSelect) {
+      sortSelect.addEventListener('change', () => {
+        applySorting();
+        applyFiltersAndSort();
+      });
+    }
+
+    // Initial run
+    applyFiltersAndSort();
+  }
+
+  // Run on initial load and View Transitions if enabled
+  document.addEventListener('DOMContentLoaded', setupCatalogInteractions);
+  setupCatalogInteractions();
+</script>

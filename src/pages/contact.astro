@@ -1,0 +1,415 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { getSiteSettings } from '../lib/store';
+
+const settings = await getSiteSettings();
+const phone = '+91 76239 06747';
+const phoneLink = '917623906747';
+const emailDisplay = 'Hydrocaresolutions5@gmail.com';
+const emailLink = 'mailto:Hydrocaresolutions5@gmail.com';
+const companyName = 'HydroCare Solutions';
+const companyAddressLines = [
+  'Gala No. 20, Poonamji Industrial Park,',
+  'Vapi-Nashik Road, Near Indian Petrol Pump,',
+  'Karvad, Vapi, Dist. Valsad, Gujarat - 396195'
+];
+---
+
+<Layout 
+  title="Contact Us — HydroCare Solutions"
+  description="Get in touch with HydroCare Solutions for food-grade absorbent pads, wholesale pricing, and trial samples. Visit our manufacturing facility in Karvad, Vapi, Gujarat."
+  currentPath="/contact"
+>
+  <div class="contact-page-wrapper">
+    <div class="container-apparel">
+      <div class="contact-blueprint-grid">
+        
+        <!-- ========================================================
+             LEFT COLUMN: COMMUNICATION CHANNELS & QUOTE PROMO
+             ======================================================== -->
+        <div class="contact-left-col">
+          
+          <!-- Top Kicker Badge -->
+          <div class="kicker-row">
+            <div class="kicker-pill font-mono">
+              <span class="kicker-label">COMMUNICATION CHANNELS</span>
+            </div>
+          </div>
+
+          <!-- Main Title & Subtitle -->
+          <h1 class="contact-headline font-serif">Get In Touch</h1>
+          <p class="contact-subtext">
+            Have questions about our products or services? Want to request a quote? Our team is here to help.
+          </p>
+
+          <!-- 3 Channel Cards (Email, Phone, Address) -->
+          <div class="channel-cards-stack">
+            
+            <!-- Card 1: Email (CH-01) -->
+            <div class="channel-card">
+              <span class="channel-code font-mono">CH-01</span>
+              <div class="channel-card-body">
+                <div class="channel-icon-wrap">
+                  <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="2" y="4" width="20" height="16" rx="2"></rect>
+                    <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path>
+                  </svg>
+                </div>
+                <div class="channel-text-block">
+                  <h3 class="channel-title">Email</h3>
+                  <a href={emailLink} class="channel-mono-val font-mono">
+                    {emailDisplay}
+                  </a>
+                </div>
+              </div>
+            </div>
+
+            <!-- Card 2: Phone (CH-02) -->
+            <div class="channel-card">
+              <span class="channel-code font-mono">CH-02</span>
+              <div class="channel-card-body">
+                <div class="channel-icon-wrap">
+                  <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+                  </svg>
+                </div>
+                <div class="channel-text-block">
+                  <h3 class="channel-title">Phone</h3>
+                  <a href={`tel:${phoneLink}`} class="channel-mono-val font-mono">
+                    {phone}
+                  </a>
+                </div>
+              </div>
+            </div>
+
+            <!-- Card 3: Address (LOC-HQ) -->
+            <div class="channel-card">
+              <span class="channel-code font-mono">LOC-HQ</span>
+              <div class="channel-card-body">
+                <div class="channel-icon-wrap">
+                  <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                    <circle cx="12" cy="10" r="3"></circle>
+                  </svg>
+                </div>
+                <div class="channel-text-block">
+                  <h3 class="channel-title">Address</h3>
+                  <div class="channel-address-stack font-mono">
+                    {companyAddressLines.map(line => (
+                      <span>{line}</span>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Request a Quote Promo Card (Dashed Border) -->
+          <div class="quote-promo-box">
+            <h3 class="quote-promo-heading font-serif">Request a Quote</h3>
+            <p class="quote-promo-text">
+              Fill out our enquiry form to receive a customized quote within 24 hours.
+            </p>
+            <a href="/enquiry" class="btn-start-enquiry">
+              Start Enquiry Form
+            </a>
+          </div>
+
+        </div>
+
+        <!-- ========================================================
+             RIGHT COLUMN: OUR LOCATION WITH CROPPED MAP FRAME
+             ======================================================== -->
+        <div class="contact-right-col">
+          
+          <!-- Section Title -->
+          <div class="location-heading-wrap">
+            <h2 class="location-heading font-serif">Our Location</h2>
+          </div>
+
+          <!-- Map Frame Box -->
+          <div class="map-viewport-frame">
+            <iframe 
+              title="HydroCare Solutions Manufacturing Facility Map"
+              src="https://maps.google.com/maps?q=Poonamji+Industrial+Park,+Vapi-Nashik+Road,+Karvad,+Vapi,+Gujarat+396195&t=&z=14&ie=UTF8&iwloc=&output=embed" 
+              class="map-iframe-embed"
+              allowfullscreen="" 
+              loading="lazy" 
+              referrerpolicy="no-referrer-when-downgrade"
+            ></iframe>
+          </div>
+
+          <!-- Facility Tour Subtitle in Monospace -->
+          <p class="facility-tour-caption font-mono">
+            VISIT OUR MANUFACTURING FACILITY FOR A TOUR
+          </p>
+
+        </div>
+
+      </div>
+    </div>
+  </div>
+</Layout>
+
+<style>
+  /* ========================================================= */
+  /* BLUEPRINT GRID BACKGROUND & CONTAINER                    */
+  /* ========================================================= */
+  .contact-page-wrapper {
+    background-color: #FAFCFF;
+    background-image: 
+      linear-gradient(to right, rgba(226, 232, 240, 0.65) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(226, 232, 240, 0.65) 1px, transparent 1px);
+    background-size: 26px 26px;
+    min-height: calc(100vh - 160px);
+    padding: 68px 0 96px;
+  }
+
+  .container-apparel {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 24px;
+  }
+
+  .contact-blueprint-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 52px;
+    align-items: start;
+  }
+
+  @media (min-width: 992px) {
+    .contact-blueprint-grid {
+      grid-template-columns: 1fr 1.05fr;
+      gap: 64px;
+    }
+  }
+
+  /* ========================================================= */
+  /* LEFT COLUMN STYLES                                        */
+  /* ========================================================= */
+  .kicker-row {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 18px;
+  }
+
+  .kicker-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: #ECEFF3;
+    padding: 5px 13px;
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    color: #475569;
+  }
+
+  .contact-headline {
+    font-size: 38px;
+    font-weight: 700;
+    color: #0F172A;
+    margin: 0 0 14px 0;
+    line-height: 1.2;
+    letter-spacing: -0.5px;
+  }
+
+  @media (max-width: 640px) {
+    .contact-headline {
+      font-size: 32px;
+    }
+  }
+
+  .contact-subtext {
+    font-size: 15px;
+    line-height: 1.6;
+    color: #64748B;
+    margin: 0 0 32px 0;
+    max-width: 520px;
+  }
+
+  /* Stack of Channel Cards */
+  .channel-cards-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .channel-card {
+    position: relative;
+    background: #FFFFFF;
+    border: 1px solid #E2E8F0;
+    border-radius: 6px;
+    padding: 20px 24px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+  }
+
+  .channel-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.05);
+    border-color: #CBD5E1;
+  }
+
+
+  .channel-code {
+    position: absolute;
+    top: 18px;
+    right: 20px;
+    font-size: 11px;
+    font-weight: 600;
+    color: #94A3B8;
+    letter-spacing: 0.5px;
+  }
+
+  .channel-card-body {
+    display: flex;
+    align-items: flex-start;
+    gap: 18px;
+  }
+
+  .channel-icon-wrap {
+    width: 44px;
+    height: 44px;
+    border-radius: 6px;
+    background: #F8FAFC;
+    border: 1px solid #E2E8F0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #475569;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  .channel-text-block {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding-right: 48px;
+  }
+
+  .channel-title {
+    font-size: 14px;
+    font-weight: 700;
+    color: #0F172A;
+    margin: 0;
+  }
+
+  .channel-mono-val {
+    font-size: 13.5px;
+    color: #475569;
+    text-decoration: none;
+    word-break: break-all;
+    transition: color 0.15s ease;
+  }
+
+  .channel-mono-val:hover {
+    color: #0F172A;
+  }
+
+  .channel-address-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    font-size: 13px;
+    color: #475569;
+    line-height: 1.45;
+  }
+
+  /* Request a Quote Promo Box */
+  .quote-promo-box {
+    position: relative;
+    background: #FFFFFF;
+    border: 1px dashed #CBD5E1;
+    border-radius: 6px;
+    padding: 24px 26px;
+    margin-top: 24px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+  }
+
+  .quote-promo-heading {
+    font-size: 19px;
+    font-weight: 700;
+    color: #0F172A;
+    margin: 4px 0 8px 0;
+  }
+
+  .quote-promo-text {
+    font-size: 13.5px;
+    color: #64748B;
+    margin: 0 0 18px 0;
+    line-height: 1.5;
+  }
+
+  .btn-start-enquiry {
+    display: block;
+    width: 100%;
+    background: #111827;
+    color: #FFFFFF;
+    font-size: 13.5px;
+    font-weight: 600;
+    text-align: center;
+    padding: 12px 20px;
+    border-radius: 6px;
+    text-decoration: none;
+    transition: background-color 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease;
+  }
+
+  .btn-start-enquiry:hover {
+    background: #1F2937;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(17, 24, 39, 0.15);
+  }
+
+  /* ========================================================= */
+  /* RIGHT COLUMN STYLES: LOCATION & MAP                       */
+  /* ========================================================= */
+  .location-heading-wrap {
+    margin-bottom: 22px;
+  }
+
+  .location-heading {
+    font-size: 24px;
+    font-weight: 700;
+    color: #0F172A;
+    margin: 0 0 16px 0;
+  }
+
+  .map-viewport-frame {
+    position: relative;
+    background: #FFFFFF;
+    border: 1px solid #E2E8F0;
+    border-radius: 6px;
+    padding: 8px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+  }
+
+  .map-iframe-embed {
+    width: 100%;
+    height: 480px;
+    border: 0;
+    border-radius: 4px;
+    display: block;
+    background-color: #E2E8F0;
+  }
+
+  @media (max-width: 640px) {
+    .map-iframe-embed {
+      height: 360px;
+    }
+  }
+
+  .facility-tour-caption {
+    text-align: center;
+    font-size: 11px;
+    font-weight: 600;
+    color: #64748B;
+    letter-spacing: 2.2px;
+    margin-top: 24px;
+  }
+</style>

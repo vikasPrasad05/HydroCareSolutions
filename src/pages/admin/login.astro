@@ -1,0 +1,231 @@
+---
+import AdminLayout from '../../layouts/AdminLayout.astro';
+import { isAdminAuthenticated } from '../../lib/auth';
+
+export const prerender = false;
+
+// If already authenticated, redirect to /admin
+if (isAdminAuthenticated(Astro.cookies)) {
+  return Astro.redirect('/admin');
+}
+---
+
+<AdminLayout title="Admin Portal Login — Absorbent Pads">
+  <div class="login-page-wrapper">
+    <div class="login-card">
+      <div class="login-brand">
+        <div class="brand-logo-badge">
+          <img src="/favicon.svg" alt="HydroCare Solutions" class="login-brand-logo" width="52" height="52" />
+        </div>
+        <h2 class="brand-heading">HydroCare Solutions</h2>
+        <p class="brand-sub">ADMIN PORTAL &bull; MANUFACTURING CONTROL</p>
+      </div>
+
+      <div class="login-notice">
+        <span>🔐 Secure access to incoming buyer enquiries, product lines, and factory orders.</span>
+      </div>
+
+      <form id="adminLoginForm" class="login-form">
+        <div class="form-group">
+          <label for="adminSecretKey" class="form-label">Admin Secret Key / PIN *</label>
+          <input 
+            type="password" 
+            id="adminSecretKey" 
+            name="key" 
+            class="form-input" 
+            placeholder="Enter admin secret key" 
+            required 
+            autofocus 
+          />
+          <span class="field-hint">Default Demo Key: <strong>admin12345</strong></span>
+        </div>
+
+        <div id="loginErrorMsg" class="login-error" style="display: none;"></div>
+
+        <button type="submit" id="loginSubmitBtn" class="btn-gold-submit">
+          <span>Authenticate & Access Dashboard</span>
+        </button>
+      </form>
+    </div>
+  </div>
+</AdminLayout>
+
+<style>
+  .login-page-wrapper {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #F4F7FB;
+    padding: 24px;
+    box-sizing: border-box;
+  }
+
+  .login-card {
+    width: 100%;
+    max-width: 420px;
+    background: #FFFFFF;
+    border: 1px solid #E2E8F0;
+    border-radius: 14px;
+    padding: 36px 32px;
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05);
+  }
+
+  .login-brand {
+    text-align: center;
+    margin-bottom: 24px;
+  }
+
+  .brand-logo-badge {
+    margin: 0 auto 12px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .login-brand-logo {
+    width: 52px;
+    height: 52px;
+    object-fit: contain;
+    display: block;
+    filter: drop-shadow(0 4px 10px rgba(0, 53, 128, 0.15));
+  }
+
+  .brand-heading {
+    font-family: 'Outfit', 'Plus Jakarta Sans', sans-serif;
+    font-size: 24px;
+    color: #0F172A;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+  }
+
+  .brand-sub {
+    font-size: 11px;
+    color: #64748B;
+    letter-spacing: 0.1em;
+    font-weight: 500;
+    margin-top: 3px;
+  }
+
+  .login-notice {
+    background: #F8FAFC;
+    border: 1px solid #E2E8F0;
+    padding: 12px 14px;
+    border-radius: 8px;
+    font-size: 12px;
+    color: #475569;
+    margin-bottom: 20px;
+    line-height: 1.4;
+  }
+
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 20px;
+  }
+
+  .form-label {
+    font-size: 12.5px;
+    font-weight: 500;
+    color: #334155;
+    margin-bottom: 6px;
+  }
+
+  .form-input {
+    width: 100%;
+    padding: 10px 14px;
+    border: 1px solid #CBD5E1;
+    border-radius: 8px;
+    font-size: 14px;
+    font-family: 'DM Mono', monospace;
+    box-sizing: border-box;
+    transition: border-color 0.15s;
+  }
+
+  .form-input:focus {
+    outline: none;
+    border-color: #6E2219;
+    box-shadow: 0 0 0 3px rgba(110, 34, 25, 0.15);
+  }
+
+  .field-hint {
+    font-size: 11.5px;
+    color: #64748B;
+    margin-top: 6px;
+  }
+
+  .field-hint strong {
+    color: #6E2219;
+  }
+
+  .login-error {
+    background: #FEE2E2;
+    border: 1px solid #F87171;
+    color: #991B1B;
+    padding: 10px 14px;
+    border-radius: 8px;
+    font-size: 12.5px;
+    margin-bottom: 16px;
+  }
+
+  .btn-gold-submit {
+    width: 100%;
+    padding: 12px;
+    font-size: 14px;
+    font-weight: 600;
+    color: #FFFFFF;
+    background-color: #6E2219;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(110, 34, 25, 0.25);
+    transition: background-color 0.2s, transform 0.1s, box-shadow 0.2s;
+  }
+
+  .btn-gold-submit:hover {
+    background-color: #842A1F;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 14px rgba(110, 34, 25, 0.35);
+  }
+</style>
+
+<script>
+  const form = document.getElementById('adminLoginForm');
+  const errorMsg = document.getElementById('loginErrorMsg');
+  const submitBtn = document.getElementById('loginSubmitBtn');
+
+  if (form) {
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      if (errorMsg) errorMsg.style.display = 'none';
+
+      const formData = new FormData(form as HTMLFormElement);
+      const key = formData.get('key');
+
+      if (submitBtn) submitBtn.setAttribute('disabled', 'true');
+
+      try {
+        const res = await fetch('/api/admin/auth', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ key })
+        });
+
+        const data = await res.json();
+        if (!res.ok || !data.success) {
+          throw new Error(data.error || 'Authentication failed');
+        }
+
+        // Redirect to admin dashboard
+        window.location.href = '/admin';
+      } catch (err: any) {
+        if (errorMsg) {
+          errorMsg.textContent = err.message || 'Invalid secret key. Please try again.';
+          errorMsg.style.display = 'block';
+        }
+      } finally {
+        if (submitBtn) submitBtn.removeAttribute('disabled');
+      }
+    });
+  }
+</script>

@@ -1,0 +1,1237 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { getProductBySlug } from '../../lib/store';
+
+export const prerender = false;
+
+const { slug } = Astro.params;
+if (!slug) {
+  return Astro.redirect('/catalogue');
+}
+
+const product = await getProductBySlug(slug);
+if (!product) {
+  return Astro.redirect('/catalogue');
+}
+
+const whatsappNumber = import.meta.env.COMPANY_WHATSAPP || '917623906747';
+
+// Multi-angle & application gallery images tailored specifically to this product
+const productGallery = [
+  {
+    url: product.image_url,
+    title: 'Main Pad',
+    alt: `${product.name} primary pad specification`
+  },
+  ...(product.gallery && product.gallery.length > 0
+    ? product.gallery
+    : [
+        { url: '/images/products/food-grade-printed-soaker-pad.jpg', title: 'Sealed Rim', alt: 'Food-grade sealed border' },
+        { url: '/images/products/ultrasonic-sealed-pad-macro.jpg', title: 'Macro Quilt', alt: 'Ultrasonic embossed core' }
+      ]
+  )
+];
+
+const colorOptions = [
+  { name: 'Clean Food White', hex: '#FFFFFF', border: '#CBD5E1', img: '/images/products/quilted-meat-tray-pad.jpg' },
+  { name: 'Jet Black', hex: '#0F172A', border: '#020617', img: '/images/products/black-beef-steak-pad.jpg' },
+  { name: 'Marine Ocean Blue', hex: '#2563EB', border: '#1D4ED8', img: '/images/products/marine-seafood-pad-macro.jpg' },
+  { name: 'Peach Pink', hex: '#F472B6', border: '#DB2777', img: '/images/products/fruit-punnet-cushion-pad.jpg' },
+  { name: 'Sunny Yellow', hex: '#EAB308', border: '#CA8A04', img: '/images/products/soaker-pads-color-variants.jpg' }
+];
+
+// B2B Wholesale Bulk Order Volume Tiers
+const volumeTiers = [
+  { qty: `${Number(product.moq || 5000).toLocaleString()} – 24,999 pcs`, structure: 'Standard Factory RFQ', dispatch: '3–5 Days Dispatch' },
+  { qty: '25,000 – 99,999 pcs', structure: 'Volume Tiered Discount', dispatch: 'Priority Converting Run' },
+  { qty: '100,000+ pcs (OEM Contract)', structure: 'Direct Mill Contract', dispatch: 'Scheduled Container Supply' }
+];
+---
+
+<Layout 
+  title={`${product.name} — B2B Wholesale Specifications & RFQ | HydroCare Solutions`}
+  description={`Food-grade absorbent drip pads for MAP trays: ${product.name}. Absorption ${product.gsm_range}, sizes ${product.sizes.join(', ')}. Direct cleanroom manufacturer supply.`}
+  currentPath="/catalogue"
+>
+  <!-- Top Breadcrumb Bar -->
+  <div class="breadcrumb-bar">
+    <div class="container-product-detail">
+      <nav class="breadcrumb-nav">
+        <a href="/">Home</a>
+        <span class="breadcrumb-sep">&gt;</span>
+        <a href="/catalogue">{product.category}</a>
+        <span class="breadcrumb-sep">&gt;</span>
+        <span class="breadcrumb-current">{product.name} | Food-Grade MAP Tray Drip Absorber Pads</span>
+      </nav>
+    </div>
+  </div>
+
+  <!-- Main Product Detail Container -->
+  <div class="product-page-wrapper">
+    <div class="container-product-detail">
+      <div class="product-main-layout">
+        
+        <!-- ============================================== -->
+        <!-- LEFT COLUMN: IMAGE GALLERY & SELLER PROFILE    -->
+        <!-- ============================================== -->
+        <div class="product-left-col">
+          <!-- Main Product Image Frame with Dynamic Badge -->
+          <div class="main-image-frame">
+            <img 
+              id="mainProductImg" 
+              src={product.image_url} 
+              alt={product.name} 
+              class="main-product-img"
+            />
+            <span class="gallery-badge" id="galleryBadge">{productGallery[0].title}</span>
+          </div>
+
+          <!-- Thumbnail Gallery (Product-Specific Food-Grade Pad Images) -->
+          <div class="thumbnail-gallery" id="thumbGallery">
+            {productGallery.map((item, idx) => (
+              <button 
+                type="button" 
+                class={`thumb-btn ${idx === 0 ? 'active' : ''}`} 
+                data-img={item.url} 
+                data-title={item.title}
+                aria-label={item.title}
+              >
+                <img src={item.url} alt={item.alt} />
+                <span class="thumb-caption">{item.title}</span>
+              </button>
+            ))}
+          </div>
+
+          <!-- Seller / Manufacturer Verified Card -->
+          <div class="seller-card">
+            <div class="seller-header">
+              <div class="seller-avatar">
+                <svg viewBox="0 0 40 40" width="40" height="40" fill="none">
+                  <circle cx="20" cy="20" r="19" fill="#FDF2F2" stroke="#6E2219" stroke-width="1.5"/>
+                  <text x="50%" y="54%" text-anchor="middle" dominant-baseline="middle" fill="#6E2219" font-family="'Inter', system-ui, sans-serif" font-weight="700" font-size="12">AP</text>
+                </svg>
+              </div>
+              <div class="seller-details">
+                <div class="seller-name-row">
+                  <span class="seller-name">ABSORBENT PADS INDIA</span>
+                  <span class="verified-badge">
+                    <svg viewBox="0 0 16 16" width="11" height="11" fill="currentColor">
+                      <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/>
+                    </svg>
+                    Verified
+                  </span>
+                </div>
+                <p class="seller-meta">Manufacturer &middot; Ahmedabad, Gujarat</p>
+                <p class="seller-stats">4 food-grade lines listed</p>
+              </div>
+            </div>
+            <a href="/about" class="btn-seller-profile">
+              View Seller Profile &rarr;
+            </a>
+          </div>
+        </div>
+
+        <!-- ============================================== -->
+        <!-- RIGHT COLUMN: DETAILS, PRICING, SPECS & DESC  -->
+        <!-- ============================================== -->
+        <div class="product-right-col">
+          <!-- Category Hierarchy Breadcrumb Link -->
+          <div class="category-meta-link">
+            <a href="/catalogue">FOOD-GRADE ABSORBENT PADS</a> &gt; <span>{product.category.toUpperCase()}</span>
+          </div>
+
+          <!-- Product Title -->
+          <h1 class="product-title">
+            {product.name} | Food-Grade MAP Tray Drip Absorber Pads
+          </h1>
+
+          <!-- SKU & Codes Line -->
+          <div class="sku-meta-line font-mono">
+            OPNS: {product.code} &middot; SKU: AP-{product.slug.toUpperCase()} &middot; HSN: 4818
+          </div>
+
+          <!-- Rating & Review Row -->
+          <div class="rating-row">
+            <span class="rating-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
+            <span class="rating-num">5.0</span>
+            <span class="rating-dot">&middot;</span>
+            <span class="rating-status">Verified Batch Tested</span>
+            <span class="rating-dot">&middot;</span>
+            <button type="button" class="write-inquiry-link open-quote-trigger" data-product={product.name}>
+              Write an inquiry
+            </button>
+          </div>
+
+          <!-- B2B Wholesale Pricing & Stock Box -->
+          <div class="price-stock-card">
+            <div class="price-row b2b-price-row">
+              <span class="main-price b2b-quote-title">Pricing on Request</span>
+              <span class="b2b-tier-badge">B2B Bulk Orders</span>
+              <span class="gst-pill">
+                <svg viewBox="0 0 16 16" width="12" height="12" fill="currentColor">
+                  <path d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0z"/>
+                </svg>
+                Direct Mill Quotes
+              </span>
+            </div>
+            <p class="wholesale-note">Wholesale tiered rates tailored by order volume, pad dimensions &amp; absorbency level.</p>
+
+            <div class="price-card-divider"></div>
+
+            <div class="moq-stock-row">
+              <div class="moq-info">
+                <span class="moq-icon">&#128230;</span>
+                <span class="moq-text"><strong>Min Order (MOQ):</strong> {Number(product.moq || 5000).toLocaleString()} pcs</span>
+              </div>
+              <div class="ready-stock-badge">
+                <svg viewBox="0 0 16 16" width="12" height="12" fill="currentColor">
+                  <path d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0z"/>
+                </svg>
+                Converting Capacity: 2M+ pcs/month
+              </div>
+            </div>
+          </div>
+
+          <!-- Available Sizes & Colors Card -->
+          <div class="options-card">
+            <div class="option-group">
+              <div class="option-label">AVAILABLE SIZES</div>
+              <div class="pills-wrap" id="sizePills">
+                {product.sizes.map((sz, idx) => (
+                  <button type="button" class={`pill-btn ${idx === 0 ? 'active' : ''}`} data-val={sz}>
+                    {sz}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <div class="option-group mt-3">
+              <div class="option-header-row">
+                <span class="option-label">AVAILABLE COLOR VARIANTS</span>
+                <span class="color-active-name" id="selectedColorLabel">Clean Food White</span>
+              </div>
+              <div class="pills-wrap color-pills-wrap" id="colorPills">
+                {colorOptions.map((c, idx) => (
+                  <button 
+                    type="button" 
+                    class={`color-pill-btn ${idx === 0 ? 'active' : ''}`} 
+                    data-val={c.name}
+                    data-img={c.img}
+                  >
+                    <span class="color-swatch-circle" style={`background-color: ${c.hex}; border: 1.5px solid ${c.border};`}></span>
+                    <span class="color-pill-text">{c.name}</span>
+                  </button>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          <!-- Color Variants Highlight Showcase (Real Pads Photo) -->
+          <div class="color-highlight-card">
+            <div class="color-highlight-banner">
+              <img src="/images/products/soaker-pads-color-variants.jpg" alt="Absorbent Pads Color Range" />
+              <div class="color-highlight-overlay">
+                <span class="badge-contrast">Certified Food-Grade Dyes</span>
+                <span class="badge-contrast-sub">White &bull; Jet Black &bull; Blue &bull; Pink &bull; Yellow</span>
+              </div>
+            </div>
+            <div class="color-highlight-body">
+              <div class="color-highlight-title">Multi-Color Contrast &amp; OEM Brand Tints</div>
+              <p class="color-highlight-text">
+                Enhance fresh meat and produce presentation with food-safe color coding (e.g. <strong>Jet Black</strong> for premium beef &amp; steak cuts, <strong>Marine Blue</strong> for seafood exports, <strong>Peach/Yellow</strong> for fruit punnets, <strong>Clean White</strong> for poultry). Custom PMS dyes available on 50,000+ pcs contract runs.
+              </p>
+            </div>
+          </div>
+
+          <!-- Action Buttons Row -->
+          <div class="action-buttons-row">
+            <a 
+              href={`/enquiry?product=${encodeURIComponent(product.name)}`}
+              class="btn-request-quote-main"
+            >
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+              </svg>
+              Request Quote
+            </a>
+            <a 
+              href={`https://wa.me/${whatsappNumber}?text=${encodeURIComponent(`Hi Absorbent Pads! I want to request a test carton sample kit for ${product.name} (${product.code}).`)}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="btn-wishlist-sample"
+            >
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+              </svg>
+              Wishlist
+            </a>
+          </div>
+
+          <!-- Bulk Pricing Slabs Card -->
+          <div class="pricing-slabs-card">
+            <div class="slabs-header-tint">
+              BULK ORDER VOLUME TIERS
+            </div>
+            <div class="slabs-table-wrap">
+              <table class="slabs-table">
+                <thead>
+                  <tr>
+                    <th>ORDER VOLUME</th>
+                    <th>PRICING STRUCTURE</th>
+                    <th>LEAD TIME / DISPATCH</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {volumeTiers.map(tier => (
+                    <tr>
+                      <td class="font-mono">{tier.qty}</td>
+                      <td class="font-mono price-cell font-bold text-maroon">{tier.structure}</td>
+                      <td class="savings-cell">{tier.dispatch}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Product Specifications Card (Matches "GARMENT SPECIFICATIONS") -->
+          <div class="specifications-card">
+            <div class="specs-card-label">PRODUCT SPECIFICATIONS</div>
+            <div class="specs-grid-3">
+              <div class="spec-inner-box">
+                <span class="spec-inner-title">ABSORPTION</span>
+                <span class="spec-inner-val">{product.gsm_range.split('/')[0]}</span>
+              </div>
+              <div class="spec-inner-box">
+                <span class="spec-inner-title">CORE MATERIAL</span>
+                <span class="spec-inner-val">Cellulose &amp; SAP</span>
+              </div>
+              <div class="spec-inner-box">
+                <span class="spec-inner-title">TARGET SAFETY</span>
+                <span class="spec-inner-val">FDA &amp; FSSAI Grade</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Product Description Card -->
+          <div class="description-card">
+            <div class="desc-card-label">PRODUCT DESCRIPTION</div>
+            <div class="desc-paragraphs">
+              <p>{product.full_description}</p>
+              <p>
+                Crafted from certified food-grade multi-layer composites, this high-performance absorbent pad features an anti-stick micro-perforated contact film, virgin cellulose fiber core, and moisture-barrier back sheet. Designed for seamless performance with automated tray packing lines, it prevents liquid pooling, stops microbial proliferation, and keeps display packaging dry and appealing.
+              </p>
+              <p>
+                Ideal for fresh supermarket display trays, export cold-chain air freight, MAP barrier trays, and automated food processing lines.
+              </p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</Layout>
+
+<style>
+  /* ========================================================= */
+  /* BREADCRUMB BAR                                           */
+  /* ========================================================= */
+  .breadcrumb-bar {
+    background: #FFFFFF;
+    border-bottom: 1px solid #F1F5F9;
+    padding: 14px 0;
+  }
+
+  .container-product-detail {
+    max-width: 1240px;
+    margin: 0 auto;
+    padding: 0 24px;
+  }
+
+  .breadcrumb-nav {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    color: #64748B;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+
+  .breadcrumb-nav a {
+    color: #64748B;
+    text-decoration: none;
+    transition: color 0.15s ease;
+  }
+
+  .breadcrumb-nav a:hover {
+    color: #6E2219;
+    text-decoration: underline;
+  }
+
+  .breadcrumb-sep {
+    color: #CBD5E1;
+    font-size: 12px;
+  }
+
+  .breadcrumb-current {
+    color: #1E293B;
+    font-weight: 500;
+  }
+
+  /* ========================================================= */
+  /* PRODUCT MAIN 2-COLUMN LAYOUT                             */
+  /* ========================================================= */
+  .product-page-wrapper {
+    background: #FFFFFF;
+    padding: 24px 0 60px;
+  }
+
+  .product-main-layout {
+    display: grid;
+    grid-template-columns: 460px 1fr;
+    gap: 36px;
+    align-items: start;
+  }
+
+  @media (max-width: 1024px) {
+    .product-main-layout {
+      grid-template-columns: 1fr;
+      gap: 28px;
+    }
+  }
+
+  /* ========================================================= */
+  /* LEFT COLUMN: IMAGE & SELLER CARD                         */
+  /* ========================================================= */
+  .product-left-col {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .main-image-frame {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    background: #F8FAFC;
+    border: 1px solid #E2E8F0;
+    border-radius: 12px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  }
+
+  .main-product-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: opacity 0.2s ease;
+  }
+
+  .gallery-badge {
+    position: absolute;
+    bottom: 12px;
+    left: 12px;
+    background: rgba(15, 23, 42, 0.85);
+    backdrop-filter: blur(4px);
+    color: #FFFFFF;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.03em;
+    padding: 4px 10px;
+    border-radius: 9999px;
+    pointer-events: none;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+  }
+
+  /* Thumbnail Gallery */
+  .thumbnail-gallery {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(70px, 1fr));
+    gap: 8px;
+    margin-top: 6px;
+  }
+
+  .thumb-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    padding: 3px;
+    border-radius: 8px;
+    border: 1.5px solid #E2E8F0;
+    background: #FFFFFF;
+    cursor: pointer;
+    overflow: hidden;
+    transition: all 0.15s ease;
+  }
+
+  .thumb-btn img {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+    border-radius: 5px;
+    display: block;
+  }
+
+  .thumb-caption {
+    font-size: 9.5px;
+    font-weight: 600;
+    color: #64748B;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
+  }
+
+  .thumb-btn:hover {
+    border-color: #6E2219;
+  }
+
+  .thumb-btn:hover .thumb-caption {
+    color: #6E2219;
+  }
+
+  .thumb-btn.active {
+    border-color: #6E2219;
+    box-shadow: 0 0 0 1px #6E2219;
+    background: #FDF2F2;
+  }
+
+  .thumb-btn.active .thumb-caption {
+    color: #6E2219;
+    font-weight: 700;
+  }
+
+  /* Seller / Manufacturer Card */
+  .seller-card {
+    border: 1px solid #E2E8F0;
+    border-radius: 10px;
+    padding: 16px;
+    background: #FFFFFF;
+    margin-top: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .seller-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+
+  .seller-avatar {
+    width: 42px;
+    height: 42px;
+    flex-shrink: 0;
+  }
+
+  .seller-details {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .seller-name-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .seller-name {
+    font-size: 14px;
+    font-weight: 700;
+    color: #1E293B;
+    letter-spacing: -0.01em;
+  }
+
+  .verified-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    background: #ECFDF5;
+    color: #059669;
+    border: 1px solid #A7F3D0;
+    border-radius: 9999px;
+    padding: 1px 7px;
+    font-size: 11px;
+    font-weight: 600;
+  }
+
+  .seller-meta {
+    font-size: 12px;
+    color: #64748B;
+    margin: 2px 0 0;
+  }
+
+  .seller-stats {
+    font-size: 11.5px;
+    color: #94A3B8;
+    margin: 2px 0 0;
+  }
+
+  .btn-seller-profile {
+    display: block;
+    width: 100%;
+    padding: 9px;
+    text-align: center;
+    font-size: 13px;
+    font-weight: 600;
+    color: #6E2219;
+    border: 1.5px solid #6E2219;
+    border-radius: 8px;
+    text-decoration: none;
+    background: #FFFFFF;
+    transition: all 0.18s ease;
+  }
+
+  .btn-seller-profile:hover {
+    background: #FDF2F2;
+  }
+
+  /* ========================================================= */
+  /* RIGHT COLUMN: DETAILS, PRICING, OPTIONS, DESCRIPTION     */
+  /* ========================================================= */
+  .product-right-col {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .category-meta-link {
+    font-size: 12px;
+    font-weight: 700;
+    color: #6E2219;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+
+  .category-meta-link a {
+    color: #6E2219;
+    text-decoration: none;
+  }
+
+  .category-meta-link a:hover {
+    text-decoration: underline;
+  }
+
+  .product-title {
+    font-size: 26px;
+    font-weight: 700;
+    color: #1E293B;
+    line-height: 1.35;
+    margin: 6px 0 8px;
+    letter-spacing: -0.015em;
+  }
+
+  .sku-meta-line {
+    font-size: 12px;
+    color: #64748B;
+    margin-bottom: 8px;
+  }
+
+  /* Rating Row */
+  .rating-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    color: #64748B;
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+  }
+
+  .rating-stars {
+    color: #CBD5E1;
+    letter-spacing: 2px;
+    font-size: 14px;
+  }
+
+  .rating-num {
+    font-weight: 700;
+    color: #1E293B;
+  }
+
+  .rating-dot {
+    color: #94A3B8;
+  }
+
+  .rating-status {
+    color: #64748B;
+  }
+
+  .write-inquiry-link {
+    background: none;
+    border: none;
+    padding: 0;
+    color: #6E2219;
+    font-size: 13px;
+    cursor: pointer;
+    text-decoration: none;
+    font-weight: 500;
+  }
+
+  .write-inquiry-link:hover {
+    text-decoration: underline;
+  }
+
+  /* Price & Stock Card */
+  .price-stock-card {
+    border: 1px solid #E2E8F0;
+    border-radius: 10px;
+    padding: 16px 20px;
+    background: #FFFFFF;
+    margin-bottom: 14px;
+  }
+
+  .price-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  .main-price {
+    font-size: 28px;
+    font-weight: 800;
+    color: #6E2219;
+    letter-spacing: -0.02em;
+  }
+
+  .gst-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    background: #ECFDF5;
+    color: #059669;
+    border: 1px solid #A7F3D0;
+    border-radius: 6px;
+    padding: 3px 8px;
+    font-size: 12px;
+    font-weight: 600;
+  }
+
+  .b2b-quote-title {
+    font-size: 24px;
+    font-weight: 800;
+    color: #6E2219;
+    letter-spacing: -0.01em;
+  }
+
+  .b2b-tier-badge {
+    background: #F8FAFC;
+    color: #334155;
+    border: 1px solid #CBD5E1;
+    border-radius: 6px;
+    padding: 3px 9px;
+    font-size: 11.5px;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+  }
+
+  .text-maroon {
+    color: #6E2219;
+  }
+
+  .wholesale-note {
+    font-size: 12.5px;
+    color: #64748B;
+    margin: 4px 0 0;
+  }
+
+  .price-card-divider {
+    height: 1px;
+    background: #F1F5F9;
+    margin: 12px 0;
+  }
+
+  .moq-stock-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  .moq-info {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    color: #1E293B;
+  }
+
+  .moq-icon {
+    font-size: 14px;
+  }
+
+  .ready-stock-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    background: #ECFDF5;
+    color: #059669;
+    border: 1px solid #A7F3D0;
+    border-radius: 9999px;
+    padding: 3px 10px;
+    font-size: 11.5px;
+    font-weight: 600;
+  }
+
+  /* Options Card (Sizes & Colors) */
+  .options-card {
+    border: 1px solid #E2E8F0;
+    border-radius: 10px;
+    padding: 16px 20px;
+    background: #FFFFFF;
+    margin-bottom: 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .option-label {
+    font-size: 11px;
+    font-weight: 700;
+    color: #64748B;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 8px;
+  }
+
+  .pills-wrap {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .pill-btn {
+    padding: 7px 14px;
+    border-radius: 6px;
+    border: 1px solid #CBD5E1;
+    background: #FFFFFF;
+    color: #1E293B;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+
+  .pill-btn:hover {
+    border-color: #6E2219;
+  }
+
+  .pill-btn.active {
+    border-color: #1E293B;
+    background: #1E293B;
+    color: #FFFFFF;
+  }
+
+  /* Color Swatch Options */
+  .option-header-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 8px;
+  }
+
+  .color-active-name {
+    font-size: 11.5px;
+    font-weight: 700;
+    color: #6E2219;
+    background: #FDF2F2;
+    padding: 2px 8px;
+    border-radius: 4px;
+    border: 1px solid #F8D7DA;
+  }
+
+  .color-pills-wrap {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .color-pill-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 12px;
+    border-radius: 6px;
+    border: 1.5px solid #CBD5E1;
+    background: #FFFFFF;
+    color: #1E293B;
+    font-size: 12.5px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+
+  .color-swatch-circle {
+    width: 13px;
+    height: 13px;
+    border-radius: 50%;
+    display: inline-block;
+    flex-shrink: 0;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.12);
+  }
+
+  .color-pill-btn:hover {
+    border-color: #6E2219;
+    background: #FDF2F2;
+  }
+
+  .color-pill-btn.active {
+    border-color: #6E2219;
+    background: #FFF5F5;
+    color: #6E2219;
+    font-weight: 700;
+    box-shadow: 0 0 0 1px #6E2219;
+  }
+
+  /* Color Highlight Showcase Card (Featuring uploaded multi-color pads photo) */
+  .color-highlight-card {
+    border: 1px solid #E2E8F0;
+    border-radius: 10px;
+    overflow: hidden;
+    background: #FFFFFF;
+    margin-bottom: 14px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+  }
+
+  .color-highlight-banner {
+    position: relative;
+    width: 100%;
+    height: 150px;
+    background: #F8FAFC;
+    overflow: hidden;
+  }
+
+  .color-highlight-banner img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .color-highlight-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(15, 23, 42, 0.1) 0%, rgba(15, 23, 42, 0.75) 100%);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 12px 14px;
+  }
+
+  .badge-contrast {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 700;
+    color: #34D399;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .badge-contrast-sub {
+    font-size: 12px;
+    font-weight: 600;
+    color: #FFFFFF;
+    margin-top: 2px;
+  }
+
+  .color-highlight-body {
+    padding: 14px 16px;
+  }
+
+  .color-highlight-title {
+    font-size: 13.5px;
+    font-weight: 700;
+    color: #1E293B;
+    margin-bottom: 4px;
+  }
+
+  .color-highlight-text {
+    font-size: 12.5px;
+    line-height: 1.55;
+    color: #64748B;
+    margin: 0;
+  }
+
+  /* CTA Buttons Row */
+  .action-buttons-row {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 14px;
+  }
+
+  .btn-request-quote-main {
+    flex: 1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    background-color: #6E2219;
+    color: #FFFFFF;
+    padding: 13px 24px;
+    border-radius: 8px;
+    border: none;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 2px 6px rgba(110, 34, 25, 0.2);
+    transition: all 0.18s ease;
+  }
+
+  .btn-request-quote-main:hover {
+    background-color: #842A1F;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(110, 34, 25, 0.3);
+  }
+
+  .btn-wishlist-sample {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    background-color: #FFFFFF;
+    color: #6E2219;
+    border: 1.5px solid #6E2219;
+    padding: 13px 20px;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.18s ease;
+    white-space: nowrap;
+  }
+
+  .btn-wishlist-sample:hover {
+    background-color: #FDF2F2;
+  }
+
+  /* Bulk Pricing Slabs Card */
+  .pricing-slabs-card {
+    border: 1px solid #FECDD3;
+    border-radius: 10px;
+    overflow: hidden;
+    background: #FFFFFF;
+    margin-bottom: 14px;
+  }
+
+  .slabs-header-tint {
+    background: #FFF1F2;
+    padding: 9px 18px;
+    font-size: 11.5px;
+    font-weight: 700;
+    color: #9F1239;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+
+  .slabs-table-wrap {
+    overflow-x: auto;
+  }
+
+  .slabs-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+
+  .slabs-table th {
+    text-align: left;
+    padding: 10px 18px;
+    font-size: 11px;
+    font-weight: 700;
+    color: #64748B;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    border-bottom: 1px solid #F1F5F9;
+    background: #FFFFFF;
+  }
+
+  .slabs-table td {
+    padding: 11px 18px;
+    border-bottom: 1px solid #F8FAFC;
+    color: #1E293B;
+  }
+
+  .slabs-table tr:last-child td {
+    border-bottom: none;
+  }
+
+  .price-cell {
+    font-weight: 700;
+    color: #1E293B;
+  }
+
+  .savings-cell {
+    color: #059669;
+    font-weight: 600;
+  }
+
+  /* Product Specifications Card (Matches "GARMENT SPECIFICATIONS") */
+  .specifications-card {
+    border: 1px solid #E2E8F0;
+    border-radius: 10px;
+    padding: 16px 20px;
+    background: #FFFFFF;
+    margin-bottom: 14px;
+  }
+
+  .specs-card-label {
+    font-size: 11px;
+    font-weight: 700;
+    color: #64748B;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 12px;
+  }
+
+  .specs-grid-3 {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+  }
+
+  @media (max-width: 640px) {
+    .specs-grid-3 {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .spec-inner-box {
+    background: #F8FAFC;
+    border: 1px solid #F1F5F9;
+    border-radius: 8px;
+    padding: 12px 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .spec-inner-title {
+    font-size: 10.5px;
+    font-weight: 700;
+    color: #64748B;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  .spec-inner-val {
+    font-size: 13.5px;
+    font-weight: 700;
+    color: #1E293B;
+  }
+
+  /* Product Description Card */
+  .description-card {
+    border: 1px solid #E2E8F0;
+    border-radius: 10px;
+    padding: 20px;
+    background: #FFFFFF;
+    margin-bottom: 14px;
+  }
+
+  .desc-card-label {
+    font-size: 11px;
+    font-weight: 700;
+    color: #64748B;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 12px;
+  }
+
+  .desc-paragraphs {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    font-size: 13.5px;
+    line-height: 1.65;
+    color: #475569;
+  }
+
+  .desc-paragraphs p {
+    margin: 0;
+  }
+
+</style>
+
+<script>
+  // Thumbnail & Multi-Photo Switcher
+  const mainImg = document.getElementById('mainProductImg') as HTMLImageElement;
+  const galleryBadge = document.getElementById('galleryBadge');
+  const thumbBtns = document.querySelectorAll('.thumb-btn');
+
+  function updateMainPhoto(src: string, label?: string) {
+    if (!mainImg || !src) return;
+    mainImg.style.opacity = '0.35';
+    setTimeout(() => {
+      mainImg.src = src;
+      mainImg.style.opacity = '1';
+      if (galleryBadge && label) {
+        galleryBadge.textContent = label;
+      }
+    }, 120);
+  }
+
+  thumbBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const targetSrc = btn.getAttribute('data-img');
+      const title = btn.getAttribute('data-title') || '';
+      if (targetSrc) {
+        updateMainPhoto(targetSrc, title);
+      }
+      thumbBtns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+    });
+  });
+
+  // Size Pills Active Selector
+  const sizeContainer = document.getElementById('sizePills');
+  if (sizeContainer) {
+    const sizePills = sizeContainer.querySelectorAll('.pill-btn');
+    sizePills.forEach(pill => {
+      pill.addEventListener('click', () => {
+        sizePills.forEach(p => p.classList.remove('active'));
+        pill.classList.add('active');
+      });
+    });
+  }
+
+  // Color Swatch Pills Active Selector & Image Switcher
+  const colorContainer = document.getElementById('colorPills');
+  const selectedColorLabel = document.getElementById('selectedColorLabel');
+  if (colorContainer) {
+    const colorPills = colorContainer.querySelectorAll('.color-pill-btn');
+    colorPills.forEach(pill => {
+      pill.addEventListener('click', () => {
+        colorPills.forEach(p => p.classList.remove('active'));
+        pill.classList.add('active');
+
+        const colorName = pill.getAttribute('data-val');
+        const colorImg = pill.getAttribute('data-img');
+
+        if (selectedColorLabel && colorName) {
+          selectedColorLabel.textContent = colorName;
+        }
+
+        if (colorImg) {
+          updateMainPhoto(colorImg, `${colorName} Pad`);
+          // Sync with thumb if it exists
+          thumbBtns.forEach(tb => {
+            if (tb.getAttribute('data-img') === colorImg) {
+              thumbBtns.forEach(b => b.classList.remove('active'));
+              tb.classList.add('active');
+            }
+          });
+        }
+      });
+    });
+  }
+</script>

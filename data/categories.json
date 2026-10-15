@@ -1,0 +1,47 @@
+[
+  {
+    "id": "cat-001",
+    "name": "MEAT & POULTRY PADS",
+    "slug": "meat",
+    "image": "/images/products/meat-pads.jpg",
+    "status": "Active",
+    "item_count": 4,
+    "description": "Food-grade certified absorbent soaker pads for raw beef, mutton, and fresh chicken trays."
+  },
+  {
+    "id": "cat-002",
+    "name": "SEAFOOD & FISH PADS",
+    "slug": "seafood",
+    "image": "/images/products/seafood-pads.jpg",
+    "status": "Active",
+    "item_count": 3,
+    "description": "Marine grade absorbent pads engineered for fresh fish fillets, chilled salmon, and export shrimp."
+  },
+  {
+    "id": "cat-003",
+    "name": "FRUITS & BERRIES PADS",
+    "slug": "produce",
+    "image": "/images/products/fruit-pads.jpg",
+    "status": "Active",
+    "item_count": 3,
+    "description": "Micro-perforated cushioning pads for delicate strawberries, blueberries, and clamshell punnets."
+  },
+  {
+    "id": "cat-004",
+    "name": "COLD CHAIN & ICE PADS",
+    "slug": "industrial",
+    "image": "/images/products/industrial-soaker-pads.jpg",
+    "status": "Active",
+    "item_count": 4,
+    "description": "Thermal gel ice pads and high-capacity absorbent liners for cold storage and export shipping."
+  },
+  {
+    "id": "cat-005",
+    "name": "BLACK GOURMET SOAKERS",
+    "slug": "gourmet",
+    "image": "/images/products/white-black-pads.jpg",
+    "status": "Active",
+    "item_count": 2,
+    "description": "Jet black food contact pads for premium retail steaks and supermarket presentation."
+  }
+]

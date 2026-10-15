@@ -1,0 +1,1072 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+const slides = [
+  {
+    image: '/images/hero/cold-chain-pads.jpg',
+    caption: 'Dispatch & Packaging Floor',
+    subtitle: 'Climate-controlled warehouse & bulk export packing'
+  },
+  {
+    image: '/images/factory/cleanroom-plant.jpg',
+    caption: 'Automated Converting Plant',
+    subtitle: 'High-speed ultrasonic lamination & 4-edge hemmetic seal'
+  },
+  {
+    image: '/images/factory/hero.jpg',
+    caption: 'Cleanroom Production Facility',
+    subtitle: 'ISO Class 8 cleanroom with optical vision inspection'
+  },
+  {
+    image: '/images/hero/meat-pads.jpg',
+    caption: 'Meat & Poultry Pad Line',
+    subtitle: 'Food-grade certified fluid-lock SAP core converting'
+  },
+  {
+    image: '/images/hero/seafood-pads.jpg',
+    caption: 'Marine Fishery Absorbency Lab',
+    subtitle: 'Saline-stable high absorption testing & QA verification'
+  }
+];
+
+const milestones = [
+  { value: '5M+', label: 'Monthly Pad Capacity', desc: 'Continuous high-speed ultrasonic lines' },
+  { value: 'ISO 22000', label: 'Food Safety Certified', desc: 'HACCP & GMP cleanroom standards' },
+  { value: '100%', label: 'Vision & Metal Inspected', desc: 'Inline AI cameras & X-ray checks' },
+  { value: '500+', label: 'B2B Clients Across India', desc: 'Retailers, packhouses & seafood exporters' }
+];
+
+const pillars = [
+  {
+    num: '01',
+    title: 'Food-Contact Safety First',
+    desc: 'Every batch is produced in certified cleanrooms using FDA 21 CFR and FSSAI approved virgin cellulose and food-grade films — zero hotmelt adhesive leaching or fiber residue.'
+  },
+  {
+    num: '02',
+    title: 'Precision Absorbency Engineering',
+    desc: 'Gravimetric micro-dosing delivers consistent retention from 40ml up to 200ml per pad. Fluids are permanently locked into gel matrices under cold storage (-18°C to +4°C).'
+  },
+  {
+    num: '03',
+    title: 'Dependable Wholesale Supply',
+    desc: 'From custom die-cut dimensions to automated roll dispensers, we guarantee rapid turnaround, standard MOQ flexibility, and seamless cold chain pan-India logistics.'
+  }
+];
+---
+
+<Layout 
+  title="About Us — A Trusted Name in Absorbent Packaging"
+  description="Discover the story behind HydroCare Solutions. India's trusted B2B manufacturer of food-grade absorbent pads for fresh meat, poultry, seafood, and berries."
+  currentPath="/about"
+>
+  <!-- MAIN OUR STORY SECTION (EXACT MATCH TO DESIGN) -->
+  <section class="story-section">
+    <div class="story-container">
+      
+      <!-- LEFT COLUMN: IMAGE SLIDER WITH CAPTION OVERLAY & DASHES -->
+      <div class="story-visual-col">
+        <div class="story-slider-card">
+          <div class="story-slides-viewport" id="storySlider">
+            {slides.map((slide, idx) => (
+              <div class={`story-slide ${idx === 0 ? 'active' : ''}`} data-index={idx}>
+                <img 
+                  src={slide.image} 
+                  alt={slide.caption} 
+                  class="story-slide-img"
+                  loading={idx === 0 ? 'eager' : 'lazy'}
+                />
+                <div class="story-slide-gradient"></div>
+                <div class="story-slide-caption">
+                  <span class="caption-tag">HydroCare Solutions</span>
+                  <h3 class="caption-title">{slide.caption}</h3>
+                  <p class="caption-sub">{slide.subtitle}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <!-- Slider Navigation Indicator Dashes -->
+        <div class="story-slider-nav" id="sliderNav">
+          {slides.map((_, idx) => (
+            <button 
+              type="button" 
+              class={`story-nav-dash ${idx === 0 ? 'active' : ''}`} 
+              data-target={idx}
+              aria-label={`Go to slide ${idx + 1}`}
+            ></button>
+          ))}
+        </div>
+
+        <!-- Quick Action CTAs below slider -->
+        <div class="story-actions">
+          <a href="/catalogue" class="btn-story-primary">
+            Browse Product Range &rarr;
+          </a>
+          <a href="/enquiry" class="btn-story-outline">
+            Request Factory Samples
+          </a>
+        </div>
+      </div>
+
+      <!-- RIGHT COLUMN: OUR STORY TYPOGRAPHY & NARRATIVE -->
+      <div class="story-content-col">
+        
+        <!-- Story Eyebrow / Tag -->
+        <div class="story-eyebrow">
+          <span class="eyebrow-text">OUR STORY</span>
+        </div>
+
+        <!-- Serif Headline -->
+        <h1 class="story-headline">
+          A trusted name<br />
+          in absorbent packaging.
+        </h1>
+
+        <!-- Narrative Paragraphs -->
+        <div class="story-paragraphs">
+          <p>
+            <strong>HydroCare Solutions</strong> began its journey with a clear mission — to solve fresh food purge, moisture pooling, and rapid bacterial spoilage across India’s growing cold supply chain. Starting with specialized high-retention drip pads engineered for raw poultry and mutton cuts, our solutions quickly earned the trust of quality-conscious meat processors, institutional butchers, and retail supermarket chains. Building on that engineering precision and customer confidence, the company rapidly expanded into full-scale cleanroom converting, wholesale B2B manufacturing, and private-label OEM solutions for food packaging leaders across India and export markets.
+          </p>
+
+          <p>
+            Today, <strong>HydroCare Solutions</strong> is a trusted name in the specialized food packaging and cold chain industry, specialising in certified food-contact absorbency manufacturing, wholesale supply, and custom-converting solutions. Our reputation is built on <strong>uncompromising hygiene, leak-proof reliability, and consistent absorbency</strong> — delivering pads that meet the evolving demands of fresh food packhouses, seafood exporters, supermarket chains, and commercial food processors across India and overseas.
+          </p>
+
+          <p>
+            Known for our <strong>food-safety-first manufacturing expertise</strong>, we offer premium food drip pads crafted with ultra-pure virgin fluff pulp, certified Super Absorbent Polymers (SAP), and continuous 4-edge ultrasonic cold-welded seams. Over the years we have expanded into marine seafood soakers, fresh berry cushioning pads, absorbent rolls, and industrial spill pads — helping clients source complete absorbency solutions under one roof.
+          </p>
+
+          <p>
+            Founded with a <strong>customer-first approach</strong> and a commitment to long-term partnerships, our ISO 22000, HACCP, and GMP certified standards have made us a dependable sourcing partner for leading food brands, supermarket retail shelves, and export packaging facilities.
+          </p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- KEY STATS STRIP -->
+  <section class="stats-strip-section">
+    <div class="story-container">
+      <div class="stats-grid">
+        {milestones.map((m) => (
+          <div class="stat-card">
+            <span class="stat-number">{m.value}</span>
+            <span class="stat-title">{m.label}</span>
+            <p class="stat-desc">{m.desc}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- SOAKER ABSORBENT PADS - PRODUCT TECHNOLOGY SECTION -->
+  <section class="soaker-section">
+    <div class="story-container">
+      <div class="soaker-grid">
+        <!-- Left: Image -->
+        <div class="soaker-img-col">
+          <img 
+            src="/images/about/soaker-absorbent-pads-layers.jpg" 
+            alt="Soaker Absorbent Pads three-layer structure showing Top PP Film, Gel SAP Sheet, and SMS Fabric" 
+            class="soaker-img"
+            loading="lazy"
+          />
+        </div>
+
+        <!-- Right: Content -->
+        <div class="soaker-content-col">
+          <span class="soaker-kicker">PRODUCT TECHNOLOGY</span>
+          <h2 class="soaker-title">Soaker Absorbent Pads</h2>
+          <p class="soaker-intro">
+            Soaker Absorbent Pads feature an advanced three-layer structure designed for efficient liquid absorption, moisture retention, and reliable performance. Each layer serves a specific purpose to help manage liquids and maintain surface dryness.
+          </p>
+
+          <div class="soaker-features">
+            <h3 class="soaker-features-heading">Key Features:</h3>
+            <ul class="soaker-features-list">
+              <li>
+                <strong>Top PP Film:</strong> Helps maintain a dry surface. Biodegradable options are available.
+              </li>
+              <li>
+                <strong>Gel SAP Sheet:</strong> Absorbs and retains liquids effectively.
+              </li>
+              <li>
+                <strong>SMS Fabric:</strong> Provides strength, durability, and structural support.
+              </li>
+            </ul>
+          </div>
+
+          <div class="soaker-info-blocks">
+            <div class="soaker-info-block">
+              <h4 class="soaker-info-label">Applications</h4>
+              <p class="soaker-info-text">
+                Suitable for healthcare and hygiene products, food packaging, and industrial liquid-management applications, depending on product specifications.
+              </p>
+            </div>
+            <div class="soaker-info-block">
+              <h4 class="soaker-info-label">Customizable Solutions</h4>
+              <p class="soaker-info-text">
+                Available in different sizes, materials, and absorbency levels to meet specific requirements.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CORE PILLARS SECTION -->
+  <section class="pillars-section">
+    <div class="story-container">
+      <div class="pillars-header">
+        <span class="pillars-eyebrow">WHAT SETS US APART</span>
+        <h2 class="pillars-headline">Engineered for Food Safety & Cold Chain Durability</h2>
+        <p class="pillars-sub">
+          We combine medical-grade hygiene standards with high-volume industrial converting efficiency.
+        </p>
+      </div>
+
+      <div class="pillars-grid">
+        {pillars.map((p) => (
+          <div class="pillar-card">
+            <span class="pillar-num">{p.num}</span>
+            <h3 class="pillar-title">{p.title}</h3>
+            <p class="pillar-desc">{p.desc}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- SNEAK PEEK TO FACTORY / INFRASTRUCTURE -->
+  <section class="factory-cta-section">
+    <div class="story-container">
+      <div class="factory-cta-box">
+        <div class="factory-cta-text">
+          <span class="factory-tag">16,000 SQ. FT. CLEANROOM FACILITY</span>
+          <h2>Want to see our manufacturing plant in action?</h2>
+          <p>
+            Explore our automated multi-lane ultrasonic converting lines, gravimetric SAP micro-dosing systems, and AI optical camera inspection facilities.
+          </p>
+          <div class="factory-cta-buttons">
+            <a href="/contact" class="btn-factory-view">Schedule a Plant Visit &rarr;</a>
+          </div>
+        </div>
+        <div class="factory-cta-img-wrap">
+          <img src="/images/factory/cleanroom-plant.jpg" alt="Absorbent Pads Cleanroom Factory" loading="lazy" />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SCRIPT FOR THE INTERACTIVE IMAGE SLIDER -->
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const slides = document.querySelectorAll<HTMLElement>('.story-slide');
+      const dashes = document.querySelectorAll<HTMLButtonElement>('.story-nav-dash');
+      if (!slides.length || !dashes.length) return;
+
+      let currentIndex = 0;
+      let timer: number | undefined;
+
+      function goToSlide(idx: number) {
+        slides.forEach((s) => s.classList.remove('active'));
+        dashes.forEach((d) => d.classList.remove('active'));
+
+        currentIndex = (idx + slides.length) % slides.length;
+        slides[currentIndex].classList.add('active');
+        dashes[currentIndex].classList.add('active');
+      }
+
+      function startAutoPlay() {
+        clearInterval(timer);
+        timer = window.setInterval(() => {
+          goToSlide(currentIndex + 1);
+        }, 4500);
+      }
+
+      dashes.forEach((btn, idx) => {
+        btn.addEventListener('click', () => {
+          goToSlide(idx);
+          startAutoPlay();
+        });
+      });
+
+      startAutoPlay();
+
+      // Pause on hover
+      const card = document.querySelector('.story-slider-card');
+      if (card) {
+        card.addEventListener('mouseenter', () => clearInterval(timer));
+        card.addEventListener('mouseleave', () => startAutoPlay());
+      }
+    });
+  </script>
+</Layout>
+
+<style>
+  /* ========================================================
+     STORY SECTION (EXACT DESIGN MATCH)
+     ======================================================== */
+  .story-section {
+    background-color: #FFFFFF;
+    padding: 70px 24px 80px;
+    border-bottom: 1px solid #F1F5F9;
+  }
+
+  .story-container {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .story-section .story-container {
+    display: grid;
+    grid-template-columns: 1fr 1.18fr;
+    gap: 60px;
+    align-items: center;
+  }
+
+  /* LEFT COLUMN: SLIDER CARD */
+  .story-visual-col {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+  }
+
+  .story-slider-card {
+    width: 100%;
+    height: 520px;
+    border-radius: 8px;
+    overflow: hidden;
+    position: relative;
+    background: #0F172A;
+    box-shadow: 0 12px 36px rgba(15, 23, 42, 0.08);
+  }
+
+  .story-slides-viewport {
+    width: 100%;
+    height: 100%;
+    position: relative;
+  }
+
+  .story-slide {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.6s;
+  }
+
+  .story-slide.active {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .story-slide-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    transform: scale(1);
+    transition: transform 6s ease-out;
+  }
+
+  .story-slide.active .story-slide-img {
+    transform: scale(1.04);
+  }
+
+  .story-slide-gradient {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      to bottom,
+      rgba(15, 23, 42, 0.05) 0%,
+      rgba(15, 23, 42, 0.15) 50%,
+      rgba(15, 23, 42, 0.85) 90%,
+      rgba(15, 23, 42, 0.95) 100%
+    );
+  }
+
+  .story-slide-caption {
+    position: absolute;
+    bottom: 28px;
+    left: 28px;
+    right: 28px;
+    color: #FFFFFF;
+    z-index: 2;
+  }
+
+  .caption-tag {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: #F8FAFC;
+    background: rgba(255, 255, 255, 0.18);
+    backdrop-filter: blur(4px);
+    padding: 3px 10px;
+    border-radius: 4px;
+    margin-bottom: 8px;
+  }
+
+  .caption-title {
+    font-family: var(--font-serif, 'Outfit', 'Plus Jakarta Sans', sans-serif);
+    font-size: 26px;
+    font-weight: 700;
+    line-height: 1.25;
+    letter-spacing: -0.02em;
+    color: #FFFFFF;
+    margin-bottom: 4px;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+  }
+
+  .caption-sub {
+    font-family: var(--font-sans, 'Inter', sans-serif);
+    font-size: 13px;
+    color: #CBD5E1;
+    line-height: 1.4;
+    text-shadow: 0 1px 4px rgba(0, 0, 0, 0.5);
+  }
+
+  /* SLIDER DASHES (MATCHING SCREENSHOT) */
+  .story-slider-nav {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 18px;
+  }
+
+  .story-nav-dash {
+    width: 26px;
+    height: 3px;
+    background: #CBD5E1;
+    border: none;
+    border-radius: 2px;
+    cursor: pointer;
+    padding: 0;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .story-nav-dash:hover {
+    background: #94A3B8;
+  }
+
+  .story-nav-dash.active {
+    width: 44px;
+    background: #B4833E; /* Warm gold tone from screenshot */
+  }
+
+  /* RIGHT COLUMN: OUR STORY CONTENT */
+  .story-content-col {
+    padding-top: 4px;
+  }
+
+  /* EYEBROW WITHOUT DASH */
+  .story-eyebrow {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    margin-bottom: 14px;
+    text-align: left;
+  }
+
+  .story-eyebrow.center {
+    justify-content: center;
+  }
+
+  .eyebrow-line {
+    width: 28px;
+    height: 2px;
+    background: #B4833E;
+    display: inline-block;
+  }
+
+  .eyebrow-text {
+    font-size: 11.5px;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: #B4833E;
+    font-family: var(--font-sans, 'Inter', sans-serif);
+  }
+
+  /* SERIF HEADLINE (EXACT MATCH) */
+  .story-headline {
+    font-family: var(--font-serif, 'Outfit', 'Plus Jakarta Sans', sans-serif);
+    font-size: 46px;
+    line-height: 1.16;
+    font-weight: 800;
+    color: #0F172A;
+    letter-spacing: -0.02em;
+    margin: 0 0 28px 0;
+  }
+
+  /* NARRATIVE PARAGRAPHS */
+  .story-paragraphs p {
+    font-family: var(--font-sans, 'Inter', system-ui, sans-serif);
+    font-size: 14.5px;
+    line-height: 1.78;
+    color: #475569;
+    margin-bottom: 20px;
+    text-align: justify;
+  }
+
+  .story-paragraphs p:last-child {
+    margin-bottom: 0;
+  }
+
+  .story-paragraphs strong {
+    color: #0F172A;
+    font-weight: 700;
+  }
+
+  /* ACTION BUTTONS */
+  .story-actions {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    flex-wrap: wrap;
+    margin-top: 52px;
+    width: 100%;
+  }
+
+  .btn-story-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: #0F172A;
+    color: #FFFFFF;
+    font-size: 13.5px;
+    font-weight: 600;
+    padding: 13px 24px;
+    border-radius: 6px;
+    text-decoration: none;
+    transition: background 0.2s, transform 0.15s;
+  }
+
+  .btn-story-primary:hover {
+    background: #B4833E;
+    color: #FFFFFF;
+    transform: translateY(-1px);
+  }
+
+  .btn-story-outline {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: transparent;
+    color: #0F172A;
+    border: 1px solid #CBD5E1;
+    font-size: 13.5px;
+    font-weight: 600;
+    padding: 13px 22px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .btn-story-outline:hover {
+    border-color: #0F172A;
+    background: #F8FAFC;
+  }
+
+  /* ========================================================
+     STATS STRIP SECTION
+     ======================================================== */
+  .stats-strip-section {
+    background: #F8FAFC;
+    padding: 50px 24px;
+    border-bottom: 1px solid #E2E8F0;
+  }
+
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 24px;
+  }
+
+  .stat-card {
+    text-align: center;
+    padding: 10px 16px;
+  }
+
+  .stat-number {
+    display: block;
+    font-family: var(--font-serif, 'Outfit', 'Plus Jakarta Sans', sans-serif);
+    font-size: 38px;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    color: #0F172A;
+    line-height: 1.1;
+    margin-bottom: 6px;
+  }
+
+  .stat-title {
+    display: block;
+    font-size: 13.5px;
+    font-weight: 700;
+    color: #B4833E;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 6px;
+  }
+
+  .stat-desc {
+    font-size: 12.5px;
+    color: #64748B;
+    line-height: 1.45;
+  }
+
+  /* ========================================================
+     CORE PILLARS SECTION
+     ======================================================== */
+  .pillars-section {
+    background: #FAF8F5;
+    padding: 80px 24px;
+    border-bottom: 1px solid #F1EFEA;
+  }
+
+  .pillars-header {
+    text-align: left;
+    max-width: 780px;
+    margin: 0 0 48px;
+  }
+
+  .pillars-eyebrow {
+    font-size: 11.5px;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: #B4833E;
+    font-family: var(--font-sans, 'Inter', sans-serif);
+    display: inline-block;
+    margin-bottom: 8px;
+  }
+
+  .pillars-headline {
+    font-family: var(--font-serif, 'Outfit', 'Plus Jakarta Sans', sans-serif);
+    font-size: 34px;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    color: #0F172A;
+    margin: 12px 0;
+    line-height: 1.25;
+  }
+
+  .pillars-sub {
+    font-size: 15px;
+    color: #64748B;
+    line-height: 1.6;
+  }
+
+  .pillars-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 30px;
+  }
+
+  .pillar-card {
+    background: #FFFFFF;
+    border: 1px solid #E2E8F0;
+    border-radius: 8px;
+    padding: 34px 28px;
+    transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+  }
+
+  .pillar-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 28px rgba(15, 23, 42, 0.06);
+    border-color: #CBD5E1;
+  }
+
+  .pillar-num {
+    display: inline-block;
+    font-family: var(--font-mono, monospace);
+    font-size: 14px;
+    font-weight: 700;
+    color: #B4833E;
+    background: #FEF3C7;
+    padding: 3px 10px;
+    border-radius: 4px;
+    margin-bottom: 18px;
+  }
+
+  .pillar-title {
+    font-family: var(--font-sans, 'Inter', sans-serif);
+    font-size: 18px;
+    font-weight: 700;
+    color: #0F172A;
+    margin-bottom: 12px;
+    line-height: 1.35;
+  }
+
+  .pillar-desc {
+    font-size: 13.5px;
+    color: #64748B;
+    line-height: 1.65;
+  }
+
+  /* ========================================================
+     FACTORY CTA BOX
+     ======================================================== */
+  .factory-cta-section {
+    background: #F8FAFC;
+    padding: 70px 24px;
+  }
+
+  .factory-cta-box {
+    background: #0F172A;
+    border-radius: 12px;
+    overflow: hidden;
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    align-items: center;
+    color: #FFFFFF;
+  }
+
+  .factory-cta-text {
+    padding: 50px 48px;
+  }
+
+  .factory-tag {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    color: #F59E0B;
+    margin-bottom: 12px;
+  }
+
+  .factory-cta-text h2 {
+    font-family: var(--font-serif, 'Outfit', 'Plus Jakarta Sans', sans-serif);
+    font-size: 30px;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    line-height: 1.25;
+    margin-bottom: 14px;
+    color: #FFFFFF;
+  }
+
+  .factory-cta-text p {
+    font-size: 14px;
+    line-height: 1.65;
+    color: #94A3B8;
+    margin-bottom: 26px;
+  }
+
+  .factory-cta-buttons {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    flex-wrap: wrap;
+  }
+
+  .btn-factory-view {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: #B4833E;
+    color: #FFFFFF;
+    font-size: 13.5px;
+    font-weight: 600;
+    padding: 12px 22px;
+    border-radius: 6px;
+    text-decoration: none;
+    transition: background 0.2s;
+  }
+
+  .btn-factory-view:hover {
+    background: #9A6735;
+    color: #FFFFFF;
+  }
+
+  .btn-factory-contact {
+    display: inline-flex;
+    align-items: center;
+    background: transparent;
+    color: #FFFFFF;
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    font-size: 13.5px;
+    font-weight: 600;
+    padding: 12px 20px;
+    border-radius: 6px;
+    text-decoration: none;
+    transition: all 0.2s;
+  }
+
+  .btn-factory-contact:hover {
+    border-color: #FFFFFF;
+    background: rgba(255, 255, 255, 0.08);
+    color: #FFFFFF;
+  }
+
+  .factory-cta-img-wrap {
+    height: 100%;
+    min-height: 320px;
+  }
+
+  .factory-cta-img-wrap img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  /* ========================================================
+     RESPONSIVE BREAKPOINTS
+     ======================================================== */
+  @media (max-width: 968px) {
+    .story-section .story-container {
+      grid-template-columns: 1fr;
+      gap: 40px;
+    }
+
+    .story-visual-col {
+      position: static;
+    }
+
+    .story-slider-card {
+      height: 420px;
+    }
+
+    .story-actions {
+      margin-top: 24px;
+    }
+
+    .story-headline {
+      font-size: 36px;
+    }
+
+    .stats-grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 28px;
+    }
+
+    .pillars-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .factory-cta-box {
+      grid-template-columns: 1fr;
+    }
+
+    .factory-cta-img-wrap {
+      min-height: 240px;
+    }
+  }
+
+  @media (max-width: 580px) {
+    .story-section {
+      padding: 40px 18px 60px;
+    }
+
+    .story-slider-card {
+      height: 340px;
+    }
+
+    .story-headline {
+      font-size: 28px;
+    }
+
+    .stats-grid {
+      grid-template-columns: 1fr;
+      gap: 20px;
+    }
+
+    .factory-cta-text {
+      padding: 32px 24px;
+    }
+
+    .pillars-header {
+      text-align: center;
+      margin: 0 auto 36px;
+    }
+  }
+
+  /* ========================================================
+     SOAKER ABSORBENT PADS SECTION
+     ======================================================== */
+  .soaker-section {
+    padding: 90px 24px;
+    background: #FFFFFF;
+    border-bottom: 1px solid #E2E8F0;
+  }
+
+  .soaker-grid {
+    display: grid;
+    grid-template-columns: 1fr 1.1fr;
+    gap: 56px;
+    align-items: center;
+  }
+
+  .soaker-img-col {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .soaker-img {
+    width: 100%;
+    max-width: 520px;
+    height: auto;
+    display: block;
+    object-fit: contain;
+  }
+
+  .soaker-content-col {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .soaker-kicker {
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    color: #D97706;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    display: inline-block;
+    margin-bottom: 8px;
+  }
+
+  .soaker-title {
+    font-family: 'Outfit', 'Plus Jakarta Sans', sans-serif;
+    font-size: 32px;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    color: #111827;
+    line-height: 1.25;
+    margin: 0 0 16px;
+  }
+
+  .soaker-intro {
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: 14.5px;
+    color: #475569;
+    line-height: 1.65;
+    margin: 0 0 24px;
+  }
+
+  .soaker-features {
+    margin-bottom: 24px;
+  }
+
+  .soaker-features-heading {
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    color: #0F172A;
+    margin: 0 0 12px;
+  }
+
+  .soaker-features-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .soaker-features-list li {
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: 13.5px;
+    color: #334155;
+    line-height: 1.55;
+    padding-left: 20px;
+    position: relative;
+  }
+
+  .soaker-features-list li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 7px;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #D97706;
+  }
+
+  .soaker-features-list li strong {
+    font-weight: 700;
+    color: #0F172A;
+  }
+
+  .soaker-info-blocks {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .soaker-info-block {
+    background: #FAF8F5;
+    border: 1px solid #E2E8F0;
+    border-radius: 10px;
+    padding: 16px 20px;
+  }
+
+  .soaker-info-label {
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    color: #0F172A;
+    margin: 0 0 6px;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+  }
+
+  .soaker-info-text {
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: 13px;
+    color: #64748B;
+    line-height: 1.55;
+    margin: 0;
+  }
+
+  @media (max-width: 968px) {
+    .soaker-grid {
+      grid-template-columns: 1fr;
+      gap: 36px;
+    }
+    .soaker-img-col {
+      order: -1;
+    }
+    .soaker-img {
+      max-width: 440px;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .soaker-section {
+      padding: 64px 18px;
+    }
+    .soaker-content-col {
+      text-align: center;
+      align-items: center;
+    }
+    .soaker-kicker {
+      text-align: center;
+      display: block;
+    }
+    .soaker-title {
+      text-align: center;
+      font-size: 26px;
+    }
+    .soaker-intro {
+      text-align: center;
+    }
+    .soaker-features {
+      text-align: left;
+    }
+    .soaker-info-blocks {
+      width: 100%;
+    }
+  }
+</style>

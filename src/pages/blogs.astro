@@ -1,0 +1,226 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+const blogPosts = [
+  {
+    title: 'How Modern Food Packaging Absorbent Pads Maximize Meat Freshness & Shelf Life',
+    category: 'Meat & Poultry Packaging',
+    date: 'Oct 04, 2026',
+    readTime: '4 min read',
+    excerpt: 'Explore advanced SAP fluid-lock technology, purge retention, and sealed-edge design that prevent microbial pooling in retail meat cuts.',
+    image: '/images/products/meat-pads.jpg',
+  },
+  {
+    title: 'Complete Guide to Marine Seafood & Fish Drip Pad Selection',
+    category: 'Seafood Cold Chain',
+    date: 'Sep 28, 2026',
+    readTime: '6 min read',
+    excerpt: 'Optimizing saline-stable absorbency and odor control to protect delicate salmon fillets, prawns, and chilled export seafood.',
+    image: '/images/products/seafood-pads.jpg',
+  },
+  {
+    title: 'Moisture & Condensation Control in Fresh Fruit and Berry Packaging',
+    category: 'Produce Packaging',
+    date: 'Sep 15, 2026',
+    readTime: '5 min read',
+    excerpt: 'Why micro-perforated food-contact pads prevent bottom rot, mold growth, and weight loss in high-value berry punnets.',
+    image: '/images/products/fruit-pads.jpg',
+  }
+];
+---
+
+<Layout 
+  title="Industry Blogs & Insights — HydroCare Solutions"
+  description="Read articles, food packaging guides, and absorbency engineering insights from HydroCare Solutions."
+  currentPath="/blogs"
+>
+  <section class="blogs-hero">
+    <div class="container-industrial">
+      <span class="badge-subtitle">Knowledge Hub</span>
+      <h1 class="page-title">Food Packaging & Absorbency Manufacturing Blogs</h1>
+      <p class="page-desc">Expert articles on food drip pad engineering, shelf-life extension, FSSAI/FDA food contact standards, and cold chain logistics.</p>
+    </div>
+  </section>
+
+  <section class="blogs-grid-section">
+    <div class="container-industrial">
+      <div class="blogs-grid">
+        {blogPosts.map((post) => (
+          <article class="blog-card">
+            <div class="blog-card-media">
+              <img src={post.image} alt={post.title} class="blog-img" loading="lazy" />
+              <span class="blog-category-tag">{post.category}</span>
+            </div>
+            <div class="blog-card-body">
+              <div class="blog-meta">
+                <span>{post.date}</span>
+                <span class="meta-dot">•</span>
+                <span>{post.readTime}</span>
+              </div>
+              <h2 class="blog-heading">{post.title}</h2>
+              <p class="blog-excerpt">{post.excerpt}</p>
+              <div class="blog-card-footer">
+                <span class="read-more-text">Read Article &rarr;</span>
+              </div>
+            </div>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .blogs-hero {
+    background: #F8FAFC;
+    padding: 60px 0 40px;
+    border-bottom: 1px solid #E2E8F0;
+    text-align: center;
+  }
+
+  .badge-subtitle {
+    display: inline-block;
+    background: #FDF2F2;
+    border: 1px solid #FECACA;
+    color: #6E2219;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    padding: 4px 12px;
+    border-radius: 20px;
+    margin-bottom: 14px;
+  }
+
+  .page-title {
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: 32px;
+    font-weight: 800;
+    color: #1E293B;
+    margin-bottom: 12px;
+    letter-spacing: -0.02em;
+  }
+
+  .page-desc {
+    max-width: 650px;
+    margin: 0 auto;
+    font-size: 15px;
+    color: #64748B;
+    line-height: 1.6;
+  }
+
+  .blogs-grid-section {
+    padding: 60px 0 80px;
+    background: #FFFFFF;
+  }
+
+  .blogs-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 30px;
+  }
+
+  .blog-card {
+    background: #FFFFFF;
+    border: 1px solid #E2E8F0;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(15, 23, 42, 0.03);
+    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .blog-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 24px rgba(15, 23, 42, 0.08);
+    border-color: #CBD5E1;
+  }
+
+  .blog-card-media {
+    position: relative;
+    height: 200px;
+    background: #F1F5F9;
+    overflow: hidden;
+  }
+
+  .blog-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+  }
+
+  .blog-card:hover .blog-img {
+    transform: scale(1.04);
+  }
+
+  .blog-category-tag {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    background: rgba(24, 24, 43, 0.85);
+    color: #FFFFFF;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 4px 10px;
+    border-radius: 4px;
+    backdrop-filter: blur(4px);
+  }
+
+  .blog-card-body {
+    padding: 22px;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+  }
+
+  .blog-meta {
+    font-size: 12px;
+    color: #94A3B8;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 10px;
+  }
+
+  .meta-dot {
+    opacity: 0.5;
+  }
+
+  .blog-heading {
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: 17px;
+    font-weight: 700;
+    color: #1E293B;
+    line-height: 1.4;
+    margin-bottom: 10px;
+  }
+
+  .blog-excerpt {
+    font-size: 13.5px;
+    color: #64748B;
+    line-height: 1.55;
+    margin-bottom: 20px;
+    flex: 1;
+  }
+
+  .blog-card-footer {
+    border-top: 1px solid #F1F5F9;
+    padding-top: 12px;
+  }
+
+  .read-more-text {
+    font-size: 13px;
+    font-weight: 600;
+    color: #6E2219;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    transition: color 0.15s ease;
+  }
+
+  .blog-card:hover .read-more-text {
+    color: #842A1F;
+  }
+</style>

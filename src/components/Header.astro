@@ -1,0 +1,1305 @@
+---
+interface Props {
+  currentPath?: string;
+}
+
+const { currentPath = '/' } = Astro.props;
+const whatsappNumber = '917623906747';
+
+// Navigation links
+const navLinks = [
+  { label: 'Home', href: '/', isActive: currentPath === '/' },
+  { label: 'Products', href: '/catalogue', isActive: currentPath === '/catalogue' || currentPath.startsWith('/products') },
+  { label: 'Blogs', href: '/blogs', isActive: currentPath === '/blogs' || currentPath.startsWith('/blogs') },
+  { label: 'About', href: '/about', isActive: currentPath === '/about' },
+  { label: 'Contact', href: '/contact', isActive: currentPath === '/contact' },
+];
+
+// Mega menu category and product definitions for Absorbent Pads
+const categories = [
+  {
+    id: 'meat-pads',
+    name: 'Meat Absorbent Pads',
+    slug: 'meat',
+    link: '/catalogue?category=meat',
+    products: [
+      {
+        name: 'Fresh Meat Drip Pads',
+        slug: 'fresh-meat-drip-pads',
+        desc: 'Food-grade certified drip soaker pads for raw beef & chicken trays',
+        image: '/images/hero/meat-pads.jpg',
+        link: '/products/fresh-meat-drip-pads',
+      },
+      {
+        name: 'Black Gourmet Beef Pads',
+        slug: 'black-beef-steak-absorbent-pads',
+        desc: 'Jet black food pads for gourmet steak & supermarket display',
+        image: '/images/products/meat-pads.jpg',
+        link: '/products/black-beef-steak-absorbent-pads',
+      },
+      {
+        name: 'Ultrasonic Sealed Pads',
+        slug: 'ultrasonic-sealed-pads',
+        desc: '4-side sealed hermetic edges preventing powder leakage',
+        image: '/images/products/white-black-pads.jpg',
+        link: '/products/ultrasonic-sealed-pads',
+      },
+      {
+        name: 'Poultry Purge Absorbers',
+        slug: 'poultry-purge-absorbers',
+        desc: 'High absorption 40ml–120ml retention for fresh chicken & turkey',
+        image: '/images/products/poultry-purge-absorbers.jpg',
+        link: '/products/poultry-purge-absorbers',
+      }
+    ]
+  },
+  {
+    id: 'seafood-pads',
+    name: 'Seafood Absorbent Pads',
+    slug: 'seafood',
+    link: '/catalogue?category=seafood',
+    products: [
+      {
+        name: 'Marine Seafood Drip Pads',
+        slug: 'marine-seafood-absorbent-pads',
+        desc: 'Saline-stable high fluid locking pads for salmon & fish fillets',
+        image: '/images/hero/seafood-pads.jpg',
+        link: '/products/marine-seafood-absorbent-pads',
+      },
+      {
+        name: 'Prawn & Shrimp Soakers',
+        slug: 'prawn-shrimp-soaker-sheets',
+        desc: 'Non-stick micro-embossed film prevents delicate seafood skin tears',
+        image: '/images/products/prawn-shrimp-soakers.jpg',
+        link: '/products/prawn-shrimp-soaker-sheets',
+      },
+      {
+        name: 'Antimicrobial Odor Liners',
+        slug: 'antimicrobial-odor-liners',
+        desc: 'Food-grade odor blockers for cold chain fishery air freight',
+        image: '/images/products/seafood-pads.jpg',
+        link: '/products/antimicrobial-odor-liners',
+      },
+      {
+        name: 'Salmon Box Export Sheets',
+        slug: 'salmon-box-export-sheets',
+        desc: '200x300mm large-format pads designed for commercial air cargo',
+        image: '/images/products/salmon-export-sheets.jpg',
+        link: '/products/salmon-box-export-sheets',
+      }
+    ]
+  },
+  {
+    id: 'fruit-pads',
+    name: 'Fruit & Vegetable Pads',
+    slug: 'fruit',
+    link: '/catalogue?category=fruit',
+    products: [
+      {
+        name: 'Fresh Berry Cushioning Pads',
+        slug: 'fruit-and-berry-absorbent-pads',
+        desc: 'Air-cushioned bubble embossed pads protecting soft strawberries',
+        image: '/images/hero/fruit-pads.jpg',
+        link: '/products/fruit-and-berry-absorbent-pads',
+      },
+      {
+        name: 'Grape & Tomato Soakers',
+        slug: 'grape-tomato-soakers',
+        desc: 'Humidity regulation layers preventing mold & juice accumulation',
+        image: '/images/products/grape-tomato-soakers.jpg',
+        link: '/products/grape-tomato-soakers',
+      },
+      {
+        name: 'Clamshell Punnet Liners',
+        slug: 'clamshell-punnet-berry-liners',
+        desc: 'Die-cut rounded corner liners for 125g, 250g & 500g punnet boxes',
+        image: '/images/products/fruit-punnet-colored-pads.jpg',
+        link: '/products/clamshell-punnet-berry-liners',
+      },
+      {
+        name: 'Breathable Produce Pads',
+        slug: 'breathable-produce-pads',
+        desc: 'Food-grade cellulose layers extending produce shelf-life 3-5 days',
+        image: '/images/products/fruit-pads.jpg',
+        link: '/products/breathable-produce-pads',
+      }
+    ]
+  },
+  {
+    id: 'cold-chain-pads',
+    name: 'Cold Chain Pad - Ice Pads',
+    slug: 'industrial',
+    link: '/catalogue?category=industrial',
+    products: [
+      {
+        name: 'Frozen Thermal Gel Ice Pads',
+        slug: 'cold-chain-ice-absorbent-pads',
+        desc: 'Refrigerant gel cooling packs for insulated shipper transit boxes',
+        image: '/images/hero/cold-chain-pads.jpg',
+        link: '/products/cold-chain-ice-absorbent-pads',
+      },
+      {
+        name: 'Heavy-Duty Prep Soakers',
+        slug: 'industrial-commercial-soaker-pads',
+        desc: 'High-capacity sheets holding up to 1500ml liquid per sheet',
+        image: '/images/products/industrial-soaker-pads.jpg',
+        link: '/products/industrial-commercial-soaker-pads',
+      },
+      {
+        name: 'Continuous Perforated Rolls',
+        slug: 'continuous-perforated-rolls',
+        desc: 'Automated dispensing rolls for industrial food processing lines',
+        image: '/images/products/continuous-perforated-rolls.jpg',
+        link: '/products/continuous-perforated-rolls',
+      },
+      {
+        name: 'Slaughterhouse Carcass Liners',
+        slug: 'slaughterhouse-carcass-liners',
+        desc: 'Puncture-resistant backing protecting against bone shards',
+        image: '/images/products/carcass-soaker-liners.jpg',
+        link: '/products/slaughterhouse-carcass-liners',
+      }
+    ]
+  }
+];
+---
+
+<header class="site-header">
+  <!-- Top sleek dark strip -->
+  <div class="header-top-accent"></div>
+
+  <div class="header-main">
+    <div class="header-container">
+      <!-- Brand Logo & Identity -->
+      <a href="/" class="brand-identity" title="HydroCare Solutions">
+        <div class="brand-logo-badge">
+          <img src="/favicon.svg" alt="HydroCare Solutions" class="brand-droplet-logo" width="46" height="46" />
+        </div>
+        <div class="brand-name-stack">
+          <span class="brand-line-1">
+            <span class="brand-hydro">HYDRO</span><span class="brand-care">CARE</span>
+          </span>
+          <span class="brand-line-2">
+            <span class="brand-sol-line"></span>
+            <span class="brand-sol-text">SOLUTIONS</span>
+            <span class="brand-sol-line"></span>
+          </span>
+        </div>
+      </a>
+
+      <!-- Desktop Navigation Menu -->
+      <nav class="nav-desktop" aria-label="Main navigation">
+        <a href="/" class={`nav-item ${currentPath === '/' ? 'active' : ''}`}>
+          Home
+        </a>
+
+        <!-- PRODUCTS NAV ITEM WITH MEGA MENU DROPDOWN -->
+        <div class="nav-dropdown-wrapper" id="productsMenuWrapper">
+          <a 
+            href="/catalogue" 
+            class={`nav-item nav-item-dropdown ${currentPath === '/catalogue' || currentPath.startsWith('/products') ? 'active' : ''}`}
+            id="productsNavBtn"
+          >
+            Products
+          </a>
+
+          <!-- MEGA DROPDOWN MENU -->
+          <div class="mega-dropdown-menu" id="megaDropdownMenu">
+            <!-- Invisible safe bridge for mouse movement -->
+            <div class="dropdown-hover-bridge"></div>
+
+            <div class="dropdown-card">
+              <!-- Left Column: Category Tabs -->
+              <div class="dropdown-left-col">
+                <div class="category-tabs-list" role="tablist">
+                  {categories.map((cat, idx) => (
+                    <button
+                      type="button"
+                      class={`cat-tab-btn ${idx === 0 ? 'active' : ''}`}
+                      data-target={`cat-panel-${cat.id}`}
+                      data-cat-title={cat.name}
+                      data-cat-link={cat.link}
+                      role="tab"
+                      aria-selected={idx === 0 ? 'true' : 'false'}
+                    >
+                      <span class="cat-tab-name">{cat.name}</span>
+                      <svg class="cat-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="9 18 15 12 9 6"></polyline>
+                      </svg>
+                    </button>
+                  ))}
+                </div>
+
+                <!-- Bottom link: View All Products -->
+                <div class="view-all-link-wrapper">
+                  <a href="/catalogue" class="view-all-products-link">
+                    View All Products
+                    <span class="arrow-sym">&rarr;</span>
+                  </a>
+                </div>
+              </div>
+
+              <!-- Right Column: Products Display Area -->
+              <div class="dropdown-right-col">
+                <!-- Top Header for current active category -->
+                <div class="panel-header">
+                  <span class="panel-category-title" id="panelCategoryTitle">{categories[0].name}</span>
+                </div>
+
+                <!-- Category Content Panels -->
+                {categories.map((cat, idx) => (
+                  <div 
+                    class={`category-panel ${idx === 0 ? 'active' : ''}`}
+                    id={`cat-panel-${cat.id}`}
+                    role="tabpanel"
+                  >
+                    <div class="products-mini-grid">
+                      {cat.products.map((prod) => (
+                        <a href={prod.link} class="product-mini-card" title={prod.name}>
+                          <div class="prod-thumb-wrap">
+                            <img 
+                              src={prod.image} 
+                              alt={prod.name} 
+                              class="prod-thumb-img"
+                              loading="lazy"
+                              onerror="this.src='/images/hero/meat-pads.jpg'"
+                            />
+                          </div>
+                          <div class="prod-mini-info">
+                            <h4 class="prod-mini-name">{prod.name}</h4>
+                          </div>
+                        </a>
+                      ))}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+        <a href="/blogs" class={`nav-item ${currentPath === '/blogs' || currentPath.startsWith('/blogs') ? 'active' : ''}`}>
+          Blogs
+        </a>
+        <a href="/about" class={`nav-item ${currentPath === '/about' ? 'active' : ''}`}>
+          About
+        </a>
+        <a href="/contact" class={`nav-item ${currentPath === '/contact' ? 'active' : ''}`}>
+          Contact
+        </a>
+      </nav>
+
+      <!-- Right Action Items -->
+      <div class="header-actions">
+        <!-- Track Order Button (To the left of WhatsApp) -->
+        <a 
+          href="/track" 
+          class="btn-nav-track" 
+          id="btnNavTrack"
+          title="Track Quotation / Order Status"
+        >
+          <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="1" y="3" width="15" height="13"></rect>
+            <polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon>
+            <circle cx="5.5" cy="18.5" r="2.5"></circle>
+            <circle cx="18.5" cy="18.5" r="2.5"></circle>
+          </svg>
+          <span>Track Order</span>
+        </a>
+
+        <!-- WhatsApp Round Green Button -->
+        <a 
+          href={`https://wa.me/${whatsappNumber}?text=${encodeURIComponent('Hello HydroCare Solutions! I would like to inquire about your products and manufacturing services.')}`}
+          target="_blank" 
+          rel="noopener noreferrer" 
+          class="btn-whatsapp-circle"
+          title="Chat on WhatsApp"
+          aria-label="Chat on WhatsApp"
+        >
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/>
+          </svg>
+        </a>
+
+        <!-- Request Quote Dark Button -->
+        <a href="/enquiry" class="btn-request-quote">
+          Request Quote
+        </a>
+
+        <!-- Mobile Menu Toggle Button -->
+        <button type="button" class="mobile-toggle" id="mobileMenuBtn" aria-label="Toggle navigation">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Mobile Nav Dropdown -->
+    <div class="mobile-menu" id="mobileMenu">
+      <a href="/" class="mobile-nav-link">Home</a>
+      
+      <!-- Mobile Products Link (Direct link, no dropdown on mobile) -->
+      <a href="/catalogue" class={`mobile-nav-link ${currentPath === '/catalogue' || currentPath.startsWith('/products') ? 'active' : ''}`}>Products</a>
+
+
+      <a href="/blogs" class={`mobile-nav-link ${currentPath === '/blogs' || currentPath.startsWith('/blogs') ? 'active' : ''}`}>Blogs</a>
+      <a href="/about" class={`mobile-nav-link ${currentPath === '/about' ? 'active' : ''}`}>About</a>
+      <a href="/contact" class="mobile-nav-link">Contact</a>
+      <a href="/track" class={`mobile-nav-link ${currentPath === '/track' ? 'active' : ''}`} id="mobileMenuTrackBtn">🚚 Track Order</a>
+
+      <div class="mobile-menu-actions">
+        <a href="/enquiry" class="btn-request-quote w-full text-center">
+          Request Quote
+        </a>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- Mobile Sticky Floating WhatsApp Button -->
+<a 
+  href={`https://wa.me/${whatsappNumber}?text=${encodeURIComponent('Hello HydroCare Solutions! I would like to inquire about your products and manufacturing services.')}`}
+  target="_blank" 
+  rel="noopener noreferrer" 
+  class="mobile-sticky-whatsapp"
+  title="Chat on WhatsApp"
+  aria-label="Chat on WhatsApp"
+>
+  <svg viewBox="0 0 24 24" width="30" height="30" fill="currentColor">
+    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/>
+  </svg>
+</a>
+
+<style>
+  .site-header {
+    position: sticky;
+    top: 0;
+    z-index: 80;
+    background: #FFFFFF;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04), 0 2px 10px rgba(0, 0, 0, 0.02);
+  }
+
+  /* Sleek top accent strip matching maroon theme */
+  .header-top-accent {
+    height: 4px;
+    background: #6E2219;
+    width: 100%;
+  }
+
+  .header-main {
+    position: relative;
+    background: #FFFFFF;
+    border-bottom: 1px solid #EEF2F6;
+  }
+
+  .header-container {
+    max-width: 1320px;
+    margin: 0 auto;
+    padding: 0 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 72px;
+    gap: 16px;
+    position: relative;
+  }
+
+  /* Brand Logo & Typography (Matches Admin Panel) */
+  .brand-identity {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-decoration: none;
+    flex-shrink: 0;
+  }
+
+  .brand-logo-badge {
+    width: 46px;
+    height: 46px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .brand-droplet-logo {
+    width: 46px;
+    height: 46px;
+    object-fit: contain;
+    display: block;
+    filter: drop-shadow(0 2px 5px rgba(0, 0, 0, 0.08));
+    transition: transform 0.2s ease;
+  }
+
+  .brand-identity:hover .brand-droplet-logo {
+    transform: scale(1.05);
+  }
+
+  .brand-name-stack {
+    display: inline-flex;
+    flex-direction: column;
+    width: fit-content;
+    line-height: 1;
+    user-select: none;
+  }
+
+  .brand-line-1 {
+    font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-size: 22px;
+    font-weight: 900;
+    letter-spacing: -0.2px;
+    display: flex;
+    align-items: center;
+    line-height: 1;
+  }
+
+  .brand-hydro {
+    color: #004B98;
+    font-weight: 900;
+  }
+
+  .brand-care {
+    color: #1CA444;
+    font-weight: 900;
+  }
+
+  .brand-line-2 {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    margin-top: 3px;
+    gap: 4px;
+    line-height: 1;
+  }
+
+  .brand-sol-line {
+    flex: 1;
+    height: 1.8px;
+    background-color: #003876;
+    border-radius: 1px;
+    min-width: 6px;
+  }
+
+  .brand-sol-text {
+    font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-size: 10px;
+    font-weight: 800;
+    color: #003876;
+    letter-spacing: 2.2px;
+    padding-left: 2px;
+    line-height: 1;
+    white-space: nowrap;
+    text-transform: uppercase;
+  }
+
+  @media (max-width: 640px) {
+    .brand-identity {
+      gap: 10px;
+    }
+    .brand-logo-badge,
+    .brand-droplet-logo {
+      width: 36px;
+      height: 36px;
+    }
+    .brand-line-1 {
+      font-size: 18px;
+    }
+    .brand-sol-text {
+      font-size: 8.5px;
+      letter-spacing: 1.8px;
+    }
+  }
+
+  .brand-logo-svg {
+    width: 42px;
+    height: 42px;
+    display: block;
+    filter: drop-shadow(0 1px 2px rgba(21, 78, 66, 0.15));
+  }
+
+  .brand-text {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .brand-title {
+    font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-size: 15.5px;
+    font-weight: 700;
+    color: #1E293B;
+    letter-spacing: -0.015em;
+    line-height: 1.25;
+    white-space: nowrap;
+  }
+
+  .brand-subtitle {
+    font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-size: 9.5px;
+    font-weight: 600;
+    color: #8492A6;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    line-height: 1.2;
+    margin-top: 3px;
+    white-space: nowrap;
+  }
+
+  /* Desktop Navigation - Aligned to left next to brand logo */
+  .nav-desktop {
+    display: none;
+    align-items: center;
+    gap: 6px;
+    margin-left: 36px;
+    margin-right: auto;
+  }
+
+  @media (min-width: 1040px) {
+    .nav-desktop {
+      display: flex;
+    }
+  }
+
+  .nav-item {
+    padding: 7px 15px;
+    font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-size: 14.5px;
+    font-weight: 500;
+    color: #5E718D;
+    text-decoration: none;
+    border-radius: 6px;
+    border: 1.5px solid transparent;
+    transition: all 0.18s ease;
+    white-space: nowrap;
+    display: inline-flex;
+    align-items: center;
+  }
+
+  .nav-item:hover {
+    color: #6E2219;
+  }
+
+  /* Active state with maroon border and soft rose background */
+  .nav-item.active,
+  .nav-dropdown-wrapper:hover .nav-item-dropdown {
+    background-color: #FDF2F2;
+    border-color: #FECACA;
+    color: #6E2219;
+    font-weight: 600;
+    box-shadow: 0 1px 2px rgba(110, 34, 25, 0.08);
+  }
+
+  /* ========================================================= */
+  /* MEGA DROPDOWN MENU IMPLEMENTATION                        */
+  /* ========================================================= */
+  .nav-dropdown-wrapper {
+    position: relative;
+    display: inline-block;
+  }
+
+  /* Invisible hover bridge to guarantee mouse movement won't collapse the dropdown */
+  .dropdown-hover-bridge {
+    position: absolute;
+    top: -14px;
+    left: 0;
+    right: 0;
+    height: 16px;
+  }
+
+  .mega-dropdown-menu {
+    position: absolute;
+    top: calc(100% + 8px);
+    left: -160px; 
+    width: 900px;
+    background: transparent;
+    z-index: 100;
+    
+    /* Animation & Smooth Visibility */
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(6px);
+    transition: opacity 0.2s cubic-bezier(0.16, 1, 0.3, 1),
+                transform 0.2s cubic-bezier(0.16, 1, 0.3, 1),
+                visibility 0.2s;
+    pointer-events: none;
+  }
+
+  /* Open dropdown on hover of wrapper */
+  .nav-dropdown-wrapper:hover .mega-dropdown-menu,
+  .mega-dropdown-menu:hover {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+    pointer-events: auto;
+  }
+
+  .dropdown-card {
+    background: #FFFFFF;
+    border: 1px solid #E2E8F0;
+    border-radius: 12px;
+    box-shadow: 0 20px 48px -4px rgba(15, 23, 42, 0.14),
+                0 8px 20px -2px rgba(15, 23, 42, 0.06);
+    display: flex;
+    overflow: hidden;
+    min-height: 440px;
+  }
+
+  /* Left Column: Categories List */
+  .dropdown-left-col {
+    width: 255px;
+    flex-shrink: 0;
+    border-right: 1px solid #F1F5F9;
+    padding: 18px 14px;
+    background: #FAFAFA;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  .category-tabs-list {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  /* Category Item Button */
+  .cat-tab-btn {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 14px;
+    border-radius: 8px;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    text-align: left;
+    transition: all 0.15s ease;
+  }
+
+  .cat-tab-name {
+    font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    color: #475569;
+    line-height: 1.35;
+    transition: color 0.15s ease;
+  }
+
+  .cat-chevron {
+    color: #64748B;
+    opacity: 0;
+    transition: opacity 0.15s ease, transform 0.15s ease;
+  }
+
+  .cat-tab-btn:hover:not(.active) {
+    background-color: #FDF2F2;
+  }
+
+  .cat-tab-btn:hover:not(.active) .cat-tab-name {
+    color: #6E2219;
+  }
+
+  /* Active Category Tab */
+  .cat-tab-btn.active {
+    background-color: #6E2219;
+    color: #FFFFFF;
+  }
+
+  .cat-tab-btn.active .cat-tab-name {
+    color: #FFFFFF;
+    font-weight: 700;
+  }
+
+  .cat-tab-btn.active .cat-chevron {
+    color: #FFFFFF;
+    opacity: 1;
+    transform: translateX(2px);
+  }
+
+  /* View All Products Bottom Link */
+  .view-all-link-wrapper {
+    padding-top: 10px;
+    margin-top: 10px;
+    border-top: 1px solid #F1F5F9;
+  }
+
+  .view-all-products-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 6px 8px;
+    font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    color: #6E2219;
+    text-decoration: none;
+    transition: color 0.15s ease;
+  }
+
+  .view-all-products-link:hover {
+    color: #842A1F;
+    text-decoration: underline;
+  }
+
+  .arrow-sym {
+    font-size: 14px;
+    line-height: 1;
+    transition: transform 0.15s ease;
+  }
+
+  .view-all-products-link:hover .arrow-sym {
+    transform: translateX(3px);
+  }
+
+  /* Right Column: Products Display Area */
+  .dropdown-right-col {
+    flex: 1;
+    padding: 20px 26px 20px;
+    background: #FFFFFF;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  /* Category Header Bar */
+  .panel-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 16px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #F1F5F9;
+  }
+
+  .panel-category-title {
+    font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    color: #1E293B;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+  }
+
+  .panel-category-link {
+    font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size: 11.5px;
+    color: #64748B;
+    text-decoration: none;
+    transition: color 0.15s ease;
+  }
+
+  .panel-category-link:hover {
+    color: #6E2219;
+    text-decoration: underline;
+  }
+
+  /* Category Panels Visibility */
+  .category-panel {
+    display: none;
+    flex: 1;
+  }
+
+  .category-panel.active {
+    display: block;
+    animation: fadeInProduct 0.2s ease-out;
+  }
+
+  @keyframes fadeInProduct {
+    from {
+      opacity: 0;
+      transform: translateY(3px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* Products 2-Column Mini Grid */
+  .products-mini-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px 20px;
+  }
+
+  .product-mini-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    gap: 10px;
+    padding: 14px 12px;
+    border-radius: 8px;
+    border: 1px solid #F1F5F9;
+    background: #FAFBFD;
+    text-decoration: none;
+    transition: background-color 0.15s ease, border-color 0.15s ease, transform 0.15s ease;
+  }
+
+  .product-mini-card:hover {
+    background-color: #F1F5F9;
+    border-color: #E2E8F0;
+  }
+
+  .prod-thumb-wrap {
+    width: 86px;
+    height: 68px;
+    border-radius: 8px;
+    overflow: hidden;
+    background: #F1F5F9;
+    border: 1px solid #E2E8F0;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .prod-thumb-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .prod-mini-info {
+    width: 100%;
+    text-align: center;
+  }
+
+  .prod-mini-name {
+    font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    color: #1E293B;
+    line-height: 1.35;
+    margin: 0;
+    text-align: center;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .product-mini-card:hover .prod-mini-name {
+    color: #6E2219;
+  }
+
+  /* Bottom Sample Request Bar Matching Screenshot */
+  .dropdown-sample-bar {
+    margin-top: 18px;
+    padding-top: 14px;
+    border-top: 1px solid #F1F5F9;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+  }
+
+  .sample-bar-info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .sample-bar-title {
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+    color: #1E293B;
+  }
+
+  .sample-bar-sub {
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: 11px;
+    color: #64748B;
+  }
+
+  .sample-bar-cta {
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: 11.5px;
+    font-weight: 600;
+    color: #6E2219;
+    text-decoration: none;
+    transition: color 0.15s ease;
+    white-space: nowrap;
+  }
+
+  .sample-bar-cta:hover {
+    color: #842A1F;
+    text-decoration: underline;
+  }
+
+  /* Right Action Buttons */
+  .header-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-shrink: 0;
+  }
+
+  /* Track Order Button in Navbar */
+  .btn-nav-track {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 14px;
+    border-radius: 8px;
+    background-color: #FFFFFF;
+    border: 1px solid #D1D5DB;
+    color: #1E293B;
+    font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    text-decoration: none;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.2s ease;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+    flex-shrink: 0;
+  }
+
+  .btn-nav-track:hover {
+    background-color: #FFF5F5;
+    border-color: #8B0000;
+    color: #8B0000;
+    transform: translateY(-1px);
+    box-shadow: 0 3px 8px rgba(139, 0, 0, 0.12);
+  }
+
+  .btn-nav-track svg {
+    color: inherit;
+    flex-shrink: 0;
+  }
+
+  /* Round WhatsApp Button */
+  .btn-whatsapp-circle {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background-color: #25D366;
+    color: #FFFFFF;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    box-shadow: 0 2px 8px rgba(37, 211, 102, 0.28);
+    transition: transform 0.2s ease, background-color 0.2s ease, box-shadow 0.2s ease;
+    flex-shrink: 0;
+  }
+
+  .btn-whatsapp-circle:hover {
+    background-color: #20BD5A;
+    transform: scale(1.06);
+    box-shadow: 0 4px 12px rgba(37, 211, 102, 0.38);
+  }
+
+  /* Request Quote Maroon Pill Button matching Sample & Quote */
+  .btn-request-quote {
+    background-color: #6E2219;
+    color: #FFFFFF;
+    font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-size: 13.5px;
+    font-weight: 600;
+    padding: 9px 18px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 6px rgba(110, 34, 25, 0.2);
+  }
+
+  .btn-request-quote:hover {
+    background-color: #842A1F;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(110, 34, 25, 0.3);
+  }
+
+  .btn-request-quote:active {
+    transform: translateY(0);
+  }
+
+  /* Mobile Toggle */
+  .mobile-toggle {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 5px;
+    padding: 6px;
+    cursor: pointer;
+    border: none;
+    background: transparent;
+  }
+
+  @media (min-width: 1040px) {
+    .mobile-toggle {
+      display: none;
+    }
+  }
+
+  .mobile-toggle span {
+    display: block;
+    width: 22px;
+    height: 2px;
+    background-color: #1E293B;
+    border-radius: 2px;
+    transition: all 0.25s ease;
+  }
+
+  /* Mobile Dropdown Menu */
+  .mobile-menu {
+    display: none;
+    flex-direction: column;
+    background: #FFFFFF;
+    border-top: 1px solid #EEF2F6;
+    padding: 16px 20px 24px;
+    gap: 6px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.06);
+    max-height: 80vh;
+    overflow-y: auto;
+  }
+
+  .mobile-menu.open {
+    display: flex;
+  }
+
+  .mobile-nav-link {
+    padding: 10px 14px;
+    font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-size: 14.5px;
+    font-weight: 500;
+    color: #5E718D;
+    text-decoration: none;
+    border-radius: 6px;
+    border: 1.5px solid transparent;
+    transition: all 0.18s ease;
+  }
+
+  .mobile-nav-link:hover {
+    background-color: #FDF2F2;
+    color: #6E2219;
+  }
+
+  .mobile-nav-link.active {
+    background-color: #FDF2F2;
+    border-color: #FECACA;
+    color: #6E2219;
+    font-weight: 600;
+  }
+
+  .flex-between-mobile {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+  }
+
+  .mobile-arrow {
+    font-size: 11px;
+    transition: transform 0.2s ease;
+  }
+
+  .mobile-sub-categories {
+    display: none;
+    padding: 8px 12px 12px;
+    background: #F8FAFC;
+    border-radius: 6px;
+    margin: 4px 0;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .mobile-sub-categories.open {
+    display: flex;
+  }
+
+  .mobile-cat-group {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .mobile-cat-heading {
+    font-size: 11px;
+    font-weight: 700;
+    color: #1E293B;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    padding: 4px 6px 2px;
+  }
+
+  .mobile-sub-link {
+    font-size: 13px;
+    color: #64748B;
+    padding: 4px 6px;
+    border-radius: 4px;
+    text-decoration: none;
+  }
+
+  .mobile-sub-link:hover {
+    color: #6E2219;
+  }
+
+  .view-all-mobile {
+    font-weight: 600;
+    color: #6E2219 !important;
+    border-top: 1px solid #E2E8F0;
+    padding-top: 8px;
+    margin-top: 4px;
+  }
+
+  .mobile-menu-actions {
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px solid #EEF2F6;
+  }
+
+  .w-full {
+    width: 100%;
+  }
+
+  /* Sticky Mobile WhatsApp Floating Action */
+  .mobile-sticky-whatsapp {
+    display: none;
+  }
+
+  @media (max-width: 1039px) {
+    /* On mobile: Hide WhatsApp round button and Track Order from top navbar */
+    .header-actions .btn-whatsapp-circle,
+    .header-actions .btn-nav-track {
+      display: none !important;
+    }
+
+    /* On mobile: Show Request Quote button with 6px border-radius matching Sample & Quote */
+    .header-actions .btn-request-quote {
+      display: inline-flex !important;
+      align-items: center;
+      justify-content: center;
+      padding: 7px 14px;
+      font-size: 13px;
+      font-weight: 700;
+      border-radius: 6px;
+      background-color: #800000;
+      color: #FFFFFF;
+      text-decoration: none;
+      white-space: nowrap;
+      box-shadow: 0 2px 6px rgba(128, 0, 0, 0.2);
+    }
+
+    /* Show floating sticky WhatsApp button in bottom right corner on mobile */
+    .mobile-sticky-whatsapp {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: fixed;
+      bottom: 22px;
+      right: 18px;
+      width: 52px;
+      height: 52px;
+      background-color: #25D366;
+      color: #FFFFFF;
+      border-radius: 50%;
+      box-shadow: 0 4px 16px rgba(37, 211, 102, 0.45), 0 2px 6px rgba(0, 0, 0, 0.15);
+      z-index: 95;
+      text-decoration: none;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      animation: whatsappPulse 2.5s infinite;
+    }
+
+    .mobile-sticky-whatsapp:active {
+      transform: scale(0.92);
+    }
+  }
+
+  @keyframes whatsappPulse {
+    0% {
+      box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.6), 0 4px 16px rgba(37, 211, 102, 0.45);
+    }
+    70% {
+      box-shadow: 0 0 0 14px rgba(37, 211, 102, 0), 0 4px 16px rgba(37, 211, 102, 0.45);
+    }
+    100% {
+      box-shadow: 0 0 0 0 rgba(37, 211, 102, 0), 0 4px 16px rgba(37, 211, 102, 0.45);
+    }
+  }
+</style>
+
+<script>
+  // Mobile Menu Toggling
+  const menuBtn = document.getElementById('mobileMenuBtn');
+  const menu = document.getElementById('mobileMenu');
+  if (menuBtn && menu) {
+    menuBtn.addEventListener('click', () => {
+      menu.classList.toggle('open');
+    });
+  }
+
+  // Mobile Products Accordion
+  const mobileProdToggle = document.getElementById('mobileProductsToggle');
+  const mobileSubCats = document.getElementById('mobileSubCats');
+  if (mobileProdToggle && mobileSubCats) {
+    mobileProdToggle.addEventListener('click', () => {
+      mobileSubCats.classList.toggle('open');
+      const arrow = mobileProdToggle.querySelector('.mobile-arrow');
+      if (arrow) {
+        arrow.textContent = mobileSubCats.classList.contains('open') ? '▴' : '▾';
+      }
+    });
+  }
+
+  // Mega Menu Category Hover & Click Switcher
+  const catTabBtns = document.querySelectorAll('.cat-tab-btn');
+  const catPanels = document.querySelectorAll('.category-panel');
+  const headerCatTitle = document.getElementById('panelCategoryTitle');
+
+  function activateTab(btn: Element) {
+    const targetPanelId = btn.getAttribute('data-target');
+    const catTitle = btn.getAttribute('data-cat-title');
+
+    // Update active tab buttons
+    catTabBtns.forEach(b => {
+      b.classList.remove('active');
+      b.setAttribute('aria-selected', 'false');
+    });
+    btn.classList.add('active');
+    btn.setAttribute('aria-selected', 'true');
+
+    // Update active category panels
+    catPanels.forEach(p => p.classList.remove('active'));
+    if (targetPanelId) {
+      const targetPanel = document.getElementById(targetPanelId);
+      if (targetPanel) targetPanel.classList.add('active');
+    }
+
+    // Update title in header
+    if (headerCatTitle && catTitle) headerCatTitle.textContent = catTitle;
+  }
+
+  catTabBtns.forEach((btn) => {
+    btn.addEventListener('mouseenter', () => activateTab(btn));
+    btn.addEventListener('click', () => activateTab(btn));
+  });
+
+  // Track Order Click Handler (Opens Global Track Modal)
+  const navTrackBtn = document.getElementById('btnNavTrack');
+  const mobileNavTrackBtn = document.getElementById('mobileMenuTrackBtn');
+
+  function handleTrackModalClick(e: Event) {
+    if (typeof (window as any).openTrackQuoteModal === 'function') {
+      e.preventDefault();
+      const mobileMenuEl = document.getElementById('mobileMenu');
+      if (mobileMenuEl && mobileMenuEl.classList.contains('open')) {
+        mobileMenuEl.classList.remove('open');
+      }
+      (window as any).openTrackQuoteModal();
+    }
+  }
+
+  navTrackBtn?.addEventListener('click', handleTrackModalClick);
+  mobileNavTrackBtn?.addEventListener('click', handleTrackModalClick);
+</script>

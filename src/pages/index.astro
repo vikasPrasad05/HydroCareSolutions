@@ -1,0 +1,2937 @@
+---
+import Layout from '../layouts/Layout.astro';
+import ProductCard from '../components/ProductCard.astro';
+import ProductionStats from '../components/ProductionStats.astro';
+import { getAllProducts, getOffer } from '../lib/store';
+
+const products = await getAllProducts();
+const activeProducts = products.filter(p => p.is_active);
+// Show 2 complete lines (8 products) on the homepage
+const homeProducts = activeProducts.slice(0, 8);
+const currentOffer = await getOffer();
+const whatsappNumber = import.meta.env.COMPANY_WHATSAPP || '917623906747';
+
+// 4-Card Hero Collage Dynamic Product Rotator Slides
+const meatSlides = [
+  { image: '/images/products/quilted-meat-tray-pad.jpg', tag: 'MEAT ABSORBENT PADS', link: '/products/fresh-meat-drip-pads' },
+  { image: '/images/products/black-beef-steak-pad.jpg', tag: 'BLACK GOURMET PADS', link: '/products/black-beef-steak-absorbent-pads' },
+  { image: '/images/products/ultrasonic-sealed-pad-macro.jpg', tag: 'ULTRASONIC SEALED PADS', link: '/products/ultrasonic-sealed-pads' },
+  { image: '/images/products/soaker-pads-color-variants.jpg', tag: '5-COLOR TRAY PADS', link: '/products/multi-color-food-grade-soaker-pads' },
+  { image: '/images/products/poultry-purge-absorbers.jpg', tag: 'POULTRY PURGE ABSORBERS', link: '/products/poultry-purge-absorbers' }
+];
+
+const coldChainSlides = [
+  { image: '/images/hero/cold-chain-pads.jpg', tag: 'COLD CHAIN ICE PADS', link: '/products/cold-chain-ice-absorbent-pads' },
+  { image: '/images/products/continuous-perforated-rolls.jpg', tag: 'PERFORATED ROLL DISPENSER', link: '/products/continuous-perforated-rolls' },
+  { image: '/images/products/industrial-soaker-pads.jpg', tag: 'HEAVY-DUTY PREP SOAKERS', link: '/products/industrial-commercial-soaker-pads' },
+  { image: '/images/products/carcass-soaker-liners.jpg', tag: 'CARCASS WRAP LINERS', link: '/products/slaughterhouse-carcass-liners' }
+];
+
+const fruitSlides = [
+  { image: '/images/products/fruit-punnet-cushion-pad.jpg', tag: 'HONEYCOMB BERRY PADS', link: '/products/fruit-and-berry-absorbent-pads' },
+  { image: '/images/hero/fruit-pads.jpg', tag: 'FRUIT & VEGETABLE PADS', link: '/products/breathable-produce-pads' },
+  { image: '/images/products/fruit-punnet-colored-pads.jpg', tag: 'PUNNET CUSHIONING LINERS', link: '/products/clamshell-punnet-berry-liners' },
+  { image: '/images/products/grape-tomato-soakers.jpg', tag: 'GRAPE & TOMATO SOAKERS', link: '/products/grape-tomato-soakers' }
+];
+
+const seafoodSlides = [
+  { image: '/images/products/marine-seafood-pad-macro.jpg', tag: 'MARINE SEAFOOD DRIP PADS', link: '/products/marine-seafood-absorbent-pads' },
+  { image: '/images/hero/seafood-pads.jpg', tag: 'SALMON DISPLAY TRAY PADS', link: '/products/marine-seafood-absorbent-pads' },
+  { image: '/images/products/salmon-export-sheets.jpg', tag: 'SALMON EXPORT SHEETS', link: '/products/salmon-box-export-sheets' },
+  { image: '/images/products/antimicrobial-odor-liner.jpg', tag: 'ANTIMICROBIAL ODOR LINERS', link: '/products/antimicrobial-odor-liners' },
+  { image: '/images/products/prawn-shrimp-soakers.jpg', tag: 'PRAWN & SHRIMP SOAKERS', link: '/products/prawn-shrimp-soaker-sheets' }
+];
+---
+
+<Layout 
+  title="HydroCare Solutions — Food-Grade Absorbent Pads Manufacturer India"
+  description="Primary B2B manufacturer of food-grade absorbent drip pads for fresh meat, poultry, seafood, berries, and cold chain logistics. Certified cleanroom converting facility."
+  currentPath="/"
+>
+  <!-- Hero Section -->
+  <section class="hero-section">
+    <!-- Animated 3-Column Background Moving Columns (Product Showcase Marquee) -->
+    <div class="hero-bg-columns-backdrop" aria-hidden="true">
+      <div class="hero-bg-columns-grid">
+        
+        <!-- Column 1: Moves Down (3 images duplicated for infinite loop) -->
+        <div class="hero-bg-col col-move-down">
+          <div class="hero-bg-col-track">
+            <!-- Group 1 -->
+            <div class="track-group">
+              <div class="bg-product-card">
+                <img src="/images/products/meat-pads.jpg" alt="" class="bg-product-img" loading="eager" />
+                <span class="bg-card-glass-tag">Meat Absorbent Pads</span>
+              </div>
+              <div class="bg-product-card">
+                <img src="/images/products/fruit-pads.jpg" alt="" class="bg-product-img" loading="eager" />
+                <span class="bg-card-glass-tag">Fruit & Berry Cushioning</span>
+              </div>
+              <div class="bg-product-card">
+                <img src="/images/products/seafood-pads.jpg" alt="" class="bg-product-img" loading="eager" />
+                <span class="bg-card-glass-tag">Marine Seafood Pads</span>
+              </div>
+            </div>
+            <!-- Group 2 (Duplicate for seamless loop) -->
+            <div class="track-group">
+              <div class="bg-product-card">
+                <img src="/images/products/meat-pads.jpg" alt="" class="bg-product-img" loading="eager" />
+                <span class="bg-card-glass-tag">Meat Absorbent Pads</span>
+              </div>
+              <div class="bg-product-card">
+                <img src="/images/products/fruit-pads.jpg" alt="" class="bg-product-img" loading="eager" />
+                <span class="bg-card-glass-tag">Fruit & Berry Cushioning</span>
+              </div>
+              <div class="bg-product-card">
+                <img src="/images/products/seafood-pads.jpg" alt="" class="bg-product-img" loading="eager" />
+                <span class="bg-card-glass-tag">Marine Seafood Pads</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Column 2: Moves Up (3 images duplicated for infinite loop) -->
+        <div class="hero-bg-col col-move-up">
+          <div class="hero-bg-col-track">
+            <!-- Group 1 -->
+            <div class="track-group">
+              <div class="bg-product-card">
+                <img src="/images/hero/cold-chain-pads.jpg" alt="" class="bg-product-img" loading="eager" />
+                <span class="bg-card-glass-tag">Cold Chain Ice Soakers</span>
+              </div>
+              <div class="bg-product-card">
+                <img src="/images/products/industrial-soaker-pads.jpg" alt="" class="bg-product-img" loading="eager" />
+                <span class="bg-card-glass-tag">Industrial Soaker Mats</span>
+              </div>
+              <div class="bg-product-card">
+                <img src="/images/products/fruit-punnet-colored-pads.jpg" alt="" class="bg-product-img" loading="eager" />
+                <span class="bg-card-glass-tag">Perforated Punnet Pads</span>
+              </div>
+            </div>
+            <!-- Group 2 (Duplicate for seamless loop) -->
+            <div class="track-group">
+              <div class="bg-product-card">
+                <img src="/images/hero/cold-chain-pads.jpg" alt="" class="bg-product-img" loading="eager" />
+                <span class="bg-card-glass-tag">Cold Chain Ice Soakers</span>
+              </div>
+              <div class="bg-product-card">
+                <img src="/images/products/industrial-soaker-pads.jpg" alt="" class="bg-product-img" loading="eager" />
+                <span class="bg-card-glass-tag">Industrial Soaker Mats</span>
+              </div>
+              <div class="bg-product-card">
+                <img src="/images/products/fruit-punnet-colored-pads.jpg" alt="" class="bg-product-img" loading="eager" />
+                <span class="bg-card-glass-tag">Perforated Punnet Pads</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Column 3: Moves Down (3 images duplicated for infinite loop) -->
+        <div class="hero-bg-col col-move-down col-3-down">
+          <div class="hero-bg-col-track">
+            <!-- Group 1 -->
+            <div class="track-group">
+              <div class="bg-product-card">
+                <img src="/images/products/meat-fish-poultry-demo.jpg" alt="" class="bg-product-img" loading="eager" />
+                <span class="bg-card-glass-tag">Poultry & Meat Barrier</span>
+              </div>
+              <div class="bg-product-card">
+                <img src="/images/products/white-black-pads.jpg" alt="" class="bg-product-img" loading="eager" />
+                <span class="bg-card-glass-tag">Black & White Soakers</span>
+              </div>
+              <div class="bg-product-card">
+                <img src="/images/about/soaker-absorbent-pads-structure.jpg" alt="" class="bg-product-img" loading="eager" />
+                <span class="bg-card-glass-tag">Multi-Layer Core Pad</span>
+              </div>
+            </div>
+            <!-- Group 2 (Duplicate for seamless loop) -->
+            <div class="track-group">
+              <div class="bg-product-card">
+                <img src="/images/products/meat-fish-poultry-demo.jpg" alt="" class="bg-product-img" loading="eager" />
+                <span class="bg-card-glass-tag">Poultry & Meat Barrier</span>
+              </div>
+              <div class="bg-product-card">
+                <img src="/images/products/white-black-pads.jpg" alt="" class="bg-product-img" loading="eager" />
+                <span class="bg-card-glass-tag">Black & White Soakers</span>
+              </div>
+              <div class="bg-product-card">
+                <img src="/images/about/soaker-absorbent-pads-structure.jpg" alt="" class="bg-product-img" loading="eager" />
+                <span class="bg-card-glass-tag">Multi-Layer Core Pad</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Translucent soft veil so foreground text and search bar stay crisp and readable -->
+      <div class="hero-bg-overlay-veil"></div>
+    </div>
+
+    <div class="hero-bg-glow"></div>
+    <div class="container-apparel hero-container">
+      <div class="hero-grid">
+        
+        <!-- Hero Left: Content, Search & Trust Badges -->
+        <div class="hero-content">
+          <!-- Main Heading -->
+          <h1 class="hero-title">
+            <span class="hero-title-main">Primary Manufacturer of</span>
+            <span class="hero-title-accent">
+              <span class="hero-word-blue">Food-Grade</span> <span class="hero-word-green">Absorbent Pads</span>
+            </span>
+          </h1>
+
+          <!-- Subtitle -->
+          <p class="hero-subtitle">
+            Certified cleanroom manufacturing of high-performance soaker pads for <strong>Fresh Meat, Poultry, Seafood, Berries & Cold Chain Logistics</strong>. FDA 21 CFR & FSSAI food contact certified with 0% middleman markup.
+          </p>
+
+          <!-- Search Bar -->
+          <form action="/catalogue" method="GET" class="search-form-row">
+            <div class="search-input-wrap">
+              <svg class="search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="11" cy="11" r="8"></circle>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+              </svg>
+              <input 
+                type="text" 
+                name="q" 
+                class="search-input" 
+                placeholder="Search meat pads, seafood soakers, berry cushioning, cold chain..." 
+                aria-label="Search absorbent pads and products"
+              />
+            </div>
+            <button type="submit" class="search-submit-btn">
+              <span>Search</span>
+              <span class="search-btn-arrow">&rarr;</span>
+            </button>
+          </form>
+
+          <!-- Brand Feature Highlights (Superior Absorption, Leak Proof, Eco Friendly, Custom Sizes, Trusted Quality) -->
+          <div class="hero-brand-features-row">
+            <!-- 1. Superior Absorption -->
+            <div class="hero-feature-item">
+              <div class="feature-circle circle-blue" title="Superior Absorption">
+                <svg viewBox="0 0 24 24" width="28" height="28" fill="currentColor">
+                  <path fill-rule="evenodd" clip-rule="evenodd" d="M12 3.2L6.34 8.86a8 8 0 1 0 11.32 0L12 3.2zm0 4.24l3.54 3.54a5 5 0 1 1-7.08 0L12 7.44z"/>
+                </svg>
+              </div>
+              <div class="feature-label">
+                <span>SUPERIOR</span>
+                <span>ABSORPTION</span>
+              </div>
+            </div>
+
+            <!-- 2. Leak Proof Protection -->
+            <div class="hero-feature-item">
+              <div class="feature-circle circle-green" title="Leak Proof Protection">
+                <svg viewBox="0 0 24 24" width="28" height="28" fill="currentColor">
+                  <path fill-rule="evenodd" clip-rule="evenodd" d="M12 2L4 5v6.09c0 5.05 3.41 9.76 8 10.91 4.59-1.15 8-5.86 8-10.91V5l-8-3zm0 2.87l6 2.25v4.97c0 3.88-2.55 7.48-6 8.52-3.45-1.04-6-4.64-6-8.52V7.12l6-2.25z"/>
+                </svg>
+              </div>
+              <div class="feature-label">
+                <span>LEAK PROOF</span>
+                <span>PROTECTION</span>
+              </div>
+            </div>
+
+            <!-- 3. Eco Friendly Solutions -->
+            <div class="hero-feature-item">
+              <div class="feature-circle circle-orange" title="Eco Friendly Solutions">
+                <svg viewBox="0 0 24 24" width="28" height="28" fill="none">
+                  <path d="M20.5 3.5c-7.5.5-13.5 4.5-15 11.5-.5 2.5 0 4.5 0 4.5s2 .5 4.5 0c7-1.5 11-7.5 11.5-15z" fill="#FFFFFF"/>
+                  <path d="M5.5 19.5c2-3 5.5-6.5 10-9" stroke="#FA6400" stroke-width="2.4" stroke-linecap="round"/>
+                </svg>
+              </div>
+              <div class="feature-label">
+                <span>ECO FRIENDLY</span>
+                <span>SOLUTIONS</span>
+              </div>
+            </div>
+
+            <!-- 4. Custom Sizes & Design -->
+            <div class="hero-feature-item">
+              <div class="feature-circle circle-purple" title="Custom Sizes & Design">
+                <svg viewBox="0 0 24 24" width="28" height="28" fill="currentColor">
+                  <path fill-rule="evenodd" clip-rule="evenodd" d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58a.49.49 0 0 0 .12-.61l-1.92-3.32a.49.49 0 0 0-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54A.484.484 0 0 0 14 2h-4c-.25 0-.46.18-.49.42l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.63 8.49c-.14.24-.08.54.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58a.49.49 0 0 0-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h4c.25 0 .46-.18.49-.42l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.54-.12-.61l-2.01-1.58zM12 15.5c-1.93 0-3.5-1.57-3.5-3.5s1.57-3.5 3.5-3.5 3.5 1.57 3.5 3.5-1.57 3.5-3.5 3.5z"/>
+                </svg>
+              </div>
+              <div class="feature-label">
+                <span>CUSTOM SIZES</span>
+                <span>& DESIGN</span>
+              </div>
+            </div>
+
+            <!-- 5. Trusted Quality -->
+            <div class="hero-feature-item">
+              <div class="feature-circle circle-red" title="Trusted Quality">
+                <svg viewBox="0 0 24 24" width="28" height="28" fill="currentColor">
+                  <path d="M21.71 8.71l-2.42-2.42a2.003 2.003 0 0 0-2.83 0l-2.46 2.46-1.71-1.71a2.003 2.003 0 0 0-2.83 0L7.17 9.33a2.003 2.003 0 0 0 0 2.83l1.41 1.41-5.87 5.87a1 1 0 0 0 0 1.41l2.83 2.83a1 1 0 0 0 1.41 0l5.87-5.87 1.41 1.41a2.003 2.003 0 0 0 2.83 0l6.65-6.65a2.003 2.003 0 0 0 0-2.83l-2-2.03zM6.12 20.88l-1.41-1.41 5.17-5.17 1.41 1.41-5.17 5.17zm6.59-3.76l-1.41-1.41 1.41-1.41 1.41 1.41-1.41 1.41zm2.12-2.12l-1.41-1.41 1.41-1.41 1.41 1.41-1.41 1.41zm2.12-2.12l-1.41-1.41 1.41-1.41 1.41 1.41-1.41 1.41zm3.47-3.47l-1.41 1.41-1.41-1.41 1.41-1.41 1.41 1.41z"/>
+                </svg>
+              </div>
+              <div class="feature-label">
+                <span>TRUSTED</span>
+                <span>QUALITY</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Hero Right: 4-Photo Staggered Dynamic Rotator Collage & 2 Floating Cards -->
+        <div class="hero-visual-collage">
+          <div class="collage-container">
+            <!-- Left Collage Column -->
+            <div class="collage-col collage-col-1">
+              <!-- Photo 1: Meat & Poultry Line (Auto-Cycling) -->
+              <div class="collage-item item-flatlay dynamic-rotator" data-interval="4000" id="heroRotatorMeat">
+                {meatSlides.map((slide, i) => (
+                  <div 
+                    class={`rotator-slide ${i === 0 ? 'active' : ''}`}
+                    title={slide.tag}
+                  >
+                    <img 
+                      src={slide.image} 
+                      alt={slide.tag} 
+                      class="collage-photo"
+                      loading={i === 0 ? 'eager' : 'lazy'}
+                    />
+                    <span class="photo-overlay-tag">{slide.tag}</span>
+                  </div>
+                ))}
+                <div class="rotator-dots" aria-hidden="true">
+                  {meatSlides.map((_, i) => (
+                    <span class={`rotator-dot ${i === 0 ? 'active' : ''}`}></span>
+                  ))}
+                </div>
+              </div>
+
+              <!-- Photo 2: Cold Chain Ice Pads Line (Auto-Cycling) -->
+              <div class="collage-item item-rack dynamic-rotator" data-interval="4700" id="heroRotatorCold">
+                {coldChainSlides.map((slide, i) => (
+                  <div 
+                    class={`rotator-slide ${i === 0 ? 'active' : ''}`}
+                    title={slide.tag}
+                  >
+                    <img 
+                      src={slide.image} 
+                      alt={slide.tag} 
+                      class="collage-photo"
+                      loading={i === 0 ? 'eager' : 'lazy'}
+                    />
+                    <span class="photo-overlay-tag">{slide.tag}</span>
+                  </div>
+                ))}
+                <div class="rotator-dots" aria-hidden="true">
+                  {coldChainSlides.map((_, i) => (
+                    <span class={`rotator-dot ${i === 0 ? 'active' : ''}`}></span>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            <!-- Right Collage Column -->
+            <div class="collage-col collage-col-2">
+              <!-- Photo 3: Fruit & Vegetable Line (Auto-Cycling) -->
+              <div class="collage-item item-wardrobe dynamic-rotator" data-interval="5400" id="heroRotatorFruit">
+                {fruitSlides.map((slide, i) => (
+                  <div 
+                    class={`rotator-slide ${i === 0 ? 'active' : ''}`}
+                    title={slide.tag}
+                  >
+                    <img 
+                      src={slide.image} 
+                      alt={slide.tag} 
+                      class="collage-photo"
+                      loading={i === 0 ? 'eager' : 'lazy'}
+                    />
+                    <span class="photo-overlay-tag">{slide.tag}</span>
+                  </div>
+                ))}
+                <div class="rotator-dots" aria-hidden="true">
+                  {fruitSlides.map((_, i) => (
+                    <span class={`rotator-dot ${i === 0 ? 'active' : ''}`}></span>
+                  ))}
+                </div>
+              </div>
+
+              <!-- Photo 4: Seafood & Fishery Line (Auto-Cycling) -->
+              <div class="collage-item item-dispatch dynamic-rotator" data-interval="6100" id="heroRotatorSeafood">
+                {seafoodSlides.map((slide, i) => (
+                  <div 
+                    class={`rotator-slide ${i === 0 ? 'active' : ''}`}
+                    title={slide.tag}
+                  >
+                    <img 
+                      src={slide.image} 
+                      alt={slide.tag} 
+                      class="collage-photo"
+                      loading={i === 0 ? 'eager' : 'lazy'}
+                    />
+                    <span class="photo-overlay-tag">{slide.tag}</span>
+                  </div>
+                ))}
+                <div class="rotator-dots" aria-hidden="true">
+                  {seafoodSlides.map((_, i) => (
+                    <span class={`rotator-dot ${i === 0 ? 'active' : ''}`}></span>
+                  ))}
+                </div>
+
+                <!-- Floating Fast Turnaround Badge (Overlapping bottom left) -->
+                <div class="floating-badge-turnaround">
+                  <div class="turnaround-hour-box">
+                    <span>24h</span>
+                  </div>
+                  <div class="turnaround-text">
+                    <span class="turnaround-title">Fast Turnaround</span>
+                    <span class="turnaround-sub">Direct quotes &amp; dispatch</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- Animated Live Offer Divider Banner (Centered over divider line) -->
+  <section class="offer-divider-section" id="homeOfferDivider" style={currentOffer && currentOffer.active ? '' : 'display: none;'}>
+    <div class="offer-divider-line"></div>
+    <div class="container-apparel offer-divider-container">
+      <a 
+        href={currentOffer && currentOffer.linkUrl ? currentOffer.linkUrl : '/enquiry'} 
+        class="offer-banner-pill-card" 
+        id="homeOfferCard"
+        title="Click to claim offer"
+      >
+        <!-- Shimmer light sweep glare -->
+        <span class="offer-shimmer-sweep"></span>
+
+        <!-- Left Tag Icon Badge -->
+        <div class="offer-pill-badge">
+          <svg class="offer-badge-tag-icon" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path>
+            <line x1="7" y1="7" x2="7.01" y2="7"></line>
+          </svg>
+        </div>
+
+        <!-- Middle Content -->
+        <div class="offer-pill-content">
+          <div class="offer-pill-top">
+            <h3 class="offer-pill-title" id="homeOfferTitle">
+              {currentOffer?.title || '10% off on tshirt bulk order'}
+            </h3>
+            <span class="offer-live-pill-tag">OFFER</span>
+          </div>
+          <p class="offer-pill-desc" id="homeOfferDesc">
+            {currentOffer?.description || '10% off on tshirt bulk order above 5000 quant'}
+          </p>
+        </div>
+
+        <!-- Right Action Button -->
+        <div class="offer-pill-action">
+          <span class="offer-action-text" id="homeOfferBtnText">{currentOffer?.buttonText || 'Claim offer'}</span>
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="offer-action-arrow">
+            <polyline points="9 18 15 12 9 6"></polyline>
+          </svg>
+        </div>
+      </a>
+    </div>
+  </section>
+
+  <!-- Industrial Performance Metrics -->
+  <ProductionStats />
+
+  <!-- Featured Products Section -->
+  <section class="section-products" id="products">
+    <div class="container-apparel">
+      <div class="section-header-flex">
+        <div class="header-text-block">
+          <span class="section-kicker">DIRECT FACTORY CATALOG</span>
+          <h2 class="section-headline">Featured Product Lines</h2>
+          <p class="section-subtext">
+            Direct mill manufacturing across core certified lines. High absorbency, food contact safety, and tech-pack ready OEM supply.
+          </p>
+        </div>
+        <div class="header-action-block">
+          <a href="/catalogue" class="filter-pill filter-link">View All Catalog &rarr;</a>
+        </div>
+      </div>
+
+      <!-- Products Grid (Exactly 4 Core Products on Home Page) -->
+      <div class="products-grid-4">
+        {homeProducts.map((product) => (
+          <ProductCard product={product} />
+        ))}
+      </div>
+
+      <!-- View Complete Wholesale Catalog Button Matching Reference -->
+      <div class="catalog-view-all-wrap">
+        <a href="/catalogue" class="btn-view-complete-catalog">
+          <span>View Complete Wholesale Catalog</span>
+          <span class="catalog-btn-arrow">&rarr;</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- Custom OEM / ODM & Private Label Sourcing Dark Bento Section -->
+  <section class="section-custom-oem">
+    <div class="container-apparel">
+      <div class="oem-bento-card">
+        <!-- Left Column: Content & CTAs -->
+        <div class="oem-left-col">
+          <h2 class="oem-title">Custom Absorbent Pad Manufacturing & Private Label Sourcing</h2>
+          <p class="oem-desc">
+            Have specific tray dimensions, custom absorbency requirements (40ml–200ml), or private label packaging needs? Partner directly with our cleanroom manufacturing plant for volume production, custom die-cut pads, and rapid sample box turnarounds.
+          </p>
+          <div class="oem-cta-group">
+            <a href="/enquiry?type=OEM" class="btn-oem-gold">
+              <span>Start Custom Order (OEM / ODM)</span>
+              <span class="btn-arrow">&rarr;</span>
+            </a>
+            <button 
+              type="button" 
+              class="btn-oem-dark btn-open-track-modal" 
+              id="heroTrackQuoteBtn"
+            >
+              Track Existing Quotation
+            </button>
+          </div>
+        </div>
+
+        <!-- Right Column: 2x2 Feature Step Cards Grid -->
+        <div class="oem-right-grid">
+          <div class="oem-step-card">
+            <div class="step-badge-num step-gold">01</div>
+            <h3 class="step-card-title">Tray Spec & Prototype Sampling</h3>
+            <p class="step-card-desc">Low MOQ trial cartons to evaluate absorbency, automated tray fit, and contact film feel before full scale production.</p>
+          </div>
+
+          <div class="oem-step-card">
+            <div class="step-badge-num step-green">02</div>
+            <h3 class="step-card-title">Custom Absorbency & SAP Core</h3>
+            <p class="step-card-desc">Targeted 40ml to 200ml fluid locking matrices, saline-stable cores for seafood, and non-stick micro-perforated PE films.</p>
+          </div>
+
+          <div class="oem-step-card">
+            <div class="step-badge-num step-red">03</div>
+            <h3 class="step-card-title">Private Label & Custom Branding</h3>
+            <p class="step-card-desc">Custom printed leak-proof backings, food-grade certified master cartons, barcodes, and automated denesting rolls.</p>
+          </div>
+
+          <div class="oem-step-card">
+            <div class="step-badge-num step-blue">04</div>
+            <h3 class="step-card-title">Cleanroom Factory Direct Dispatch</h3>
+            <p class="step-card-desc">Direct converting from certified cleanroom lines with batch COA reports, FDA 21 CFR compliance, and ready freight dispatch.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Our Certifications & Quality Assurance Section -->
+  <section class="section-certifications">
+    <div class="container-apparel">
+      <!-- Section Header -->
+      <div class="cert-header">
+        <span class="section-kicker">QUALITY ASSURANCE</span>
+        <h2 class="section-headline">Our Certifications</h2>
+        <p class="section-subtext">
+          Our products meet the highest international quality and safety standards, backed by recognized certifications.
+        </p>
+      </div>
+
+      <!-- Certificates Grid -->
+      <div class="cert-cards-grid">
+        <!-- Card 1: UDYAM Registration Certificate -->
+        <div class="cert-card">
+          <div class="cert-preview-frame">
+            <img 
+              src="/certificates/udyam-preview.webp" 
+              alt="Udyam Registration Certificate - Ministry of Micro, Small and Medium Enterprises" 
+              class="cert-preview-img"
+              loading="lazy"
+            />
+          </div>
+          <div class="cert-info">
+            <h3 class="cert-name">UDYAM REGISTRATION</h3>
+            <p class="cert-desc">Ministry of MSME, Government of India</p>
+            <a 
+              href="/certificates/udyam-registration-certificate.pdf" 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              class="btn-cert-view"
+            >
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                <polyline points="14 2 14 8 20 8"></polyline>
+                <line x1="16" y1="13" x2="8" y2="13"></line>
+                <line x1="16" y1="17" x2="8" y2="17"></line>
+                <polyline points="10 9 9 9 8 9"></polyline>
+              </svg>
+              <span>VIEW FULL</span>
+            </a>
+          </div>
+        </div>
+
+        <!-- Card 2: GST Registration Certificate -->
+        <div class="cert-card">
+          <div class="cert-preview-frame">
+            <img 
+              src="/certificates/gst-preview.webp" 
+              alt="GST Registration Certificate - Government of India Form GST REG-06" 
+              class="cert-preview-img"
+              loading="lazy"
+            />
+          </div>
+          <div class="cert-info">
+            <h3 class="cert-name">GST REGISTRATION</h3>
+            <p class="cert-desc">Government of India — Form GST REG-06</p>
+            <a 
+              href="/certificates/gst-registration-certificate.pdf" 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              class="btn-cert-view"
+            >
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                <polyline points="14 2 14 8 20 8"></polyline>
+                <line x1="16" y1="13" x2="8" y2="13"></line>
+                <line x1="16" y1="17" x2="8" y2="17"></line>
+                <polyline points="10 9 9 9 8 9"></polyline>
+              </svg>
+              <span>VIEW FULL</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Economic Advantage: Direct Cleanroom Factory vs Middlemen Comparison Section -->
+  <section class="section-economic-advantage">
+    <div class="container-apparel">
+      <div class="advantage-header">
+        <span class="advantage-kicker">ECONOMIC ADVANTAGE</span>
+        <h2 class="advantage-title">Why Source Directly with HydroCare Solutions?</h2>
+        <p class="advantage-subtitle">
+          See how cutting out trading middlemen lowers your food packaging procurement costs.
+        </p>
+      </div>
+
+      <div class="advantage-card">
+        <!-- Left Column: Traditional Middlemen (Red) -->
+        <div class="advantage-col col-negative">
+          <div class="col-pill pill-red">
+            <span class="pill-icon">✕</span>
+            <span>Traditional Packaging Traders & Middlemen</span>
+          </div>
+
+          <div class="advantage-list">
+            <div class="advantage-item">
+              <span class="item-icon icon-red">✕</span>
+              <p class="item-text">
+                <strong>15% – 30% Price Markup</strong> added on top of actual factory production costs.
+              </p>
+            </div>
+
+            <div class="advantage-item">
+              <span class="item-icon icon-red">✕</span>
+              <p class="item-text">
+                <strong>Hidden Factory Identity:</strong> Inability to verify real manufacturing capabilities or audit cleanroom facilities.
+              </p>
+            </div>
+
+            <div class="advantage-item">
+              <span class="item-icon icon-red">✕</span>
+              <p class="item-text">
+                <strong>Delayed Communication:</strong> Slow quoting cycles through multiple layers of agents and brokers.
+              </p>
+            </div>
+
+            <div class="advantage-item">
+              <span class="item-icon icon-red">✕</span>
+              <p class="item-text">
+                <strong>Rigid MOQs:</strong> Unwillingness to accommodate custom tray trial runs or customized die-cut dimensions.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right Column: Direct Factory (Green) -->
+        <div class="advantage-col col-positive">
+          <div class="col-pill pill-green">
+            <span class="pill-icon">✓</span>
+            <span>Direct Factory Procurement with HydroCare Solutions</span>
+          </div>
+
+          <div class="advantage-list">
+            <div class="advantage-item">
+              <span class="item-icon icon-green">✓</span>
+              <p class="item-text">
+                <strong>0% Sourcing Commission:</strong> Transparent volume price slabs direct from the factory converting floor.
+              </p>
+            </div>
+
+            <div class="advantage-item">
+              <span class="item-icon icon-green">✓</span>
+              <p class="item-text">
+                <strong>FSSAI & FDA Certified Plant:</strong> Direct batch COA reports, migration test certificates, and physical audit access.
+              </p>
+            </div>
+
+            <div class="advantage-item">
+              <span class="item-icon icon-green">✓</span>
+              <p class="item-text">
+                <strong>Instant WhatsApp / RFQ:</strong> Connect directly with technical sales desk for immediate quotes and tray fit analysis.
+              </p>
+            </div>
+
+            <div class="advantage-item">
+              <span class="item-icon icon-green">✓</span>
+              <p class="item-text">
+                <strong>Custom Die-Cut & Sample Batches:</strong> Low MOQ trial cartons and customized tray dimensions tailored for testing.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Procurement Flow: 4 Simple Steps Section -->
+  <section class="section-procurement-steps">
+    <div class="container-apparel">
+      <div class="steps-header">
+        <span class="steps-kicker">PROCUREMENT FLOW</span>
+        <h2 class="steps-title">Direct Sourcing in 4 Simple Steps</h2>
+        <p class="steps-subtitle">
+          How supermarkets, meat processors, and exporters procure wholesale food pads from HydroCare Solutions.
+        </p>
+      </div>
+
+      <div class="steps-grid-4">
+        <!-- Step 01 -->
+        <div class="procure-step-card">
+          <div class="procure-num-badge num-badge-1">01</div>
+          <h3 class="procure-step-title">Discover Catalogs</h3>
+          <p class="procure-step-desc">
+            Filter wholesale food drip pads by target food category, tray dimensions, absorbency capacity (40ml–200ml), and MOQ.
+          </p>
+        </div>
+
+        <!-- Step 02 -->
+        <div class="procure-step-card">
+          <div class="procure-num-badge num-badge-2">02</div>
+          <h3 class="procure-step-title">Inquire Direct / RFQ</h3>
+          <p class="procure-step-desc">
+            Initiate a direct quote inquiry via on-platform form or connect on WhatsApp directly with cleanroom factory technologists.
+          </p>
+        </div>
+
+        <!-- Step 03 -->
+        <div class="procure-step-card">
+          <div class="procure-num-badge num-badge-3">03</div>
+          <h3 class="procure-step-title">Finalize Volume Price</h3>
+          <p class="procure-step-desc">
+            Confirm custom die-cut tray sizes, absorbency specs, trial cartons, and volume discount slabs with zero middleman commissions.
+          </p>
+        </div>
+
+        <!-- Step 04 -->
+        <div class="procure-step-card">
+          <div class="procure-num-badge num-badge-4">04</div>
+          <h3 class="procure-step-title">Dispatch & Delivery</h3>
+          <p class="procure-step-desc">
+            Factory dispatches directly from cleanroom packaging facility with batch COA test reports, official GST invoice, and transit tracking.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Frequently Asked Sourcing Questions Section Matching Reference -->
+  <section class="section-faq">
+    <div class="container-apparel">
+      <div class="faq-header">
+        <span class="faq-kicker">KNOWLEDGE & SUPPORT</span>
+        <h2 class="faq-title">Frequently Asked Sourcing Questions</h2>
+        <p class="faq-subtitle">
+          Everything you need to know about B2B food pad procurement and cleanroom supply.
+        </p>
+      </div>
+
+      <div class="faq-accordion-wrap">
+        <details class="faq-accordion-item">
+          <summary class="faq-question">
+            <span>What is the Minimum Order Quantity (MOQ) for Absorbent Pads?</span>
+            <svg class="faq-chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
+          </summary>
+          <div class="faq-answer">
+            <p>
+              Standard food-grade drip pad cartons start from an MOQ of 5,000 pieces per size for our in-stock formulations (Meat & Poultry, Marine Seafood, and Berries). For customized die-cut dimensions or custom absorbent core matrices, trial runs begin at 10,000 to 25,000 pieces with tiered volume price breaks for master shipping containers.
+            </p>
+          </div>
+        </details>
+
+        <details class="faq-accordion-item">
+          <summary class="faq-question">
+            <span>How does direct manufacturer pricing work with zero trader markups?</span>
+            <svg class="faq-chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
+          </summary>
+          <div class="faq-answer">
+            <p>
+              You procure directly from our cleanroom converting floor without trading middlemen or commission distributors. You get true factory cost pricing with transparent volume discount slabs, direct batch COA certificates, and dispatch directly to your meat plant, cold store, or retail packhouse.
+            </p>
+          </div>
+        </details>
+
+        <details class="faq-accordion-item">
+          <summary class="faq-question">
+            <span>Can I request custom pad dimensions, specific absorbency levels, and private label branding?</span>
+            <svg class="faq-chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
+          </summary>
+          <div class="faq-answer">
+            <p>
+              Yes. We provide complete OEM & ODM manufacturing. You can specify custom tray dimensions (from 80x140mm up to 200x300mm), fluid absorption retention (40ml to 200ml per pad), non-stick PE film perforation patterns, ultrasonic hermetic sealed edges, and custom printed outer master cartons with your company branding and barcodes.
+            </p>
+          </div>
+        </details>
+
+        <details class="faq-accordion-item">
+          <summary class="faq-question">
+            <span>What food safety certifications and compliance standards do your pads meet?</span>
+            <svg class="faq-chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
+          </summary>
+          <div class="faq-answer">
+            <p>
+              All our food absorbent pads are manufactured in an audited cleanroom facility and are 100% compliant with FDA 21 CFR 177.1520 (direct food contact polymers), FSSAI Central Authority standards, ISO 22000, and HACCP hygiene protocols. Every production shipment is accompanied by comprehensive migration test reports and Certificates of Analysis (COA).
+            </p>
+          </div>
+        </details>
+
+        <details class="faq-accordion-item">
+          <summary class="faq-question">
+            <span>Can we request sample trial cartons before committing to bulk production?</span>
+            <svg class="faq-chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
+          </summary>
+          <div class="faq-answer">
+            <p>
+              Yes! We provide sample trial cartons for tray fit verification, de-nesting machine testing, and lab purge absorption trials. You can request a sample box by clicking our "Request Production Sample Box" button or connecting directly with our technical team on WhatsApp.
+            </p>
+          </div>
+        </details>
+      </div>
+    </div>
+  </section>
+
+
+  <script>
+    document.querySelectorAll('.btn-open-track-modal').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.preventDefault();
+        if ((window as any).openTrackQuoteModal) {
+          (window as any).openTrackQuoteModal();
+        }
+      });
+    });
+
+    // Live sync offer updates from admin
+    async function syncOfferFromAdmin() {
+      try {
+        const res = await fetch('/api/offer');
+        if (!res.ok) return;
+        const data = await res.json();
+        if (!data.success || !data.offer) return;
+        const offer = data.offer;
+        
+        const divider = document.getElementById('homeOfferDivider');
+        const titleEl = document.getElementById('homeOfferTitle');
+        const descEl = document.getElementById('homeOfferDesc');
+        const btnTextEl = document.getElementById('homeOfferBtnText');
+        const cardEl = document.getElementById('homeOfferCard') as HTMLAnchorElement;
+
+        if (divider) {
+          divider.style.display = offer.active ? 'block' : 'none';
+        }
+
+        if (titleEl && offer.title) titleEl.textContent = offer.title;
+        if (descEl && offer.description) descEl.textContent = offer.description;
+        if (btnTextEl && offer.buttonText) btnTextEl.textContent = offer.buttonText;
+        if (cardEl && offer.linkUrl) {
+          cardEl.href = offer.linkUrl;
+        }
+      } catch (e) {}
+    }
+
+    window.addEventListener('focus', syncOfferFromAdmin);
+    setInterval(syncOfferFromAdmin, 10000);
+
+    // Dynamic Hero 4-Photo Rotator (Auto-cycles through real product pads)
+    function setupHeroRotators() {
+      const rotators = document.querySelectorAll('.dynamic-rotator');
+      rotators.forEach((rotator) => {
+        const slides = rotator.querySelectorAll('.rotator-slide');
+        const dots = rotator.querySelectorAll('.rotator-dot');
+        if (slides.length <= 1) return;
+
+        let currentIndex = 0;
+        const intervalTime = parseInt(rotator.getAttribute('data-interval') || '4500', 10);
+        let isPaused = false;
+
+        function showSlide(index: number) {
+          slides.forEach((s, idx) => {
+            s.classList.toggle('active', idx === index);
+          });
+          dots.forEach((d, idx) => {
+            d.classList.toggle('active', idx === index);
+          });
+          currentIndex = index;
+        }
+
+        function nextSlide() {
+          if (isPaused) return;
+          const nextIdx = (currentIndex + 1) % slides.length;
+          showSlide(nextIdx);
+        }
+
+        setInterval(nextSlide, intervalTime);
+
+        rotator.addEventListener('mouseenter', () => {
+          isPaused = true;
+        });
+
+        rotator.addEventListener('mouseleave', () => {
+          isPaused = false;
+        });
+      });
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', setupHeroRotators);
+    } else {
+      setupHeroRotators();
+    }
+  </script>
+</Layout>
+
+<style>
+  /* ========================================================= */
+  /* LIVE OFFER DIVIDER BANNER (BETWEEN HERO & SAFETY HIGHLIGHTS) */
+  /* ========================================================= */
+  .offer-divider-section {
+    position: relative;
+    width: 100%;
+    padding: 38px 0;
+    background: #FFFFFF;
+    overflow: visible;
+  }
+
+  .offer-divider-line {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent 0%, #E2E8F0 15%, #CBD5E1 50%, #E2E8F0 85%, transparent 100%);
+    z-index: 1;
+  }
+
+  .offer-divider-container {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .offer-banner-pill-card {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 16px;
+    background: #002244;
+    background: linear-gradient(135deg, #071D3A 0%, #003876 50%, #0A2540 100%);
+    border: 1px solid rgba(255, 255, 255, 0.28);
+    border-radius: 14px;
+    padding: 13px 22px;
+    max-width: 680px;
+    width: 100%;
+    box-sizing: border-box;
+    text-decoration: none;
+    cursor: pointer;
+    overflow: hidden;
+    box-shadow: 0 10px 28px -4px rgba(0, 34, 68, 0.45), 0 0 16px rgba(0, 56, 118, 0.28);
+    animation: gentleFloat 3.5s ease-in-out infinite, pulseGlow 3.5s ease-in-out infinite;
+    transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s ease, border-color 0.25s ease;
+  }
+
+  .offer-banner-pill-card:hover {
+    transform: translateY(-5px) scale(1.015);
+    box-shadow: 0 18px 42px -4px rgba(0, 34, 68, 0.65), 0 0 30px rgba(0, 75, 152, 0.45);
+    border-color: rgba(255, 255, 255, 0.65);
+  }
+
+  /* Shimmer light sweep glare */
+  .offer-shimmer-sweep {
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(
+      115deg,
+      transparent 0%,
+      transparent 40%,
+      rgba(255, 255, 255, 0.35) 48%,
+      rgba(255, 255, 255, 0.6) 50%,
+      rgba(255, 255, 255, 0.35) 52%,
+      transparent 60%,
+      transparent 100%
+    );
+    pointer-events: none;
+    transform: translateX(-100%);
+    animation: shimmerSweep 4s ease-in-out infinite;
+  }
+
+  @keyframes shimmerSweep {
+    0% {
+      transform: translateX(-100%);
+    }
+    30%, 100% {
+      transform: translateX(100%);
+    }
+  }
+
+  @keyframes gentleFloat {
+    0%, 100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-4px);
+    }
+  }
+
+  @keyframes pulseGlow {
+    0%, 100% {
+      box-shadow: 0 10px 26px -4px rgba(0, 34, 68, 0.4), 0 0 14px rgba(0, 56, 118, 0.25);
+    }
+    50% {
+      box-shadow: 0 14px 34px -4px rgba(0, 34, 68, 0.58), 0 0 24px rgba(0, 75, 152, 0.42);
+    }
+  }
+
+  .offer-pill-badge {
+    width: 44px;
+    height: 44px;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.18);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #FFFFFF;
+    flex-shrink: 0;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+  }
+
+  .offer-badge-tag-icon {
+    transform-origin: 6px 6px;
+    animation: tagSway 4s ease-in-out infinite;
+  }
+
+  @keyframes tagSway {
+    0%, 100% {
+      transform: rotate(0deg);
+    }
+    15% {
+      transform: rotate(-12deg);
+    }
+    30% {
+      transform: rotate(10deg);
+    }
+    45% {
+      transform: rotate(-5deg);
+    }
+    60% {
+      transform: rotate(0deg);
+    }
+  }
+
+  .offer-pill-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    min-width: 0;
+  }
+
+  .offer-pill-top {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .offer-pill-title {
+    font-size: 15px;
+    font-weight: 700;
+    color: #FFFFFF;
+    margin: 0;
+    line-height: 1.3;
+    letter-spacing: -0.2px;
+  }
+
+  .offer-live-pill-tag {
+    font-size: 10px;
+    font-weight: 800;
+    background: rgba(255, 255, 255, 0.25);
+    color: #FFFFFF;
+    padding: 2px 7px;
+    border-radius: 999px;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+  }
+
+  .offer-pill-desc {
+    font-size: 12.5px;
+    color: #E0F2FE;
+    margin: 0;
+    line-height: 1.35;
+    opacity: 0.95;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .offer-pill-action {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(255, 255, 255, 0.18);
+    border: 1px solid rgba(255, 255, 255, 0.32);
+    color: #FFFFFF;
+    padding: 7px 14px;
+    border-radius: 8px;
+    font-size: 12.5px;
+    font-weight: 600;
+    flex-shrink: 0;
+    transition: all 0.2s ease;
+  }
+
+  .offer-banner-pill-card:hover .offer-pill-action {
+    background: #FFFFFF;
+    color: #003876;
+    border-color: #FFFFFF;
+    transform: translateX(2px);
+  }
+
+  .offer-action-arrow {
+    transition: transform 0.2s ease;
+  }
+
+  .offer-banner-pill-card:hover .offer-action-arrow {
+    transform: translateX(3px);
+  }
+
+  @media (max-width: 640px) {
+    .offer-divider-section {
+      padding: 26px 0;
+    }
+    .offer-banner-pill-card {
+      padding: 12px 16px;
+      gap: 12px;
+    }
+    .offer-pill-desc {
+      white-space: normal;
+    }
+    .offer-pill-action {
+      display: none;
+    }
+  }
+
+  /* ========================================================= */
+  /* HERO SECTION STYLES MATCHING REFERENCE DESIGN            */
+  /* ========================================================= */
+  .hero-section {
+    position: relative;
+    background: #0B0F17;
+    padding: 110px 0 76px;
+    overflow: hidden;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  @media (max-width: 768px) {
+    .hero-section {
+      padding: 64px 0 60px;
+    }
+  }
+
+  /* 3-Column Animated Product Showcase Background with Slanted Dividers */
+  .hero-bg-columns-backdrop {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    pointer-events: none;
+    z-index: 1;
+    -webkit-mask-image: linear-gradient(to bottom, transparent 0%, rgba(0, 0, 0, 1) 12%, rgba(0, 0, 0, 1) 88%, transparent 100%);
+    mask-image: linear-gradient(to bottom, transparent 0%, rgba(0, 0, 0, 1) 12%, rgba(0, 0, 0, 1) 88%, transparent 100%);
+  }
+
+  .hero-bg-columns-grid {
+    position: absolute;
+    top: -25%;
+    left: -4%;
+    width: 108%;
+    height: 150%;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 26px;
+    padding: 0 20px;
+    box-sizing: border-box;
+    transform: skewX(-7deg) scale(1.08);
+    opacity: 0.58;
+    filter: grayscale(20%) saturate(0.9) contrast(1.08) brightness(0.92);
+  }
+
+  .hero-bg-col {
+    position: relative;
+    overflow: hidden;
+    height: 100%;
+  }
+
+  .hero-bg-col-track {
+    display: flex;
+    flex-direction: column;
+    will-change: transform;
+  }
+
+  .track-group {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    padding-bottom: 24px;
+  }
+
+  /* Column 1: Moves Down */
+  .col-move-down .hero-bg-col-track {
+    animation: bgColumnScrollDown 30s linear infinite;
+  }
+
+  /* Column 2: Moves Up */
+  .col-move-up .hero-bg-col-track {
+    animation: bgColumnScrollUp 26s linear infinite;
+  }
+
+  /* Column 3: Moves Down with slight speed variance for natural feel */
+  .col-3-down .hero-bg-col-track {
+    animation: bgColumnScrollDown 34s linear infinite;
+  }
+
+  @keyframes bgColumnScrollUp {
+    0% {
+      transform: translateY(0);
+    }
+    100% {
+      transform: translateY(-50%);
+    }
+  }
+
+  @keyframes bgColumnScrollDown {
+    0% {
+      transform: translateY(-50%);
+    }
+    100% {
+      transform: translateY(0);
+    }
+  }
+
+  .bg-product-card {
+    position: relative;
+    border-radius: 18px;
+    overflow: hidden;
+    background: #111827;
+    box-shadow: 0 16px 36px rgba(0, 0, 0, 0.55);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    aspect-ratio: 16 / 10.5;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .bg-product-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .bg-card-glass-tag {
+    position: absolute;
+    bottom: 8px;
+    left: 8px;
+    right: 8px;
+    background: rgba(15, 23, 42, 0.88);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    padding: 5px 10px;
+    border-radius: 6px;
+    font-size: 11px;
+    font-weight: 700;
+    color: #F8FAFC;
+    letter-spacing: 0.3px;
+    text-transform: uppercase;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35);
+    text-align: center;
+  }
+
+  /* Dark translucent overlay veil matching client reference screenshot */
+  .hero-bg-overlay-veil {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      135deg,
+      rgba(11, 15, 23, 0.82) 0%,
+      rgba(11, 15, 23, 0.58) 50%,
+      rgba(11, 15, 23, 0.80) 100%
+    );
+    pointer-events: none;
+    z-index: 2;
+  }
+
+  @media (max-width: 768px) {
+    .hero-bg-columns-grid {
+      gap: 12px;
+      padding: 0 8px;
+      opacity: 0.45;
+      transform: skewX(-5deg) scale(1.04);
+    }
+    .track-group {
+      gap: 12px;
+      padding-bottom: 12px;
+    }
+    .bg-card-glass-tag {
+      font-size: 9px;
+      padding: 3px 5px;
+      bottom: 4px;
+      left: 4px;
+      right: 4px;
+    }
+  }
+
+  /* Subtle Warm Ambient Glows */
+  .hero-bg-glow {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: 
+      radial-gradient(ellipse 60% 40% at 85% 20%, rgba(0, 75, 152, 0.22) 0%, transparent 70%),
+      radial-gradient(ellipse 50% 50% at 15% 85%, rgba(0, 56, 118, 0.16) 0%, transparent 60%);
+    z-index: 2;
+  }
+
+  .container-apparel {
+    max-width: 1320px;
+    margin: 0 auto;
+    padding: 0 24px;
+    position: relative;
+    z-index: 3;
+  }
+
+  .hero-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 48px;
+    align-items: center;
+  }
+
+  @media (min-width: 1040px) {
+    .hero-grid {
+      grid-template-columns: 1.08fr 0.92fr;
+      gap: 56px;
+    }
+  }
+
+  /* Left Side: Content */
+  .hero-content {
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Top Pill Badge */
+  .hero-pill-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: #FFFFFF;
+    border: 1px solid #FED7AA;
+    padding: 6px 14px;
+    border-radius: 9999px;
+    width: fit-content;
+    margin-bottom: 22px;
+    box-shadow: 0 1px 3px rgba(217, 119, 6, 0.08);
+  }
+
+  .pulse-green-dot {
+    width: 8px;
+    height: 8px;
+    background-color: #10B981;
+    border-radius: 50%;
+    box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.2);
+  }
+
+  .pill-badge-text {
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    color: #78350F;
+    letter-spacing: -0.01em;
+  }
+
+  /* Main Headline */
+  .hero-title {
+    font-family: 'Outfit', 'Plus Jakarta Sans', sans-serif;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    font-size: 38px;
+    line-height: 1.2;
+    margin-top: -6px;
+    margin-bottom: 26px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  @media (min-width: 768px) {
+    .hero-title {
+      font-size: 48px;
+      gap: 8px;
+    }
+  }
+
+  @media (min-width: 1200px) {
+    .hero-title {
+      font-size: 52px;
+      gap: 8px;
+    }
+  }
+
+  .hero-title-main {
+    color: #FFFFFF;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    text-shadow: 0 2px 16px rgba(255, 255, 255, 0.12), 0 4px 20px rgba(0, 0, 0, 0.4);
+    line-height: 1.2;
+  }
+
+  .hero-title-accent {
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    position: relative;
+    display: inline-block;
+    width: fit-content;
+    font-size: 1em;
+    line-height: 1.2;
+  }
+
+  .hero-word-blue {
+    color: #0077EE;
+    text-shadow: 0 2px 14px rgba(0, 119, 238, 0.35);
+  }
+
+  .hero-word-green {
+    color: #22C55E;
+    text-shadow: 0 2px 14px rgba(34, 197, 94, 0.35);
+  }
+
+  .title-underline-svg {
+    position: absolute;
+    bottom: -8px;
+    left: 0;
+    width: 100%;
+    height: 12px;
+    pointer-events: none;
+  }
+
+  /* Subtitle */
+  .hero-subtitle {
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: 15.5px;
+    line-height: 1.7;
+    color: #CBD5E1;
+    margin-bottom: 32px;
+    max-width: 580px;
+  }
+
+  .hero-subtitle strong {
+    color: #FFFFFF;
+    font-weight: 700;
+  }
+
+  /* Standalone Hero Search Bar */
+  .search-form-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border: none;
+    border-radius: 14px;
+    padding: 6px 6px 6px 16px;
+    transition: all 0.25s ease;
+    box-shadow: none;
+    max-width: 580px;
+    margin-bottom: 28px;
+  }
+
+  .search-form-row:focus-within {
+    background: rgba(255, 255, 255, 0.14);
+    box-shadow: none;
+  }
+
+  .search-input-wrap {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex: 1;
+    min-width: 0;
+  }
+
+  .search-icon {
+    color: rgba(255, 255, 255, 0.75);
+    flex-shrink: 0;
+  }
+
+  .search-input {
+    width: 100%;
+    border: none;
+    outline: none;
+    background: transparent;
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: 14.5px;
+    color: #FFFFFF;
+  }
+
+  .search-input::placeholder {
+    color: rgba(226, 232, 240, 0.65);
+  }
+
+  .search-submit-btn {
+    background: linear-gradient(135deg, #8B0000 0%, #A81818 100%);
+    color: #FFFFFF;
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    padding: 10px 22px;
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    white-space: nowrap;
+    transition: all 0.2s;
+    box-shadow: 0 4px 14px rgba(139, 0, 0, 0.45);
+    flex-shrink: 0;
+  }
+
+  .search-submit-btn:hover {
+    background: linear-gradient(135deg, #A81818 0%, #C42626 100%);
+    transform: translateY(-1px);
+    box-shadow: 0 6px 18px rgba(168, 24, 24, 0.55);
+  }
+
+  .search-btn-arrow {
+    font-size: 15px;
+    transition: transform 0.2s;
+  }
+
+  .search-submit-btn:hover .search-btn-arrow {
+    transform: translateX(3px);
+  }
+
+  /* Brand Feature Highlights Row (Superior Absorption, Leak Proof, Eco Friendly, Custom Sizes, Trusted Quality) */
+  .hero-brand-features-row {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 14px 10px;
+    max-width: 620px;
+    margin-top: 24px;
+    padding-top: 18px;
+    border-top: 1px dashed rgba(255, 255, 255, 0.22);
+  }
+
+  .hero-feature-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 9px;
+  }
+
+  .feature-circle {
+    width: 58px;
+    height: 58px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #FFFFFF;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12);
+    transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.25s ease;
+    flex-shrink: 0;
+  }
+
+  .hero-feature-item:hover .feature-circle {
+    transform: translateY(-4px) scale(1.06);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.18);
+  }
+
+  .circle-blue {
+    background: #0056B3;
+  }
+
+  .circle-green {
+    background: #00A82D;
+  }
+
+  .circle-orange {
+    background: #FF7300;
+  }
+
+  .circle-purple {
+    background: #7A1EA6;
+  }
+
+  .circle-red {
+    background: #E6004C;
+  }
+
+  .feature-label {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-size: 11px;
+    font-weight: 800;
+    color: #F1F5F9;
+    line-height: 1.25;
+    letter-spacing: 0.2px;
+    text-transform: uppercase;
+  }
+
+  .feature-label span {
+    white-space: nowrap;
+  }
+
+  @media (max-width: 768px) {
+    .hero-brand-features-row {
+      gap: 12px 8px;
+    }
+    .feature-circle {
+      width: 50px;
+      height: 50px;
+    }
+    .feature-circle svg {
+      width: 24px;
+      height: 24px;
+    }
+    .feature-label {
+      font-size: 9.5px;
+    }
+  }
+
+  @media (max-width: 500px) {
+    .hero-brand-features-row {
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px 8px;
+    }
+  }
+
+  /* ========================================================= */
+  /* HERO RIGHT: 4-PHOTO ASYMMETRIC COLLAGE & BADGES           */
+  /* ========================================================= */
+  .hero-visual-collage {
+    position: relative;
+    width: 100%;
+  }
+
+  .collage-container {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+    position: relative;
+    max-width: 540px;
+    margin: 0 auto;
+  }
+
+  .collage-col {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .collage-col-1 {
+    padding-top: 36px;
+  }
+
+  .collage-item {
+    position: relative;
+    border-radius: 18px;
+    overflow: hidden;
+    background: #F1F5F9;
+    box-shadow: 0 10px 25px -4px rgba(15, 23, 42, 0.08);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .collage-item:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 16px 32px -4px rgba(15, 23, 42, 0.12);
+  }
+
+  .collage-photo {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  /* Custom aspect ratios for collage items */
+  .item-flatlay {
+    height: 280px;
+    overflow: visible; /* to allow floating badge overflow */
+  }
+
+  .item-rack {
+    height: 250px;
+  }
+
+  .item-wardrobe {
+    height: 250px;
+    margin-top: 0;
+  }
+
+  .item-dispatch {
+    height: 280px;
+    overflow: visible; /* to allow floating badge overflow */
+  }
+
+  /* Dynamic Rotator Slides (Non-clickable showcase cards) */
+  .dynamic-rotator {
+    position: relative;
+    cursor: default;
+    user-select: none;
+  }
+
+  .rotator-slide {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.75s cubic-bezier(0.4, 0, 0.2, 1), transform 0.75s cubic-bezier(0.4, 0, 0.2, 1);
+    transform: scale(1.02);
+    border-radius: 18px;
+    overflow: hidden;
+    display: block;
+    z-index: 1;
+    pointer-events: none;
+  }
+
+  .rotator-slide.active {
+    opacity: 1;
+    visibility: visible;
+    transform: scale(1);
+    z-index: 2;
+  }
+
+  /* Rotator Progress Dots */
+  .rotator-dots {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    z-index: 7;
+    pointer-events: none;
+    background: rgba(15, 23, 42, 0.45);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    padding: 3px 6px;
+    border-radius: 9999px;
+  }
+
+  .rotator-dot {
+    width: 5px;
+    height: 5px;
+    border-radius: 9999px;
+    background: rgba(255, 255, 255, 0.45);
+    transition: all 0.3s ease;
+  }
+
+  .rotator-dot.active {
+    width: 14px;
+    background: #FFFFFF;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+  }
+
+  /* Overlay Tags on Bottom of Photos */
+  .photo-overlay-tag {
+    position: absolute;
+    bottom: 12px;
+    left: 12px;
+    background: rgba(15, 23, 42, 0.88);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    color: #FFFFFF;
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    padding: 5px 12px;
+    border-radius: 6px;
+    z-index: 5;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+    transition: background 0.2s ease, transform 0.2s ease;
+  }
+
+
+  /* Floating Card 1: Direct Sourcing */
+  .floating-badge-sourcing {
+    position: absolute;
+    bottom: -22px;
+    left: -20px;
+    background: #FFFFFF;
+    border: 1px solid #F1F5F9;
+    border-radius: 14px;
+    padding: 12px 14px;
+    box-shadow: 0 14px 30px -4px rgba(15, 23, 42, 0.14), 0 4px 10px rgba(15, 23, 42, 0.04);
+    z-index: 10;
+    width: 225px;
+  }
+
+  .sourcing-badge-top {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 6px;
+  }
+
+  .lightning-box {
+    width: 24px;
+    height: 24px;
+    border-radius: 6px;
+    background: #FEF3C7;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .sourcing-badge-headings {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .sourcing-title {
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: 12.5px;
+    font-weight: 700;
+    color: #1E293B;
+    line-height: 1.2;
+  }
+
+  .sourcing-margin-pill {
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: 10px;
+    font-weight: 700;
+    color: #059669;
+    line-height: 1.2;
+    margin-top: 1px;
+  }
+
+  .sourcing-desc {
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: 11px;
+    color: #64748B;
+    line-height: 1.4;
+    margin: 0;
+  }
+
+  /* Floating Card 2: Fast Turnaround */
+  .floating-badge-turnaround {
+    position: absolute;
+    bottom: -16px;
+    left: 10px;
+    background: #18182B;
+    border-radius: 12px;
+    padding: 10px 14px;
+    box-shadow: 0 14px 28px rgba(24, 24, 43, 0.28);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    z-index: 10;
+    width: 190px;
+  }
+
+  .turnaround-hour-box {
+    width: 30px;
+    height: 30px;
+    border-radius: 7px;
+    background: rgba(255, 255, 255, 0.12);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+    color: #E2E8F0;
+    flex-shrink: 0;
+  }
+
+  .turnaround-text {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .turnaround-title {
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+    color: #FFFFFF;
+    line-height: 1.25;
+  }
+
+  .turnaround-sub {
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: 10px;
+    color: #94A3B8;
+    line-height: 1.25;
+    margin-top: 2px;
+  }
+
+  /* ========================================================= */
+  /* PRODUCTS & CTA REST OF PAGE STYLES                        */
+  /* ========================================================= */
+  .section-products {
+    padding: 92px 0 96px;
+    background: #FFFFFF;
+  }
+
+  .section-kicker {
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    color: #C28B1E;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    display: inline-block;
+    margin-bottom: 6px;
+  }
+
+  .section-header-flex {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-bottom: 42px;
+  }
+
+  @media (min-width: 768px) {
+    .section-header-flex {
+      flex-direction: row;
+      align-items: flex-end;
+      justify-content: space-between;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .section-header-flex {
+      text-align: center;
+      align-items: center;
+    }
+    .header-text-block {
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .section-kicker {
+      text-align: center;
+      display: block;
+    }
+    .section-headline {
+      text-align: center;
+      font-size: 24px;
+    }
+    .section-subtext {
+      text-align: center;
+      margin: 0 auto;
+    }
+    .header-action-block {
+      display: flex;
+      justify-content: center;
+      width: 100%;
+    }
+  }
+
+  .section-headline {
+    font-family: 'Outfit', 'Plus Jakarta Sans', sans-serif;
+    font-size: 30px;
+    font-weight: 800;
+    color: #111827;
+    margin: 0 0 8px;
+    letter-spacing: -0.02em;
+  }
+
+  .section-subtext {
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: 14.5px;
+    color: #64748B;
+    line-height: 1.55;
+    max-width: 600px;
+    margin: 0;
+  }
+
+  .catalog-filter-pills {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .filter-pill {
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: 12.5px;
+    font-weight: 600;
+    color: #64748B;
+    background: #F8FAFC;
+    border: 1px solid #E2E8F0;
+    padding: 6px 14px;
+    border-radius: 9999px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    text-decoration: none;
+    white-space: nowrap;
+  }
+
+  .filter-pill:hover {
+    background: #F1F5F9;
+    color: #1E293B;
+  }
+
+  .filter-pill.active {
+    background: #6E2219;
+    color: #FFFFFF;
+    border-color: #6E2219;
+    box-shadow: 0 2px 8px rgba(110, 34, 25, 0.2);
+  }
+
+  .products-grid-4 {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 36px 20px;
+  }
+
+  @media (min-width: 640px) {
+    .products-grid-4 {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 42px 20px;
+    }
+  }
+
+  @media (min-width: 1040px) {
+    .products-grid-4 {
+      grid-template-columns: repeat(4, 1fr);
+      gap: 52px 20px;
+    }
+  }
+
+  .catalog-view-all-wrap {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 48px;
+  }
+
+  .btn-view-complete-catalog {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    background: #FFFFFF;
+    color: #1E293B;
+    font-family: var(--font-sans, 'Inter', system-ui, sans-serif);
+    font-size: 14.5px;
+    font-weight: 700;
+    padding: 13px 28px;
+    border: 1px solid #E2E8F0;
+    border-radius: 9px;
+    box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04);
+    text-decoration: none;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .btn-view-complete-catalog:hover {
+    color: #6E2219;
+    border-color: #FECACA;
+    background: #FDF2F2;
+    box-shadow: 0 4px 14px rgba(110, 34, 25, 0.1);
+    transform: translateY(-2px);
+  }
+
+  .catalog-btn-arrow {
+    font-size: 16px;
+    line-height: 1;
+    transition: transform 0.2s ease;
+  }
+
+  .btn-view-complete-catalog:hover .catalog-btn-arrow {
+    transform: translateX(4px);
+  }
+
+  /* ========================================================= */
+  /* CUSTOM OEM / PRIVATE LABEL DARK BENTO SECTION           */
+  /* ========================================================= */
+  .section-custom-oem {
+    padding: 92px 0 96px;
+    background: #FFFFFF;
+    border-top: 1px solid #F1F5F9;
+  }
+
+  .oem-bento-card {
+    background: transparent;
+    border: none;
+    border-radius: 0;
+    padding: 0;
+    box-shadow: none;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 36px;
+    position: relative;
+  }
+
+  @media (min-width: 1040px) {
+    .oem-bento-card {
+      grid-template-columns: 1.05fr 1.15fr;
+      gap: 56px;
+      align-items: center;
+      padding: 0;
+    }
+  }
+
+  .oem-left-col {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .oem-pill-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 5px 14px;
+    border-radius: 9999px;
+    background: #FDF2F2;
+    border: 1px solid #FECACA;
+    color: #6E2219;
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: 10.5px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+    width: fit-content;
+  }
+
+  .oem-title {
+    font-family: 'Outfit', 'Plus Jakarta Sans', sans-serif;
+    font-size: 30px;
+    font-weight: 800;
+    color: #1E293B;
+    line-height: 1.25;
+    margin: 0 0 16px;
+    letter-spacing: -0.02em;
+  }
+
+  @media (min-width: 768px) {
+    .oem-title {
+      font-size: 34px;
+    }
+  }
+
+  .oem-desc {
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: 14px;
+    color: #64748B;
+    line-height: 1.65;
+    margin: 0 0 28px;
+    max-width: 480px;
+  }
+
+  .oem-cta-group {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 14px;
+  }
+
+  .btn-oem-gold {
+    background-color: #6E2219;
+    color: #FFFFFF;
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    padding: 12px 22px;
+    border-radius: 10px;
+    border: none;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.2s ease;
+    box-shadow: 0 4px 12px rgba(110, 34, 25, 0.2);
+  }
+
+  .btn-oem-gold:hover {
+    background-color: #842A1F;
+    transform: translateY(-1px);
+    box-shadow: 0 6px 18px rgba(110, 34, 25, 0.3);
+  }
+
+  .btn-arrow {
+    font-size: 15px;
+    transition: transform 0.15s ease;
+  }
+
+  .btn-oem-gold:hover .btn-arrow {
+    transform: translateX(3px);
+  }
+
+  .btn-oem-dark {
+    background: #FFFFFF;
+    border: 1px solid #CBD5E1;
+    color: #334155;
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    padding: 12px 20px;
+    border-radius: 10px;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+  }
+
+  .btn-oem-dark:hover {
+    background: #F8FAFC;
+    border-color: #94A3B8;
+    color: #0F172A;
+  }
+
+  /* Right Column: 2x2 Grid */
+  .oem-right-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  @media (min-width: 560px) {
+    .oem-right-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  .oem-step-card {
+    background: #F8FAFC;
+    border: 1px solid #E2E8F0;
+    border-radius: 14px;
+    padding: 22px 20px;
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.2s ease, border-color 0.2s ease, background-color 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .oem-step-card:hover {
+    background: #FFFFFF;
+    border-color: #CBD5E1;
+    box-shadow: 0 4px 12px rgba(15, 23, 42, 0.05);
+    transform: translateY(-2px);
+  }
+
+  .step-badge-num {
+    font-family: var(--font-mono, monospace);
+    font-size: 11px;
+    font-weight: 700;
+    padding: 3px 8px;
+    border-radius: 4px;
+    width: fit-content;
+    margin-bottom: 12px;
+  }
+
+  .step-gold {
+    background: #FEF3C7;
+    color: #B45309;
+  }
+
+  .step-green {
+    background: #D1FAE5;
+    color: #059669;
+  }
+
+  .step-red {
+    background: #FEE2E2;
+    color: #DC2626;
+  }
+
+  .step-blue {
+    background: #DBEAFE;
+    color: #2563EB;
+  }
+
+  .step-card-title {
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    color: #1E293B;
+    margin: 0 0 8px;
+    line-height: 1.35;
+  }
+
+  .step-card-desc {
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: 12px;
+    color: #64748B;
+    line-height: 1.5;
+    margin: 0;
+  }
+
+  /* ========================================================= */
+  /* ECONOMIC ADVANTAGE COMPARISON SECTION                    */
+  /* ========================================================= */
+  .section-economic-advantage {
+    padding: 96px 0 100px;
+    background: #FFFFFF;
+    border-top: 1px solid #F1F5F9;
+  }
+
+  .advantage-header {
+    text-align: left;
+    margin-bottom: 42px;
+  }
+
+  .advantage-kicker {
+    font-family: var(--font-sans, 'Inter', system-ui, sans-serif);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    color: #D97706;
+    text-transform: uppercase;
+    display: block;
+    margin-bottom: 6px;
+    text-align: left;
+  }
+
+  .advantage-title {
+    font-family: 'Outfit', 'Plus Jakarta Sans', sans-serif;
+    font-size: 30px;
+    font-weight: 800;
+    color: #111827;
+    line-height: 1.25;
+    margin-bottom: 8px;
+    letter-spacing: -0.02em;
+    text-align: left;
+  }
+
+  @media (max-width: 768px) {
+    .advantage-header {
+      text-align: center;
+    }
+    .advantage-kicker {
+      text-align: center;
+      display: block;
+    }
+    .advantage-title {
+      text-align: center;
+      font-size: 24px;
+    }
+    .advantage-subtitle {
+      text-align: center;
+      margin: 0 auto;
+    }
+  }
+
+  .advantage-subtitle {
+    font-family: var(--font-sans, 'Inter', system-ui, sans-serif);
+    font-size: 14.5px;
+    color: #64748B;
+    max-width: 620px;
+    margin: 0;
+    line-height: 1.55;
+    text-align: left;
+  }
+
+  .advantage-card {
+    background: #FFFFFF;
+    border: 1px solid #E2E8F0;
+    border-radius: 20px;
+    box-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.04), 0 2px 6px -1px rgba(15, 23, 42, 0.02);
+    display: grid;
+    grid-template-columns: 1fr;
+    overflow: hidden;
+  }
+
+  @media (min-width: 900px) {
+    .advantage-card {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  .advantage-col {
+    padding: 38px 42px;
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+  }
+
+  @media (max-width: 640px) {
+    .advantage-col {
+      padding: 28px 20px;
+      gap: 22px;
+    }
+  }
+
+  .col-negative {
+    background: #FFFFFF;
+    border-bottom: 1px solid #F1F5F9;
+  }
+
+  @media (min-width: 900px) {
+    .col-negative {
+      border-bottom: none;
+      border-right: 1px solid #F1F5F9;
+    }
+  }
+
+  .col-positive {
+    background: #FFFFFF;
+  }
+
+  .col-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    width: fit-content;
+    padding: 6px 14px;
+    border-radius: 9999px;
+    font-family: var(--font-sans, 'Inter', system-ui, sans-serif);
+    font-size: 12px;
+    font-weight: 700;
+    line-height: 1.2;
+  }
+
+  .pill-red {
+    background: #FEE2E2;
+    color: #DC2626;
+    border: 1px solid #FECACA;
+  }
+
+  .pill-green {
+    background: #DCFCE7;
+    color: #059669;
+    border: 1px solid #BBF7D0;
+  }
+
+  .pill-icon {
+    font-weight: 800;
+  }
+
+  .advantage-list {
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+  }
+
+  .advantage-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .item-icon {
+    font-size: 14px;
+    font-weight: 800;
+    flex-shrink: 0;
+    margin-top: 2px;
+    line-height: 1;
+  }
+
+  .icon-red {
+    color: #EF4444;
+  }
+
+  .icon-green {
+    color: #10B981;
+  }
+
+  .item-text {
+    font-family: var(--font-sans, 'Inter', system-ui, sans-serif);
+    font-size: 13.5px;
+    line-height: 1.55;
+    color: #334155;
+    margin: 0;
+  }
+
+  .item-text strong {
+    font-weight: 700;
+    color: #0F172A;
+  }
+
+  /* ========================================================= */
+  /* PROCUREMENT FLOW 4 SIMPLE STEPS SECTION                   */
+  /* ========================================================= */
+  .section-procurement-steps {
+    padding: 96px 0 100px;
+    background: #FAF8F5;
+    border-top: 1px solid #F1EFEA;
+  }
+
+  .steps-header {
+    text-align: left;
+    margin-bottom: 42px;
+  }
+
+  .steps-kicker {
+    font-family: var(--font-sans, 'Inter', system-ui, sans-serif);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    color: #D97706;
+    text-transform: uppercase;
+    display: block;
+    margin-bottom: 6px;
+    text-align: left;
+  }
+
+  .steps-title {
+    font-family: 'Outfit', 'Plus Jakarta Sans', sans-serif;
+    font-size: 30px;
+    font-weight: 800;
+    color: #111827;
+    line-height: 1.25;
+    margin-bottom: 8px;
+    letter-spacing: -0.02em;
+    text-align: left;
+  }
+
+  @media (max-width: 768px) {
+    .steps-header {
+      text-align: center;
+    }
+    .steps-kicker {
+      text-align: center;
+      display: block;
+    }
+    .steps-title {
+      text-align: center;
+      font-size: 24px;
+    }
+    .steps-subtitle {
+      text-align: center;
+      margin: 0 auto;
+    }
+  }
+
+  .steps-subtitle {
+    font-family: var(--font-sans, 'Inter', system-ui, sans-serif);
+    font-size: 14.5px;
+    color: #64748B;
+    max-width: 620px;
+    margin: 0;
+    line-height: 1.55;
+    text-align: left;
+  }
+
+  .steps-grid-4 {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  @media (min-width: 640px) {
+    .steps-grid-4 {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .steps-grid-4 {
+      grid-template-columns: repeat(4, 1fr);
+      gap: 22px;
+    }
+  }
+
+  .procure-step-card {
+    background: #FFFFFF;
+    border: 1px solid #EAE6DF;
+    border-radius: 20px;
+    padding: 38px 24px 32px;
+    text-align: center;
+    box-shadow: 0 4px 18px rgba(15, 23, 42, 0.025);
+    transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .procure-step-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 28px -4px rgba(15, 23, 42, 0.08);
+    border-color: #CBD5E1;
+  }
+
+  .procure-num-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 38px;
+    height: 28px;
+    border-radius: 9999px;
+    font-family: var(--font-mono, monospace);
+    font-size: 11.5px;
+    font-weight: 700;
+    margin-bottom: 22px;
+    letter-spacing: 0.02em;
+  }
+
+  .num-badge-1 {
+    background: #FEE2E2;
+    color: #DC2626;
+  }
+
+  .num-badge-2 {
+    background: #FEF3C7;
+    color: #D97706;
+  }
+
+  .num-badge-3 {
+    background: #D1FAE5;
+    color: #059669;
+  }
+
+  .num-badge-4 {
+    background: #EDE9FE;
+    color: #6366F1;
+  }
+
+  .procure-step-title {
+    font-family: 'Outfit', 'Plus Jakarta Sans', sans-serif;
+    font-size: 17.5px;
+    font-weight: 800;
+    color: #0F172A;
+    margin-bottom: 12px;
+    line-height: 1.3;
+  }
+
+  .procure-step-desc {
+    font-family: var(--font-sans, 'Inter', system-ui, sans-serif);
+    font-size: 12.5px;
+    color: #64748B;
+    line-height: 1.6;
+    margin: 0;
+  }
+
+  /* ========================================================= */
+  /* FAQ ACCORDION SECTION MATCHING REFERENCE                  */
+  /* ========================================================= */
+  .section-faq {
+    padding: 96px 0 108px;
+    background: #FAF8F5;
+    border-top: 1px solid #F1EFEA;
+  }
+
+  .faq-header {
+    text-align: left;
+    margin-bottom: 42px;
+  }
+
+  .faq-kicker {
+    font-family: var(--font-sans, 'Inter', system-ui, sans-serif);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    color: #D97706;
+    text-transform: uppercase;
+    display: block;
+    margin-bottom: 6px;
+    text-align: left;
+  }
+
+  .faq-title {
+    font-family: 'Outfit', 'Plus Jakarta Sans', sans-serif;
+    font-size: 30px;
+    font-weight: 800;
+    color: #111827;
+    line-height: 1.25;
+    margin-bottom: 8px;
+    letter-spacing: -0.02em;
+    text-align: left;
+  }
+
+  @media (max-width: 768px) {
+    .faq-header {
+      text-align: center;
+    }
+    .faq-kicker {
+      text-align: center;
+      display: block;
+    }
+    .faq-title {
+      text-align: center;
+      font-size: 24px;
+    }
+    .faq-subtitle {
+      text-align: center;
+      margin: 0 auto;
+    }
+  }
+
+  .faq-subtitle {
+    font-family: var(--font-sans, 'Inter', system-ui, sans-serif);
+    font-size: 14.5px;
+    color: #64748B;
+    max-width: 620px;
+    margin: 0;
+    line-height: 1.55;
+    text-align: left;
+  }
+
+  .faq-accordion-wrap {
+    max-width: 820px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .faq-accordion-item {
+    background: #FFFFFF;
+    border: 1px solid #EAE6DF;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(15, 23, 42, 0.02);
+    overflow: hidden;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .faq-accordion-item:hover {
+    border-color: #CBD5E1;
+  }
+
+  .faq-accordion-item[open] {
+    border-color: #C28B1E;
+    box-shadow: 0 4px 16px rgba(194, 139, 30, 0.08);
+  }
+
+  .faq-question {
+    list-style: none;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 18px 24px;
+    cursor: pointer;
+    font-family: var(--font-sans, 'Inter', system-ui, sans-serif);
+    font-size: 14.5px;
+    font-weight: 700;
+    color: #0F172A;
+    user-select: none;
+    transition: color 0.2s ease;
+  }
+
+  .faq-question::-webkit-details-marker {
+    display: none;
+  }
+
+  .faq-question:hover {
+    color: #6E2219;
+  }
+
+  .faq-chevron {
+    color: #94A3B8;
+    flex-shrink: 0;
+    transition: transform 0.25s ease, color 0.2s ease;
+  }
+
+  .faq-accordion-item[open] .faq-chevron {
+    transform: rotate(180deg);
+    color: #6E2219;
+  }
+
+  .faq-answer {
+    padding: 0 24px 22px;
+    font-family: var(--font-sans, 'Inter', system-ui, sans-serif);
+    font-size: 13.5px;
+    line-height: 1.65;
+    color: #475569;
+    border-top: 1px solid #F8FAFC;
+  }
+
+  .faq-answer p {
+    margin: 12px 0 0;
+  }
+
+  /* ========================================================= */
+  /* OUR CERTIFICATIONS & QUALITY ASSURANCE SECTION             */
+  /* ========================================================= */
+  .section-certifications {
+    background-color: #FAFCFF;
+    background-image: 
+      linear-gradient(to right, rgba(226, 232, 240, 0.65) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(226, 232, 240, 0.65) 1px, transparent 1px);
+    background-size: 26px 26px;
+    padding: 72px 0 88px;
+    border-top: 1px solid #E2E8F0;
+    border-bottom: 1px solid #E2E8F0;
+  }
+
+  .cert-header {
+    margin-bottom: 36px;
+  }
+
+  .cert-cards-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 32px;
+    max-width: 860px;
+  }
+
+  .cert-card {
+    background: #FFFFFF;
+    border: 1px solid #E2E8F0;
+    border-radius: 6px;
+    padding: 18px 18px 20px 18px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .cert-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.07);
+  }
+
+  .cert-preview-frame {
+    position: relative;
+    background: #FFFFFF;
+    border: 1px solid #E2E8F0;
+    border-radius: 4px;
+    height: 380px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    scrollbar-width: thin;
+    scrollbar-color: #94A3B8 #F1F5F9;
+  }
+
+  .cert-preview-frame::-webkit-scrollbar {
+    width: 7px;
+  }
+
+  .cert-preview-frame::-webkit-scrollbar-track {
+    background: #F1F5F9;
+    border-radius: 4px;
+  }
+
+  .cert-preview-frame::-webkit-scrollbar-thumb {
+    background: #94A3B8;
+    border-radius: 4px;
+  }
+
+  .cert-preview-frame::-webkit-scrollbar-thumb:hover {
+    background: #64748B;
+  }
+
+  .cert-preview-img {
+    width: 100%;
+    height: auto;
+    display: block;
+    background-color: #FFFFFF;
+  }
+
+  .cert-info {
+    padding-top: 18px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .cert-name {
+    font-size: 17px;
+    font-weight: 800;
+    color: #0F172A;
+    margin: 0 0 6px 0;
+    letter-spacing: 0.3px;
+    text-transform: uppercase;
+  }
+
+  .cert-desc {
+    font-size: 13.5px;
+    color: #64748B;
+    margin: 0 0 18px 0;
+    line-height: 1.4;
+  }
+
+  .btn-cert-view {
+    width: 100%;
+    background: #C81E1E;
+    color: #FFFFFF;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    text-decoration: none;
+    padding: 12px 20px;
+    border-radius: 4px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: background-color 0.2s ease, transform 0.15s ease;
+  }
+
+  .btn-cert-view:hover {
+    background: #A51717;
+    color: #FFFFFF;
+  }
+
+  @media (max-width: 768px) {
+    .cert-cards-grid {
+      grid-template-columns: 1fr;
+      gap: 24px;
+    }
+
+    .cert-preview-frame {
+      height: 340px;
+    }
+  }
+</style>

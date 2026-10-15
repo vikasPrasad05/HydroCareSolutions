@@ -1,0 +1,90 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="100%" height="100%">
+  <defs>
+    <!-- Blue Water Gradient (Hydro) -->
+    <linearGradient id="hydroBlueGrad" x1="20%" y1="10%" x2="80%" y2="90%">
+      <stop offset="0%" stop-color="#0284C7" />
+      <stop offset="30%" stop-color="#0066CC" />
+      <stop offset="70%" stop-color="#004BA0" />
+      <stop offset="100%" stop-color="#003580" />
+    </linearGradient>
+
+    <!-- Green Leaf Gradient (Care) -->
+    <linearGradient id="careGreenGrad" x1="10%" y1="20%" x2="90%" y2="90%">
+      <stop offset="0%" stop-color="#72D022" />
+      <stop offset="40%" stop-color="#4CB81E" />
+      <stop offset="80%" stop-color="#249B17" />
+      <stop offset="100%" stop-color="#147E0F" />
+    </linearGradient>
+
+    <!-- Subtle Inner Glow / Highlight -->
+    <linearGradient id="dropletHighlight" x1="30%" y1="0%" x2="70%" y2="60%">
+      <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.35" />
+      <stop offset="100%" stop-color="#FFFFFF" stop-opacity="0" />
+    </linearGradient>
+
+    <!-- Drop Shadow for crisp standing on white backgrounds -->
+    <filter id="dropletShadow" x="-10%" y="-10%" width="125%" height="125%">
+      <feDropShadow dx="0" dy="6" stdDeviation="12" flood-color="#003580" flood-opacity="0.15" />
+    </filter>
+  </defs>
+
+  <g filter="url(#dropletShadow)">
+    <!-- 1. Upper / Blue Water Body (Hydro) -->
+    <path 
+      d="M 256 36 
+         C 256 36, 175 130, 108 230 
+         C 62 298, 62 360, 96 414
+         C 105 428, 118 440, 134 450
+         C 126 430, 130 405, 146 384
+         C 178 344, 230 318, 290 288
+         C 345 260, 396 230, 424 186
+         C 402 118, 332 58, 256 36 Z" 
+      fill="url(#hydroBlueGrad)" 
+    />
+
+    <!-- Subtle soft highlight on upper blue -->
+    <path 
+      d="M 256 46 
+         C 256 46, 185 136, 122 232 
+         C 95 275, 84 316, 92 355
+         C 120 290, 185 200, 260 120 
+         C 260 120, 256 50, 256 46 Z" 
+      fill="url(#dropletHighlight)" 
+    />
+
+    <!-- 2. Main Flowing White Dividing Ribbon -->
+    <path 
+      d="M 108 438
+         C 138 390, 196 350, 262 316
+         C 324 284, 382 250, 418 200
+         C 426 215, 432 232, 436 250
+         C 402 296, 348 328, 286 358
+         C 222 390, 168 428, 138 472
+         C 126 462, 116 450, 108 438 Z" 
+      fill="#FFFFFF" 
+    />
+
+    <!-- 3. Lower / Green Leaf Body (Care) -->
+    <path 
+      d="M 138 472
+         C 168 428, 222 390, 286 358
+         C 348 328, 402 296, 436 250
+         C 446 288, 444 330, 420 376
+         C 386 440, 326 476, 256 476
+         C 210 476, 168 460, 138 472 Z" 
+      fill="url(#careGreenGrad)" 
+    />
+
+    <!-- 4. Inner White Leaf Vein Ribbon -->
+    <path 
+      d="M 152 470
+         C 185 436, 230 408, 285 385
+         C 328 367, 368 350, 396 325
+         C 392 334, 385 344, 376 354
+         C 348 376, 312 392, 272 408
+         C 224 428, 182 454, 158 480
+         C 155 477, 153 474, 152 470 Z" 
+      fill="#FFFFFF" 
+    />
+  </g>
+</svg>

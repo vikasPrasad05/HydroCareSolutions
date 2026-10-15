@@ -1,0 +1,566 @@
+---
+import { getAllProducts } from '../lib/store';
+
+const products = await getAllProducts();
+const whatsappNumber = import.meta.env.COMPANY_WHATSAPP || '917623906747';
+---
+
+<div id="quoteModalBackdrop" class="modal-backdrop" aria-hidden="true">
+  <div class="modal-box">
+    <!-- Header -->
+    <div class="modal-header">
+      <div class="header-tag">
+        <span class="pulse-dot"></span>
+        <span>B2B Commercial Quotation & Sample Request</span>
+      </div>
+      <button type="button" class="close-btn" id="closeQuoteModalBtn" aria-label="Close modal">
+        &times;
+      </button>
+    </div>
+
+    <!-- Body -->
+    <div class="modal-content-area">
+      <!-- FORM STATE -->
+      <form id="quoteInquiryForm" class="inquiry-form">
+        <div class="form-title-group">
+          <h3 class="form-title">Request Food-Grade Pad Samples & Pricing</h3>
+          <p class="form-subtitle">Get direct manufacturer rate cards and test sample cartons tailored to your tray dimensions within 24 hours.</p>
+        </div>
+
+        <div class="form-grid">
+          <!-- Product Selector -->
+          <div class="form-group full-width">
+            <label for="inqProduct" class="form-label">Food Absorbent Pad Line *</label>
+            <select id="inqProduct" name="product_name" class="form-select" required>
+              <option value="">-- Choose One of Our 4 Food Pad Lines --</option>
+              {products.map(p => (
+                <option value={p.name} data-slug={p.slug} data-moq={p.moq || 5000}>
+                  {p.code} — {p.name} (MOQ: {Number(p.moq || 5000).toLocaleString()} pcs)
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <!-- Quantity with Volume quick buttons -->
+          <div class="form-group">
+            <label for="inqQuantity" class="form-label">Estimated Monthly Volume (Pcs) *</label>
+            <input 
+              type="number" 
+              id="inqQuantity" 
+              name="quantity" 
+              class="form-input font-mono" 
+              min="1000" 
+              value="25000" 
+              required 
+            />
+            <div class="quick-qty-btns">
+              <button type="button" class="qty-btn" data-add="10000">+10K</button>
+              <button type="button" class="qty-btn" data-add="50000">+50K</button>
+              <button type="button" class="qty-btn" data-add="100000">+100K</button>
+            </div>
+          </div>
+
+          <!-- Timeline -->
+          <div class="form-group">
+            <label for="inqTimeline" class="form-label">Dispatch Requirement</label>
+            <select id="inqTimeline" name="target_timeline" class="form-select">
+              <option value="Sample Box First (3-4 Days)">Send Test Sample Box First</option>
+              <option value="Production Batch (7-10 Days)">Commercial Batch (7-10 Days)</option>
+              <option value="Urgent Dispatch (3-5 Days)">Urgent Air Cargo (3-5 Days)</option>
+              <option value="Recurring Monthly Contract">Standing Monthly Container Supply</option>
+            </select>
+          </div>
+
+          <!-- Company Name -->
+          <div class="form-group">
+            <label for="inqCompany" class="form-label">Company / Brand / Packhouse Name *</label>
+            <input 
+              type="text" 
+              id="inqCompany" 
+              name="company_name" 
+              class="form-input" 
+              placeholder="e.g. Royal Fresh Meats / Coastal Fishery" 
+              required 
+            />
+          </div>
+
+          <!-- Contact Person Name -->
+          <div class="form-group">
+            <label for="inqName" class="form-label">Procurement Contact Person *</label>
+            <input 
+              type="text" 
+              id="inqName" 
+              name="name" 
+              class="form-input" 
+              placeholder="Your full name" 
+              required 
+            />
+          </div>
+
+          <!-- Work Email -->
+          <div class="form-group">
+            <label for="inqEmail" class="form-label">Business Email *</label>
+            <input 
+              type="email" 
+              id="inqEmail" 
+              name="email" 
+              class="form-input" 
+              placeholder="procurement@company.com" 
+              required 
+            />
+          </div>
+
+          <!-- Phone / WhatsApp -->
+          <div class="form-group">
+            <label for="inqPhone" class="form-label">Phone / WhatsApp Number *</label>
+            <input 
+              type="tel" 
+              id="inqPhone" 
+              name="phone" 
+              class="form-input" 
+              placeholder="+91 98765 43210" 
+              required 
+            />
+          </div>
+
+          <!-- Dimensions / Absorbency Target -->
+          <div class="form-group">
+            <label for="inqFabric" class="form-label">Target Pad Size / Tray Dimension</label>
+            <input 
+              type="text" 
+              id="inqFabric" 
+              name="fabric_choice" 
+              class="form-input" 
+              placeholder="e.g. 100 x 160 mm or 250g Strawberry Punnet" 
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="inqCustomization" class="form-label">Pad Color & Core Spec</label>
+            <select id="inqCustomization" name="customization_type" class="form-select">
+              <option value="Clean White Pad (Standard)">Clean Food White (Standard)</option>
+              <option value="Black Pad (For Red Meat & Steaks)">Black Food Pad (For Red Meat & Steaks)</option>
+              <option value="Honeycomb Air-Cushioned (Berries)">Honeycomb Air-Cushioned (Fresh Berries)</option>
+              <option value="Heavy Saline Resistant (Seafood)">Heavy Saline Resistant (Marine Seafood)</option>
+              <option value="Continuous Roll Dispenser">Continuous Perforated Roll</option>
+              <option value="Custom Die-Cut Specification">Custom Die-Cut Specification</option>
+            </select>
+          </div>
+
+          <!-- Message / Requirements -->
+          <div class="form-group full-width">
+            <label for="inqMessage" class="form-label">Specific Food Product / Packaging Tray Type</label>
+            <textarea 
+              id="inqMessage" 
+              name="message" 
+              rows="3" 
+              class="form-textarea" 
+              placeholder="Tell us what food you are packing (beef, chicken, salmon, berries), tray type (PP/PET/Foam), or automated inserter speed..."
+            ></textarea>
+          </div>
+        </div>
+
+        <div id="formErrorMessage" class="form-error-banner" style="display: none;"></div>
+
+        <!-- Submit Button -->
+        <div class="modal-footer">
+          <button type="submit" id="submitInquiryBtn" class="btn-industrial-accent btn-full">
+            <span class="btn-text">Transmit Request to Production Desk</span>
+            <span class="btn-loader" style="display: none;">Processing...</span>
+          </button>
+        </div>
+      </form>
+
+      <!-- SUCCESS STATE -->
+      <div id="quoteSuccessState" class="success-state" style="display: none;">
+        <div class="success-icon-wrap">✓</div>
+        <h3 class="success-title">Food Pad Inquiry Registered</h3>
+        <p class="success-msg">
+          Thank you, <strong id="successLeadName">Valued Client</strong>. Your inquiry reference is <span id="successInquiryNo" class="font-mono ref-badge">INQ-XXXX</span>.
+        </p>
+        <p class="success-sub">
+          Our food packaging specialists will review your tray specifications and connect via WhatsApp and email with test sample dispatch details and wholesale pricing.
+        </p>
+
+        <div class="success-actions">
+          <a id="successTrackLink" href="/track" class="btn-industrial-outline" style="text-decoration: none; display: inline-flex; align-items: center; justify-content: center; gap: 6px;">
+            🔍 Track Quotation Status
+          </a>
+          <a id="successWhatsAppLink" href="#" target="_blank" class="btn-whatsapp-direct">
+            💬 Quick Connect on WhatsApp
+          </a>
+          <button type="button" class="btn-industrial-outline btn-close-done" id="doneQuoteModalBtn">
+            Close Window
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 24px;
+    background: #0F172A;
+    color: #FFFFFF;
+    border-bottom: 2px solid var(--accent);
+  }
+
+  .header-tag {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    text-transform: uppercase;
+    color: var(--accent-light);
+    letter-spacing: 0.05em;
+  }
+
+  .close-btn {
+    font-size: 26px;
+    color: #94A3B8;
+    line-height: 1;
+    padding: 0 4px;
+    transition: color 0.2s;
+  }
+
+  .close-btn:hover {
+    color: #FFFFFF;
+  }
+
+  .modal-content-area {
+    padding: 24px;
+  }
+
+  .form-title-group {
+    margin-bottom: 20px;
+  }
+
+  .form-title {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--primary);
+    margin-bottom: 6px;
+  }
+
+  .form-subtitle {
+    font-size: 13px;
+    color: var(--muted-foreground);
+    line-height: 1.4;
+  }
+
+  .form-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  @media (min-width: 600px) {
+    .form-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  .full-width {
+    grid-column: 1 / -1;
+  }
+
+  .form-group {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .quick-qty-btns {
+    display: flex;
+    gap: 6px;
+    margin-top: 6px;
+  }
+
+  .qty-btn {
+    padding: 3px 8px;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    background: #F1F5F9;
+    border: 1px solid #CBD5E1;
+    border-radius: 4px;
+    color: #475569;
+    cursor: pointer;
+  }
+
+  .qty-btn:hover {
+    background: #E2E8F0;
+    color: var(--primary);
+  }
+
+  .form-error-banner {
+    margin-top: 14px;
+    padding: 10px 14px;
+    background: #FEE2E2;
+    border: 1px solid #F87171;
+    border-radius: 6px;
+    color: #B91C1C;
+    font-size: 13px;
+  }
+
+  .modal-footer {
+    margin-top: 24px;
+    padding-top: 16px;
+    border-top: 1px solid var(--border);
+  }
+
+  .btn-full {
+    width: 100%;
+    padding: 14px;
+    font-size: 15px;
+  }
+
+  /* Success State */
+  .success-state {
+    text-align: center;
+    padding: 32px 16px;
+  }
+
+  .success-icon-wrap {
+    width: 64px;
+    height: 64px;
+    margin: 0 auto 16px;
+    background: #D1FAE5;
+    border: 2px solid #10B981;
+    color: #065F46;
+    font-size: 32px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+  }
+
+  .success-title {
+    font-size: 22px;
+    color: var(--primary);
+    margin-bottom: 12px;
+  }
+
+  .success-msg {
+    font-size: 14px;
+    color: #334155;
+    margin-bottom: 10px;
+  }
+
+  .ref-badge {
+    background: rgba(2, 132, 199, 0.15);
+    color: var(--accent);
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-weight: 700;
+  }
+
+  .success-sub {
+    font-size: 13px;
+    color: var(--muted-foreground);
+    line-height: 1.5;
+    margin-bottom: 24px;
+  }
+
+  .success-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    max-width: 320px;
+    margin: 0 auto;
+  }
+
+  .btn-whatsapp-direct {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    background: #25D366;
+    color: #FFFFFF;
+    padding: 12px;
+    font-weight: 600;
+    font-size: 14px;
+    border-radius: 6px;
+    transition: background-color 0.2s;
+  }
+
+  .btn-whatsapp-direct:hover {
+    background: #1EBE5D;
+  }
+
+  .btn-close-done {
+    width: 100%;
+    padding: 10px;
+    font-size: 13px;
+  }
+</style>
+
+<script define:vars={{ whatsappNumber }}>
+  const backdrop = document.getElementById('quoteModalBackdrop');
+  const closeBtn = document.getElementById('closeQuoteModalBtn');
+  const doneBtn = document.getElementById('doneQuoteModalBtn');
+  const form = document.getElementById('quoteInquiryForm');
+  const successState = document.getElementById('quoteSuccessState');
+  const errorBanner = document.getElementById('formErrorMessage');
+  const productSelect = document.getElementById('inqProduct');
+  const quantityInput = document.getElementById('inqQuantity');
+  const submitBtn = document.getElementById('submitInquiryBtn');
+
+  function openModal(prefillProduct = '', prefillMoq = 5000) {
+    if (!backdrop) return;
+    backdrop.classList.add('open');
+    backdrop.setAttribute('aria-hidden', 'false');
+
+    if (prefillProduct && productSelect) {
+      for (const opt of productSelect.options) {
+        if (opt.value.toLowerCase().includes(prefillProduct.toLowerCase()) || 
+            prefillProduct.toLowerCase().includes(opt.value.toLowerCase())) {
+          opt.selected = true;
+          break;
+        }
+      }
+    }
+
+    if (quantityInput && prefillMoq) {
+      const currentVal = parseInt(quantityInput.value, 10);
+      if (isNaN(currentVal) || currentVal < prefillMoq) {
+        quantityInput.value = prefillMoq;
+      }
+    }
+
+    if (form) form.style.display = 'block';
+    if (successState) successState.style.display = 'none';
+    if (errorBanner) {
+      errorBanner.style.display = 'none';
+      errorBanner.textContent = '';
+    }
+  }
+
+  function closeModal() {
+    if (!backdrop) return;
+    backdrop.classList.remove('open');
+    backdrop.setAttribute('aria-hidden', 'true');
+  }
+
+  document.addEventListener('click', (e) => {
+    const trigger = e.target.closest('.open-quote-trigger');
+    if (trigger) {
+      e.preventDefault();
+      const product = trigger.getAttribute('data-product') || '';
+      window.location.href = '/enquiry' + (product ? '?product=' + encodeURIComponent(product) : '');
+    }
+  });
+
+  if (closeBtn) closeBtn.addEventListener('click', closeModal);
+  if (doneBtn) doneBtn.addEventListener('click', closeModal);
+
+  if (backdrop) {
+    backdrop.addEventListener('click', (e) => {
+      if (e.target === backdrop) closeModal();
+    });
+  }
+
+  document.querySelectorAll('.qty-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const add = parseInt(btn.getAttribute('data-add') || '0', 10);
+      if (quantityInput) {
+        const val = parseInt(quantityInput.value, 10) || 5000;
+        quantityInput.value = Math.max(1000, val + add);
+      }
+    });
+  });
+
+  if (form) {
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      if (errorBanner) errorBanner.style.display = 'none';
+
+      const formData = new FormData(form);
+      const selectedOption = productSelect.options[productSelect.selectedIndex];
+      const product_slug = selectedOption ? selectedOption.getAttribute('data-slug') : '';
+
+      const payload = {
+        name: formData.get('name'),
+        company_name: formData.get('company_name'),
+        email: formData.get('email'),
+        phone: formData.get('phone'),
+        product_slug: product_slug,
+        product_name: formData.get('product_name'),
+        quantity: parseInt(formData.get('quantity'), 10) || 5000,
+        target_timeline: formData.get('target_timeline'),
+        fabric_choice: formData.get('fabric_choice'),
+        customization_type: formData.get('customization_type'),
+        message: formData.get('message')
+      };
+
+      if (submitBtn) {
+        submitBtn.disabled = true;
+        const btnText = submitBtn.querySelector('.btn-text');
+        const btnLoader = submitBtn.querySelector('.btn-loader');
+        if (btnText) btnText.style.display = 'none';
+        if (btnLoader) btnLoader.style.display = 'inline';
+      }
+
+      try {
+        const res = await fetch('/api/inquiries', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+
+        const data = await res.json();
+
+        if (!res.ok || !data.success) {
+          throw new Error(data.error || 'Failed to submit inquiry');
+        }
+
+        form.style.display = 'none';
+        if (successState) {
+          successState.style.display = 'block';
+          const nameEl = document.getElementById('successLeadName');
+          const noEl = document.getElementById('successInquiryNo');
+          const waEl = document.getElementById('successWhatsAppLink');
+          const trackEl = document.getElementById('successTrackLink') as HTMLAnchorElement;
+
+          const inqNo = data.inquiry?.inquiry_no || 'INQ-SUCCESS';
+          if (nameEl) nameEl.textContent = payload.company_name || payload.name;
+          if (noEl) noEl.textContent = inqNo;
+          if (trackEl) {
+            trackEl.href = `/track?no=${encodeURIComponent(inqNo)}`;
+            trackEl.onclick = (e) => {
+              e.preventDefault();
+              if ((window as any).openTrackQuoteModal) {
+                (window as any).openTrackQuoteModal(inqNo);
+              } else {
+                window.location.href = `/track?no=${encodeURIComponent(inqNo)}`;
+              }
+            };
+          }
+
+          if (waEl) {
+            const waMsg = `Hi HydroCare Solutions! I submitted quotation #${data.inquiry?.inquiry_no || ''} for ${payload.quantity} units of ${payload.product_name}. My company is ${payload.company_name}.`;
+            waEl.href = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(waMsg)}`;
+          }
+        }
+        form.reset();
+      } catch (err) {
+        if (errorBanner) {
+          errorBanner.textContent = err.message || 'An error occurred. Please try again or message via WhatsApp directly.';
+          errorBanner.style.display = 'block';
+        }
+      } finally {
+        if (submitBtn) {
+          submitBtn.disabled = false;
+          const btnText = submitBtn.querySelector('.btn-text');
+          const btnLoader = submitBtn.querySelector('.btn-loader');
+          if (btnText) btnText.style.display = 'inline';
+          if (btnLoader) btnLoader.style.display = 'none';
+        }
+      }
+    });
+  }
+</script>

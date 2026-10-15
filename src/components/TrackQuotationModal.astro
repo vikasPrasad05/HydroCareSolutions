@@ -1,0 +1,370 @@
+---
+// Component: TrackQuotationModal.astro
+// Clean, simple, e-commerce style quotation tracking modal
+---
+
+<div id="trackQuoteModalBackdrop" class="track-modal-backdrop" style="display: none;" aria-hidden="true" role="dialog">
+  <div class="track-modal-card">
+    
+    <!-- Modal Header -->
+    <div style="display: flex; justify-content: space-between; align-items: center; padding: 18px 24px; border-bottom: 1px solid #E5E7EB; background: #FFFFFF; border-top-left-radius: 12px; border-top-right-radius: 12px;">
+      <div>
+        <h3 style="margin: 0; font-size: 18px; font-weight: 700; color: #111827;">Track Quotation Status</h3>
+      </div>
+      <button type="button" id="btnCloseTrackModal" aria-label="Close" style="background: none; border: none; font-size: 24px; line-height: 1; color: #9CA3AF; cursor: pointer; padding: 4px; border-radius: 4px;">&times;</button>
+    </div>
+
+    <!-- Modal Body -->
+    <div style="padding: 20px 24px; display: flex; flex-direction: column; gap: 16px;">
+      
+      <!-- Search Input Box -->
+      <form id="trackQuoteForm" onsubmit="return false;" style="background: #F9FAFB; border: 1px solid #E5E7EB; border-radius: 8px; padding: 14px 16px;">
+        <label for="trackInquiryInput" style="display: block; font-size: 11px; font-weight: 700; color: #4B5563; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px;">Enter Quotation ID / Tracking No.</label>
+        <div style="display: flex; gap: 10px;">
+          <input 
+            type="text" 
+            id="trackInquiryInput" 
+            placeholder="e.g. INQ-2026-4892" 
+            style="flex: 1; padding: 10px 14px; border: 1px solid #D1D5DB; border-radius: 6px; font-size: 14px; font-weight: 600; font-family: monospace; color: #111827; outline: none; background: #FFFFFF;"
+            autocomplete="off"
+            required 
+          />
+          <button type="submit" id="btnRunTrack" style="background: #8B0000; color: #FFFFFF; border: none; padding: 10px 20px; border-radius: 6px; font-size: 13.5px; font-weight: 600; cursor: pointer; white-space: nowrap;">
+            Track Status
+          </button>
+        </div>
+
+      </form>
+
+      <!-- Loading State -->
+      <div id="trackLoadingState" style="display: none; text-align: center; padding: 30px; color: #6B7280; font-size: 14px;">
+        <div style="width: 32px; height: 32px; border: 3px solid #E5E7EB; border-top-color: #8B0000; border-radius: 50%; margin: 0 auto 10px auto; animation: spin 0.8s linear infinite;"></div>
+        Searching quotation records...
+      </div>
+
+      <!-- Error State -->
+      <div id="trackErrorState" style="display: none; background: #FEF2F2; border: 1px solid #FECACA; border-radius: 8px; padding: 16px; text-align: center;">
+        <div style="font-size: 24px; margin-bottom: 4px;">⚠️</div>
+        <div style="font-size: 14px; font-weight: 700; color: #991B1B;">Quotation Not Found</div>
+        <p id="trackErrorMessage" style="font-size: 13px; color: #B91C1C; margin: 4px 0 12px 0;">Please check your quotation code or submit a new inquiry.</p>
+        <div style="display: flex; gap: 8px; justify-content: center; flex-wrap: wrap;">
+          <button type="button" id="btnTrackRetry" style="background: #374151; color: #FFF; border: none; font-size: 12.5px; font-weight: 600; padding: 7px 14px; border-radius: 6px; cursor: pointer;">🔍 Search Another ID</button>
+          <a href="/enquiry" style="background: #8B0000; color: #FFF; text-decoration: none; font-size: 12.5px; font-weight: 600; padding: 7px 14px; border-radius: 6px; display: inline-block;">Submit New Quote</a>
+        </div>
+      </div>
+
+      <!-- ============================================== -->
+      <!-- E-COMMERCE STYLE TRACKING RESULT CONTAINER     -->
+      <!-- ============================================== -->
+      <div id="trackSuccessContainer" style="display: none; flex-direction: column; gap: 14px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
+        
+        <!-- 1. Order Status Header Card -->
+        <div style="background: #F9FAFB; border: 1px solid #E5E7EB; border-radius: 8px; padding: 14px 18px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+          <div>
+            <div style="font-size: 11px; font-weight: 700; color: #6B7280; text-transform: uppercase;">Quotation ID</div>
+            <div style="font-size: 16px; font-weight: 800; color: #111827; font-family: monospace; margin-top: 1px;" id="resInquiryNo">INQ-XXXX</div>
+            <div style="font-size: 12px; color: #6B7280; margin-top: 2px;">Date: <span id="resCreatedDate" style="color: #374151; font-weight: 500;">Oct 13, 2026</span></div>
+          </div>
+          <div style="text-align: right;">
+            <div style="font-size: 11px; font-weight: 700; color: #6B7280; text-transform: uppercase;">Current Status</div>
+            <span id="resStatusBadge" style="display: inline-block; font-size: 12px; font-weight: 700; padding: 4px 12px; border-radius: 20px; background: #DCFCE7; color: #15803D; margin-top: 3px;">Quotation Ready</span>
+          </div>
+        </div>
+
+        <!-- 2. Product Summary Card (E-Commerce Item Style) -->
+        <div style="background: #FFFFFF; border: 1px solid #E5E7EB; border-radius: 8px; padding: 14px 16px; display: flex; gap: 14px; align-items: center; justify-content: space-between;">
+          <div style="flex: 1; min-width: 0;">
+            <div style="font-size: 13.5px; font-weight: 700; color: #111827; line-height: 1.35;" id="resProduct">Meat & Poultry Packaging</div>
+            <div style="font-size: 12px; color: #4B5563; margin-top: 3px; display: flex; flex-wrap: wrap; gap: 8px;">
+              <span>Qty: <strong id="resQuantity" style="color: #111827;">5,000 units</strong></span>
+              <span style="color: #D1D5DB;">&bull;</span>
+              <span>Spec: <span id="resFabric" style="color: #111827;">Custom Spec</span></span>
+              <span style="color: #D1D5DB;">&bull;</span>
+              <span>Client: <span id="resCompany" style="color: #111827;">Company</span></span>
+            </div>
+          </div>
+          <div style="width: 58px; height: 58px; border-radius: 8px; overflow: hidden; border: 1px solid #E5E7EB; background: #F8FAFC; flex-shrink: 0; margin-left: 10px;">
+            <img id="resProductImg" src="/images/products/quilted-meat-tray-pad.jpg" alt="Ordered Product" style="width: 100%; height: 100%; object-fit: cover; display: block;" />
+          </div>
+        </div>
+
+        <!-- 3. E-Commerce Vertical Stepper (Milestones Timeline) -->
+        <div style="background: #FFFFFF; padding: 14px 4px;">
+          <div style="font-size: 11px; font-weight: 800; color: #374151; text-transform: uppercase; letter-spacing: 0.6px; margin-bottom: 16px;">TRACKING TIMELINE</div>
+          <div id="trackStepperSteps" style="display: flex; flex-direction: column;">
+            <!-- Rendered cleanly with inline styles via JS -->
+          </div>
+        </div>
+
+        <!-- 4. Quotation Admin Note Box (if note present) -->
+        <div id="trackNotesCard" style="display: none; background: #FFF8F8; border: 1.5px solid #FCA5A5; border-radius: 8px; padding: 12px 16px;">
+          <p style="margin: 0; line-height: 1.45; display: flex; align-items: baseline; flex-wrap: wrap; gap: 4px;">
+            <span style="color: #000000; font-weight: 800; font-size: 15.5px; letter-spacing: 0.2px;">Note :- </span>
+            <span id="resAdminNotes" style="color: #8B0000; font-size: 13px; font-weight: 600;"></span>
+          </p>
+        </div>
+
+        <!-- 5. Actions Footer -->
+        <div style="display: flex; gap: 10px; margin-top: 4px; flex-wrap: wrap;">
+          <a id="resWhatsAppBtn" href="#" target="_blank" style="flex: 1; min-width: 200px; background: #25D366; color: #FFFFFF; text-decoration: none; font-size: 13.5px; font-weight: 600; padding: 11px 16px; border-radius: 6px; text-align: center; display: inline-flex; align-items: center; justify-content: center; gap: 6px;">
+            💬 Chat on WhatsApp for Quick Delivery
+          </a>
+          <button type="button" id="btnTrackAnother" style="background: #F3F4F6; color: #374151; border: 1px solid #D1D5DB; padding: 11px 16px; border-radius: 6px; font-size: 13.5px; font-weight: 600; cursor: pointer;">
+            Track Another
+          </button>
+          <button type="button" id="btnCloseTrackDone" style="background: #E5E7EB; color: #374151; border: none; padding: 11px 16px; border-radius: 6px; font-size: 13.5px; font-weight: 600; cursor: pointer;">
+            Done
+          </button>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<style>
+  .track-modal-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.65);
+    backdrop-filter: blur(4px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 99999;
+    padding: 16px;
+  }
+
+  .track-modal-card {
+    background: #FFFFFF;
+    border-radius: 12px;
+    width: 100%;
+    max-width: 600px;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.15);
+    border: 1px solid #E5E7EB;
+  }
+
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
+</style>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const backdrop = document.getElementById('trackQuoteModalBackdrop');
+    const closeBtn = document.getElementById('btnCloseTrackModal');
+    const closeDoneBtn = document.getElementById('btnCloseTrackDone');
+    const form = document.getElementById('trackQuoteForm') as HTMLFormElement;
+    const input = document.getElementById('trackInquiryInput') as HTMLInputElement;
+    const btnRun = document.getElementById('btnRunTrack') as HTMLButtonElement;
+    
+    const loadingState = document.getElementById('trackLoadingState');
+    const errorState = document.getElementById('trackErrorState');
+    const errorMsg = document.getElementById('trackErrorMessage');
+    const successContainer = document.getElementById('trackSuccessContainer');
+    const btnTrackAnother = document.getElementById('btnTrackAnother');
+    const btnTrackRetry = document.getElementById('btnTrackRetry');
+
+    function showSearchForm() {
+      if (form) form.style.display = 'block';
+      if (loadingState) loadingState.style.display = 'none';
+      if (errorState) errorState.style.display = 'none';
+      if (successContainer) successContainer.style.display = 'none';
+      if (btnRun) btnRun.disabled = false;
+      if (input) {
+        input.value = '';
+        input.focus();
+      }
+    }
+
+    function openModal(defaultCode?: string) {
+      if (!backdrop) return;
+      backdrop.style.display = 'flex';
+      backdrop.setAttribute('aria-hidden', 'false');
+      document.body.style.overflow = 'hidden';
+
+      showSearchForm();
+
+      if (defaultCode && input) {
+        input.value = defaultCode.trim();
+        runTracking(defaultCode.trim());
+      }
+    }
+
+    function closeModal() {
+      if (!backdrop) return;
+      backdrop.style.display = 'none';
+      backdrop.setAttribute('aria-hidden', 'true');
+      document.body.style.overflow = '';
+    }
+
+    (window as any).openTrackQuoteModal = openModal;
+
+    closeBtn?.addEventListener('click', closeModal);
+    closeDoneBtn?.addEventListener('click', closeModal);
+    btnTrackAnother?.addEventListener('click', showSearchForm);
+    btnTrackRetry?.addEventListener('click', showSearchForm);
+
+    backdrop?.addEventListener('click', (e) => {
+      if (e.target === backdrop) closeModal();
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && backdrop && backdrop.style.display === 'flex') {
+        closeModal();
+      }
+    });
+
+    form?.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const code = input?.value?.trim();
+      if (code) runTracking(code);
+    });
+
+    async function runTracking(code: string) {
+      if (!code) return;
+
+      // Hide the search form when user tracks
+      if (form) form.style.display = 'none';
+      if (loadingState) loadingState.style.display = 'block';
+      if (errorState) errorState.style.display = 'none';
+      if (successContainer) successContainer.style.display = 'none';
+      if (btnRun) btnRun.disabled = true;
+
+      try {
+        const res = await fetch(`/api/inquiries/track?inquiry_no=${encodeURIComponent(code)}`);
+        const data = await res.json();
+
+        if (loadingState) loadingState.style.display = 'none';
+        if (btnRun) btnRun.disabled = false;
+
+        if (!res.ok || !data.success || !data.found) {
+          if (errorState) {
+            errorState.style.display = 'block';
+            if (errorMsg) errorMsg.textContent = data.error || `No quotation found matching "${code}".`;
+          }
+          return;
+        }
+
+        renderTrackingSuccess(data);
+      } catch (err: any) {
+        if (loadingState) loadingState.style.display = 'none';
+        if (btnRun) btnRun.disabled = false;
+        if (errorState) {
+          errorState.style.display = 'block';
+          if (errorMsg) errorMsg.textContent = err.message || 'Error communicating with server.';
+        }
+      }
+    }
+
+    function renderTrackingSuccess(data: any) {
+      const inq = data.inquiry;
+      const badge = data.statusBadge;
+      const steps = data.steps || [];
+
+      // Header Meta
+      const noEl = document.getElementById('resInquiryNo');
+      const dateEl = document.getElementById('resCreatedDate');
+      const badgeEl = document.getElementById('resStatusBadge');
+
+      if (noEl) noEl.textContent = inq.inquiry_no || inq.id;
+      if (dateEl) {
+        const d = new Date(inq.created_at);
+        dateEl.textContent = d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+      }
+      if (badgeEl) {
+        badgeEl.textContent = badge.label || inq.status;
+        badgeEl.style.color = badge.color || '#15803D';
+        badgeEl.style.background = badge.bg || '#DCFCE7';
+      }
+
+      // E-Commerce Timeline (Classic Vertical Stepper)
+      const stepperGrid = document.getElementById('trackStepperSteps');
+      if (stepperGrid) {
+        stepperGrid.innerHTML = steps.map((s: any, idx: number) => {
+          const isCompleted = !!s.isCompleted;
+          const isActive = !!s.isActive;
+          const isLast = idx === steps.length - 1;
+
+          const circleBg = isCompleted ? '#16A34A' : (isActive ? '#2563EB' : '#FFFFFF');
+          const circleBorder = isCompleted ? '#16A34A' : (isActive ? '#2563EB' : '#D1D5DB');
+          const circleColor = (isCompleted || isActive) ? '#FFFFFF' : '#9CA3AF';
+          const circleContent = isCompleted ? '✓' : String(idx + 1);
+          const lineBg = isCompleted ? '#16A34A' : '#E5E7EB';
+          const titleColor = isCompleted ? '#111827' : (isActive ? '#1D4ED8' : '#9CA3AF');
+          const titleWeight = (isCompleted || isActive) ? '700' : '500';
+
+          return `
+            <div style="display: flex; position: relative; padding-bottom: ${isLast ? '0' : '22px'};">
+              <!-- Left: Step Circle and Connecting Line -->
+              <div style="display: flex; flex-direction: column; align-items: center; width: 28px; flex-shrink: 0; margin-right: 14px;">
+                <div style="width: 24px; height: 24px; border-radius: 50%; background: ${circleBg}; border: 2px solid ${circleBorder}; color: ${circleColor}; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; z-index: 2; ${isActive ? 'box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);' : ''}">
+                  ${circleContent}
+                </div>
+                ${!isLast ? `<div style="width: 2px; flex: 1; background: ${lineBg}; margin-top: 4px; margin-bottom: -4px; z-index: 1;"></div>` : ''}
+              </div>
+
+              <!-- Right: Content -->
+              <div style="flex: 1; padding-top: 3px;">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                  <span style="font-size: 13.5px; font-weight: ${titleWeight}; color: ${titleColor};">${s.title}</span>
+                  <span style="font-size: 11.5px; color: #6B7280; font-weight: 500;">${s.date}</span>
+                </div>
+              </div>
+            </div>
+          `;
+        }).join('');
+      }
+
+      // Specs & Image
+      const prodEl = document.getElementById('resProduct');
+      const qtyEl = document.getElementById('resQuantity');
+      const compEl = document.getElementById('resCompany');
+      const fabEl = document.getElementById('resFabric');
+      const imgEl = document.getElementById('resProductImg') as HTMLImageElement;
+
+      if (prodEl) prodEl.textContent = inq.product_name || 'Absorbent Pads';
+      if (qtyEl) qtyEl.textContent = `${Number(inq.quantity || 100).toLocaleString()} units`;
+      if (compEl) compEl.textContent = inq.company_name || inq.name || 'Valued Buyer';
+      if (fabEl) fabEl.textContent = inq.fabric_choice || inq.customization_type || 'Custom Specs';
+      if (imgEl) {
+        imgEl.src = inq.product_image || '/images/products/quilted-meat-tray-pad.jpg';
+        imgEl.alt = inq.product_name || 'Ordered Product';
+      }
+
+      // Admin notes
+      const notesCard = document.getElementById('trackNotesCard');
+      const notesBody = document.getElementById('resAdminNotes');
+      if (inq.admin_notes && inq.admin_notes.trim()) {
+        if (notesCard) notesCard.style.display = 'block';
+        if (notesBody) notesBody.textContent = inq.admin_notes;
+      } else {
+        if (notesCard) notesCard.style.display = 'none';
+      }
+
+      // WhatsApp link
+      const waBtn = document.getElementById('resWhatsAppBtn') as HTMLAnchorElement;
+      if (waBtn) {
+        const phone = '917623906747';
+        const msg = `Hi HydroCare Solutions Team! Following up on quotation #${inq.inquiry_no || inq.id} for ${inq.product_name} (${inq.quantity} units). Status shows "${badge.label}".`;
+        waBtn.href = `https://wa.me/${phone}?text=${encodeURIComponent(msg)}`;
+      }
+
+      if (successContainer) {
+        successContainer.style.display = 'flex';
+      }
+    }
+
+    // Auto check if URL has ?track=... or ?no=... or hash #track
+    const urlParams = new URLSearchParams(window.location.search);
+    const trackParam = urlParams.get('track') || urlParams.get('no') || urlParams.get('inquiry_no');
+    if (trackParam) {
+      openModal(trackParam);
+    } else if (window.location.hash === '#track') {
+      openModal();
+    }
+  });
+</script>

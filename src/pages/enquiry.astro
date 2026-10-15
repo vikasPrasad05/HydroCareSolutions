@@ -1,0 +1,1014 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { getAllProducts } from '../lib/store';
+
+const products = await getAllProducts();
+const activeProducts = products.filter(p => p.is_active);
+const whatsappNumber = import.meta.env.COMPANY_WHATSAPP || '917623906747';
+---
+
+<Layout 
+  title="Request a Quote — HydroCare Solutions"
+  description="Tell us about your requirements and our team will provide a custom quote within 24 business hours."
+  currentPath="/enquiry"
+>
+  <!-- TOP DARK HEADER (MATCHING SCREENSHOT) -->
+  <section class="quote-hero-header">
+    <div class="quote-hero-container">
+      <h1 class="quote-hero-title">Request a Quote</h1>
+      <p class="quote-hero-subtitle">
+        Tell us about your requirements and our team will provide a custom quote within 24 business hours.
+      </p>
+    </div>
+  </section>
+
+  <!-- MULTI-STEP WIZARD BODY -->
+  <section class="quote-wizard-section">
+    <div class="quote-wizard-container">
+      
+      <!-- STEPPER PROGRESS BAR (MATCHING SCREENSHOT) -->
+      <div class="wizard-stepper" id="wizardStepper">
+        <div class="stepper-item active" data-step="1">
+          <div class="stepper-circle">1</div>
+        </div>
+        <div class="stepper-line"></div>
+
+        <div class="stepper-item" data-step="2">
+          <div class="stepper-circle">2</div>
+        </div>
+        <div class="stepper-line"></div>
+
+        <div class="stepper-item" data-step="3">
+          <div class="stepper-circle">3</div>
+        </div>
+        <div class="stepper-line"></div>
+
+        <div class="stepper-item" data-step="4">
+          <div class="stepper-circle">4</div>
+        </div>
+      </div>
+
+      <!-- ACTIVE STEP LABEL (MATCHING SCREENSHOT) -->
+      <div class="wizard-step-info" id="stepInfo">
+        <h2 class="step-title" id="stepTitle">Product Selection</h2>
+        <p class="step-subtitle" id="stepSubtitle">Choose pad category and fabric type</p>
+      </div>
+
+      <!-- WHITE FORM CARD (MATCHING SCREENSHOT) -->
+      <div class="wizard-form-card">
+        <form id="multiStepQuoteForm" novalidate>
+
+          <!-- ==================== STEP 1 ==================== -->
+          <div class="wizard-pane active" id="paneStep1" data-pane="1">
+            <div class="form-group">
+              <label for="quoteCategory" class="form-label">
+                Category <span class="required-star">*</span>
+              </label>
+              <div class="select-wrapper">
+                <select id="quoteCategory" name="category" class="form-select" required>
+                  <option value="">Select category</option>
+                  <option value="Meat & Poultry Packaging">Meat & Poultry Packaging</option>
+                  <option value="Seafood & Fishery Logistics">Seafood & Fishery Logistics</option>
+                  <option value="Fresh Produce & Berries">Fresh Produce & Berries</option>
+                  <option value="AGS Green Sorb™ High Capacity Series">AGS Green Sorb™ High Capacity Series</option>
+                  <option value="Industrial Cold Chain & Ice Pads">Industrial Cold Chain & Ice Pads</option>
+                </select>
+                <span class="select-arrow">⌵</span>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="quoteFabric" class="form-label">
+                Fabric <span class="required-star">*</span>
+              </label>
+              <div class="select-wrapper">
+                <select id="quoteFabric" name="fabric" class="form-select" required>
+                  <option value="">Select fabric type</option>
+                  <option value="Food-Grade PE Perforated Film (Top Layer)">Food-Grade PE Perforated Film (Top Layer)</option>
+                  <option value="AGS 4 & 6 Ply Multi-Layer Matrix">AGS 4 & 6 Ply Multi-Layer Matrix (Anti-Delamination)</option>
+                  <option value="Super Absorbent Polymer (SAP) Crystal Core">Super Absorbent Polymer (SAP) Crystal Core</option>
+                  <option value="Anti-Stick Embossed Saline-Resistant Layer">Anti-Stick Embossed Saline-Resistant Layer (Seafood)</option>
+                  <option value="Air-Cushioned Bubble Honeycomb Non-Woven">Air-Cushioned Bubble Honeycomb Non-Woven (Berries)</option>
+                  <option value="Heavy Spunbond Industrial Barrier Film">Heavy Spunbond Industrial Barrier Film</option>
+                </select>
+                <span class="select-arrow">⌵</span>
+              </div>
+            </div>
+
+            <div class="form-footer-actions">
+              <button type="button" class="btn-wizard-next" id="btnNext1">
+                Next &rarr;
+              </button>
+            </div>
+          </div>
+
+          <!-- ==================== STEP 2 ==================== -->
+          <div class="wizard-pane" id="paneStep2" data-pane="2">
+            <div class="form-group">
+              <label for="quoteSize" class="form-label">
+                Target Dimensions / Size <span class="required-star">*</span>
+              </label>
+              <div class="select-wrapper">
+                <select id="quoteSize" name="size" class="form-select" required>
+                  <option value="">Select standard size or custom</option>
+                  <option value="75 x 120 MM (HYDSAP75120 - 40g Absorbency)">75 x 120 MM (HYDSAP75120 - 40g Absorbency)</option>
+                  <option value="95 x 160 MM (HYDSAP95160 - 120g Absorbency)">95 x 160 MM (HYDSAP95160 - 120g Absorbency)</option>
+                  <option value="115 x 115 MM (HYDSAP115115 - 50g Absorbency)">115 x 115 MM (HYDSAP115115 - 50g Absorbency)</option>
+                  <option value="100 x 170 MM (HYDSAP100170 - 135g Absorbency)">100 x 170 MM (HYDSAP100170 - 135g Absorbency)</option>
+                  <option value="125 x 165 MM (HYDSAP125165 - 140g Absorbency)">125 x 165 MM (HYDSAP125165 - 140g Absorbency)</option>
+                  <option value="165 x 210 MM (HYDSAP165210 - 600g Absorbency)">165 x 210 MM (HYDSAP165210 - 600g Absorbency)</option>
+                  <option value="Custom Die-Cut Dimension">Custom Die-Cut Tray Dimensions</option>
+                </select>
+                <span class="select-arrow">⌵</span>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="quoteColor" class="form-label">
+                Pad Color <span class="required-star">*</span>
+              </label>
+              <div class="select-wrapper">
+                <select id="quoteColor" name="color" class="form-select" required>
+                  <option value="">Select pad color</option>
+                  <option value="Clean Food White (Standard)">Clean Food White (Standard)</option>
+                  <option value="Jet Black (For Gourmet Beef Trays)">Jet Black (For Gourmet Beef Trays)</option>
+                  <option value="Honeycomb Peach / Soft Pink">Honeycomb Peach / Soft Pink</option>
+                  <option value="Golden Yellow">Golden Yellow</option>
+                  <option value="Fresh Produce Red">Fresh Produce Red</option>
+                  <option value="Custom Color Specification">Custom Tint / Color</option>
+                </select>
+                <span class="select-arrow">⌵</span>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="quoteQuantity" class="form-label">
+                Estimated Volume (Pcs) <span class="required-star">*</span>
+              </label>
+              <div class="select-wrapper">
+                <select id="quoteQuantity" name="quantity" class="form-select" required>
+                  <option value="">Select quantity slab</option>
+                  <option value="5000">5,000 Pcs (Minimum Trial Batch)</option>
+                  <option value="25000">25,000 Pcs (Wholesale Packhouse)</option>
+                  <option value="50000">50,000 Pcs (Commercial Production)</option>
+                  <option value="100000">100,000+ Pcs (OEM / Bulk Container)</option>
+                </select>
+                <span class="select-arrow">⌵</span>
+              </div>
+            </div>
+
+            <div class="form-footer-actions">
+              <button type="button" class="btn-wizard-back" id="btnBack2">&larr; Back</button>
+              <button type="button" class="btn-wizard-next" id="btnNext2">Next &rarr;</button>
+            </div>
+          </div>
+
+          <!-- ==================== STEP 3 ==================== -->
+          <div class="wizard-pane" id="paneStep3" data-pane="3">
+            <div class="form-group">
+              <label for="quoteCompany" class="form-label">
+                Company / Packhouse Name <span class="required-star">*</span>
+              </label>
+              <input 
+                type="text" 
+                id="quoteCompany" 
+                name="company_name" 
+                class="form-input" 
+                placeholder="e.g. FreshValley Foods Pvt Ltd" 
+                required 
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="quoteName" class="form-label">
+                Contact Person Name <span class="required-star">*</span>
+              </label>
+              <input 
+                type="text" 
+                id="quoteName" 
+                name="name" 
+                class="form-input" 
+                placeholder="Your full name" 
+                required 
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="quoteEmail" class="form-label">
+                Business Email <span class="required-star">*</span>
+              </label>
+              <input 
+                type="email" 
+                id="quoteEmail" 
+                name="email" 
+                class="form-input" 
+                placeholder="procurement@company.com" 
+                required 
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="quotePhone" class="form-label">
+                Phone / WhatsApp Number <span class="required-star">*</span>
+              </label>
+              <input 
+                type="tel" 
+                id="quotePhone" 
+                name="phone" 
+                class="form-input" 
+                placeholder="+91 98765 43210" 
+                required 
+              />
+            </div>
+
+            <div class="form-footer-actions">
+              <button type="button" class="btn-wizard-back" id="btnBack3">&larr; Back</button>
+              <button type="button" class="btn-wizard-next" id="btnNext3">Next &rarr;</button>
+            </div>
+          </div>
+
+          <!-- ==================== STEP 4 ==================== -->
+          <div class="wizard-pane" id="paneStep4" data-pane="4">
+            
+            <!-- Summary Review Box -->
+            <div class="quote-summary-box">
+              <h4 class="summary-title">Summary Review</h4>
+              <div class="summary-list">
+                <div class="summary-row">
+                  <span class="summary-label">Category:</span>
+                  <span class="summary-val" id="sumCategory">—</span>
+                </div>
+                <div class="summary-row">
+                  <span class="summary-label">Fabric / Pad Type:</span>
+                  <span class="summary-val" id="sumFabric">—</span>
+                </div>
+                <div class="summary-row">
+                  <span class="summary-label">Target Size:</span>
+                  <span class="summary-val" id="sumSize">—</span>
+                </div>
+                <div class="summary-row">
+                  <span class="summary-label">Pad Color:</span>
+                  <span class="summary-val" id="sumColor">—</span>
+                </div>
+                <div class="summary-row">
+                  <span class="summary-label">Estimated Volume:</span>
+                  <span class="summary-val" id="sumQty">—</span>
+                </div>
+                <div class="summary-row">
+                  <span class="summary-label">Contact:</span>
+                  <span class="summary-val" id="sumContact">—</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="quoteMessage" class="form-label">
+                Additional Requirements / Food Type
+              </label>
+              <textarea 
+                id="quoteMessage" 
+                name="message" 
+                rows="3" 
+                class="form-textarea" 
+                placeholder="Tell us about your specific food product (beef, chicken, salmon, berries), tray type (PP/PET/Foam), or automated inserter speed..."
+              ></textarea>
+            </div>
+
+            <div id="wizardErrorMessage" class="form-error-banner" style="display: none;"></div>
+
+            <div class="form-footer-actions">
+              <button type="button" class="btn-wizard-back" id="btnBack4">&larr; Back</button>
+              <button type="submit" class="btn-wizard-submit" id="btnSubmitQuote">
+                <span class="submit-text">Submit Quote Request &rarr;</span>
+                <span class="submit-loader" style="display: none;">Transmitting...</span>
+              </button>
+            </div>
+          </div>
+
+        </form>
+
+        <!-- SUCCESS STATE -->
+        <div id="wizardSuccessBox" class="wizard-success-state" style="display: none;">
+          <div class="success-check-icon">✓</div>
+          <h3 class="success-heading">Quote Request Received!</h3>
+          <p class="success-text">
+            Thank you, <strong id="successName">Valued Client</strong>. Your inquiry reference number is:
+          </p>
+          <div class="success-ref-badge font-mono" id="successRefBadge">INQ-XXXX</div>
+          <p class="success-sub">
+            Our technical packaging team will review your specifications and dispatch test sample box details and custom wholesale rate cards within 24 business hours.
+          </p>
+          <div class="success-actions-row">
+            <a id="successTrackBtn" href="/track" class="btn-track-status" style="background: #1E1B4B; color: #FFFFFF; padding: 12px 20px; border-radius: 8px; text-decoration: none; font-weight: 600; font-size: 14px; display: inline-flex; align-items: center; justify-content: center; gap: 6px;">
+              🔍 Track Quotation Status
+            </a>
+            <a id="successWhatsAppBtn" href="#" target="_blank" class="btn-whatsapp-chat">
+              💬 Connect Instantly on WhatsApp
+            </a>
+            <a href="/" class="btn-back-home">
+              Return to Home
+            </a>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- MULTI-STEP LOGIC SCRIPT -->
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const stepItems = document.querySelectorAll<HTMLElement>('.stepper-item');
+      const stepTitle = document.getElementById('stepTitle');
+      const stepSubtitle = document.getElementById('stepSubtitle');
+      const panes = document.querySelectorAll<HTMLElement>('.wizard-pane');
+      const form = document.getElementById('multiStepQuoteForm') as HTMLFormElement;
+      const errorBanner = document.getElementById('wizardErrorMessage');
+
+      let currentStep = 1;
+
+      const stepMetadata: Record<number, { title: string; subtitle: string }> = {
+        1: { title: 'Product Selection', subtitle: 'Choose garment type and fabric' },
+        2: { title: 'Customization & Dimensions', subtitle: 'Select target dimensions, color, and required volume' },
+        3: { title: 'Contact & Company Details', subtitle: 'Provide your business details for quotation dispatch' },
+        4: { title: 'Review & Submit', subtitle: 'Verify order details and transmit request to production desk' }
+      };
+
+      function updateStep(step: number) {
+        currentStep = step;
+
+        // Update Stepper Circles
+        stepItems.forEach((item) => {
+          const s = parseInt(item.getAttribute('data-step') || '1', 10);
+          item.classList.remove('active', 'completed');
+          if (s === currentStep) {
+            item.classList.add('active');
+          } else if (s < currentStep) {
+            item.classList.add('completed');
+          }
+        });
+
+        // Update Step Title & Subtitle
+        if (stepTitle && stepSubtitle && stepMetadata[currentStep]) {
+          stepTitle.textContent = stepMetadata[currentStep].title;
+          stepSubtitle.textContent = stepMetadata[currentStep].subtitle;
+        }
+
+        // Update Visible Pane
+        panes.forEach((pane) => {
+          pane.classList.remove('active');
+          if (parseInt(pane.getAttribute('data-pane') || '1', 10) === currentStep) {
+            pane.classList.add('active');
+          }
+        });
+
+        // Populate Summary on Step 4
+        if (currentStep === 4) {
+          const cat = (document.getElementById('quoteCategory') as HTMLSelectElement)?.value || 'Not selected';
+          const fab = (document.getElementById('quoteFabric') as HTMLSelectElement)?.value || 'Not selected';
+          const size = (document.getElementById('quoteSize') as HTMLSelectElement)?.value || 'Not selected';
+          const color = (document.getElementById('quoteColor') as HTMLSelectElement)?.value || 'Not selected';
+          const qty = (document.getElementById('quoteQuantity') as HTMLSelectElement)?.value || 'Not selected';
+          const comp = (document.getElementById('quoteCompany') as HTMLInputElement)?.value || '';
+          const name = (document.getElementById('quoteName') as HTMLInputElement)?.value || '';
+          const phone = (document.getElementById('quotePhone') as HTMLInputElement)?.value || '';
+
+          const sumCat = document.getElementById('sumCategory');
+          const sumFab = document.getElementById('sumFabric');
+          const sumSize = document.getElementById('sumSize');
+          const sumColor = document.getElementById('sumColor');
+          const sumQty = document.getElementById('sumQty');
+          const sumContact = document.getElementById('sumContact');
+
+          if (sumCat) sumCat.textContent = cat;
+          if (sumFab) sumFab.textContent = fab;
+          if (sumSize) sumSize.textContent = size;
+          if (sumColor) sumColor.textContent = color;
+          if (sumQty) sumQty.textContent = `${Number(qty || 0).toLocaleString()} Pcs`;
+          if (sumContact) sumContact.textContent = `${name} (${comp}) - ${phone}`;
+        }
+
+        // Scroll to wizard top smoothly
+        const wizard = document.getElementById('wizardStepper');
+        if (wizard) {
+          wizard.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+      }
+
+      function validateStep(step: number): boolean {
+        if (errorBanner) errorBanner.style.display = 'none';
+
+        if (step === 1) {
+          const cat = (document.getElementById('quoteCategory') as HTMLSelectElement)?.value;
+          const fab = (document.getElementById('quoteFabric') as HTMLSelectElement)?.value;
+          if (!cat) {
+            alert('Please select a Category to proceed.');
+            return false;
+          }
+          if (!fab) {
+            alert('Please select a Fabric / Pad Type to proceed.');
+            return false;
+          }
+        } else if (step === 2) {
+          const size = (document.getElementById('quoteSize') as HTMLSelectElement)?.value;
+          const color = (document.getElementById('quoteColor') as HTMLSelectElement)?.value;
+          const qty = (document.getElementById('quoteQuantity') as HTMLSelectElement)?.value;
+          if (!size || !color || !qty) {
+            alert('Please select dimensions, pad color, and estimated volume.');
+            return false;
+          }
+        } else if (step === 3) {
+          const comp = (document.getElementById('quoteCompany') as HTMLInputElement)?.value;
+          const name = (document.getElementById('quoteName') as HTMLInputElement)?.value;
+          const email = (document.getElementById('quoteEmail') as HTMLInputElement)?.value;
+          const phone = (document.getElementById('quotePhone') as HTMLInputElement)?.value;
+          if (!comp || !name || !email || !phone) {
+            alert('Please fill all contact fields.');
+            return false;
+          }
+          if (!email.includes('@')) {
+            alert('Please enter a valid business email address.');
+            return false;
+          }
+        }
+
+        return true;
+      }
+
+      // Next / Back Button Handlers
+      document.getElementById('btnNext1')?.addEventListener('click', () => {
+        if (validateStep(1)) updateStep(2);
+      });
+
+      document.getElementById('btnNext2')?.addEventListener('click', () => {
+        if (validateStep(2)) updateStep(3);
+      });
+
+      document.getElementById('btnNext3')?.addEventListener('click', () => {
+        if (validateStep(3)) updateStep(4);
+      });
+
+      document.getElementById('btnBack2')?.addEventListener('click', () => updateStep(1));
+      document.getElementById('btnBack3')?.addEventListener('click', () => updateStep(2));
+      document.getElementById('btnBack4')?.addEventListener('click', () => updateStep(3));
+
+      // Handle Form Submit
+      if (form) {
+        form.addEventListener('submit', async (e) => {
+          e.preventDefault();
+          const submitBtn = document.getElementById('btnSubmitQuote') as HTMLButtonElement;
+          const submitText = submitBtn?.querySelector('.submit-text') as HTMLElement;
+          const submitLoader = submitBtn?.querySelector('.submit-loader') as HTMLElement;
+
+          if (submitBtn) submitBtn.disabled = true;
+          if (submitText) submitText.style.display = 'none';
+          if (submitLoader) submitLoader.style.display = 'inline';
+          if (errorBanner) errorBanner.style.display = 'none';
+
+          const cat = (document.getElementById('quoteCategory') as HTMLSelectElement)?.value;
+          const fab = (document.getElementById('quoteFabric') as HTMLSelectElement)?.value;
+          const size = (document.getElementById('quoteSize') as HTMLSelectElement)?.value;
+          const color = (document.getElementById('quoteColor') as HTMLSelectElement)?.value;
+          const qty = parseInt((document.getElementById('quoteQuantity') as HTMLSelectElement)?.value || '5000', 10);
+          const comp = (document.getElementById('quoteCompany') as HTMLInputElement)?.value;
+          const name = (document.getElementById('quoteName') as HTMLInputElement)?.value;
+          const email = (document.getElementById('quoteEmail') as HTMLInputElement)?.value;
+          const phone = (document.getElementById('quotePhone') as HTMLInputElement)?.value;
+          const msg = (document.getElementById('quoteMessage') as HTMLTextAreaElement)?.value || '';
+
+          const payload = {
+            product_name: `${cat} - ${size}`,
+            category: cat,
+            fabric_choice: `${fab} | ${color}`,
+            quantity: qty,
+            company_name: comp,
+            name: name,
+            email: email,
+            phone: phone,
+            message: `Size: ${size} | Color: ${color} | Additional: ${msg}`,
+            target_timeline: 'Within 24 Hours'
+          };
+
+          try {
+            const res = await fetch('/api/inquiries', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(payload)
+            });
+
+            const data = await res.json();
+
+            if (!res.ok) {
+              throw new Error(data.error || 'Failed to submit quote request');
+            }
+
+            // Show Success State
+            form.style.display = 'none';
+            const stepInfo = document.getElementById('stepInfo');
+            if (stepInfo) stepInfo.style.display = 'none';
+
+            const successBox = document.getElementById('wizardSuccessBox');
+            const successName = document.getElementById('successName');
+            const refBadge = document.getElementById('successRefBadge');
+            const waBtn = document.getElementById('successWhatsAppBtn') as HTMLAnchorElement;
+
+            if (successBox) successBox.style.display = 'block';
+            if (successName) successName.textContent = name;
+            
+            const refNo = data.inquiry?.inquiry_no || `INQ-${Math.floor(1000 + Math.random() * 9000)}`;
+            if (refBadge) refBadge.textContent = refNo;
+
+            const trackBtn = document.getElementById('successTrackBtn') as HTMLAnchorElement;
+            if (trackBtn) {
+              trackBtn.href = `/track?no=${encodeURIComponent(refNo)}`;
+            }
+
+            if (waBtn) {
+              const waText = encodeURIComponent(
+                `Hello! I just submitted Quote Request #${refNo} on the website for ${cat} (${size}, ${qty} pcs). Looking forward to rate cards and sample dispatch.`
+              );
+              waBtn.href = `https://wa.me/917623906747?text=${waText}`;
+            }
+
+          } catch (err: any) {
+            if (errorBanner) {
+              errorBanner.textContent = err.message || 'Something went wrong. Please check your fields and try again.';
+              errorBanner.style.display = 'block';
+            }
+            if (submitBtn) submitBtn.disabled = false;
+            if (submitText) submitText.style.display = 'inline';
+            if (submitLoader) submitLoader.style.display = 'none';
+          }
+        });
+      }
+
+      // Check URL parameters for pre-filling
+      const urlParams = new URLSearchParams(window.location.search);
+      const catParam = urlParams.get('category');
+      const prodParam = urlParams.get('product');
+
+      if (catParam) {
+        const catSelect = document.getElementById('quoteCategory') as HTMLSelectElement;
+        if (catSelect) {
+          for (const opt of catSelect.options) {
+            if (opt.value.toLowerCase().includes(catParam.toLowerCase())) {
+              opt.selected = true;
+              break;
+            }
+          }
+        }
+      }
+    });
+  </script>
+</Layout>
+
+<style>
+  /* ========================================================
+     TOP DARK HERO HEADER (EXACT MATCH TO SCREENSHOT)
+     ======================================================== */
+  .quote-hero-header {
+    background-color: #121420; /* Deep midnight navy */
+    padding: 38px 0 34px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  .quote-hero-container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 32px;
+  }
+
+  .quote-hero-title {
+    font-family: var(--font-serif, 'Outfit', 'Plus Jakarta Sans', sans-serif);
+    font-size: 32px;
+    font-weight: 800;
+    color: #FFFFFF;
+    margin: 0 0 8px 0;
+    letter-spacing: -0.02em;
+  }
+
+  .quote-hero-subtitle {
+    font-family: var(--font-sans, 'Inter', system-ui, sans-serif);
+    font-size: 13.5px;
+    color: #94A3B8;
+    margin: 0;
+    font-weight: 400;
+    letter-spacing: 0.01em;
+  }
+
+  /* ========================================================
+     WIZARD SECTION
+     ======================================================== */
+  .quote-wizard-section {
+    background-color: #F8FAFC;
+    padding: 44px 20px 80px;
+    min-height: 70vh;
+  }
+
+  .quote-wizard-container {
+    max-width: 720px;
+    margin: 0 auto;
+  }
+
+  /* STEPPER PROGRESS BAR (MATCHING SCREENSHOT) */
+  .wizard-stepper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    max-width: 440px;
+    margin: 0 auto 24px;
+  }
+
+  .stepper-item {
+    display: flex;
+    align-items: center;
+  }
+
+  .stepper-circle {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background-color: #EEF2F6;
+    color: #94A3B8;
+    font-family: var(--font-sans, 'Inter', sans-serif);
+    font-size: 13px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.25s ease;
+  }
+
+  .stepper-item.active .stepper-circle {
+    background-color: #121420;
+    color: #FFFFFF;
+    box-shadow: 0 2px 8px rgba(18, 20, 32, 0.3);
+  }
+
+  .stepper-item.completed .stepper-circle {
+    background-color: #10B981;
+    color: #FFFFFF;
+  }
+
+  .stepper-line {
+    flex: 1;
+    height: 1px;
+    background-color: #E2E8F0;
+    margin: 0 16px;
+    min-width: 44px;
+  }
+
+  /* STEP TITLE & SUBTITLE */
+  .wizard-step-info {
+    text-align: center;
+    margin-bottom: 28px;
+  }
+
+  .step-title {
+    font-family: var(--font-serif, 'Outfit', 'Plus Jakarta Sans', sans-serif);
+    font-size: 18px;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    color: #0F172A;
+    margin: 0 0 4px 0;
+  }
+
+  .step-subtitle {
+    font-family: var(--font-sans, 'Inter', sans-serif);
+    font-size: 13px;
+    color: #64748B;
+    margin: 0;
+  }
+
+  /* WHITE FORM CARD (MATCHING SCREENSHOT) */
+  .wizard-form-card {
+    background: #FFFFFF;
+    border: 1px solid #E2E8F0;
+    border-radius: 8px;
+    padding: 38px 40px 32px;
+    box-shadow: 0 4px 20px rgba(15, 23, 42, 0.03);
+  }
+
+  .wizard-pane {
+    display: none;
+  }
+
+  .wizard-pane.active {
+    display: block;
+    animation: fadeIn 0.25s ease-out;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(4px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* FORM INPUTS & LABELS */
+  .form-group {
+    margin-bottom: 22px;
+  }
+
+  .form-label {
+    display: block;
+    font-family: var(--font-sans, 'Inter', sans-serif);
+    font-size: 13px;
+    font-weight: 600;
+    color: #1E293B;
+    margin-bottom: 8px;
+  }
+
+  .required-star {
+    color: #DC2626;
+    font-weight: bold;
+    margin-left: 2px;
+  }
+
+  .select-wrapper {
+    position: relative;
+    width: 100%;
+  }
+
+  .form-select {
+    width: 100%;
+    height: 42px;
+    border: 1px solid #CBD5E1;
+    border-radius: 6px;
+    padding: 0 34px 0 14px;
+    font-family: var(--font-sans, 'Inter', sans-serif);
+    font-size: 13.5px;
+    color: #334155;
+    background-color: #FFFFFF;
+    appearance: none;
+    -webkit-appearance: none;
+    cursor: pointer;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+
+  .form-select:focus,
+  .form-input:focus,
+  .form-textarea:focus {
+    border-color: #121420;
+    box-shadow: 0 0 0 3px rgba(18, 20, 32, 0.08);
+  }
+
+  .select-arrow {
+    position: absolute;
+    right: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none;
+    font-size: 13px;
+    color: #94A3B8;
+  }
+
+  .form-input {
+    width: 100%;
+    height: 42px;
+    border: 1px solid #CBD5E1;
+    border-radius: 6px;
+    padding: 0 14px;
+    font-family: var(--font-sans, 'Inter', sans-serif);
+    font-size: 13.5px;
+    color: #1E293B;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+
+  .form-textarea {
+    width: 100%;
+    border: 1px solid #CBD5E1;
+    border-radius: 6px;
+    padding: 10px 14px;
+    font-family: var(--font-sans, 'Inter', sans-serif);
+    font-size: 13.5px;
+    color: #1E293B;
+    outline: none;
+    resize: vertical;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+
+  /* BUTTONS & FOOTER ACTIONS */
+  .form-footer-actions {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 12px;
+    margin-top: 28px;
+    padding-top: 20px;
+    border-top: 1px solid #F1F5F9;
+  }
+
+  .btn-wizard-next,
+  .btn-wizard-submit {
+    background-color: #121420;
+    color: #FFFFFF;
+    border: none;
+    border-radius: 6px;
+    padding: 10px 24px;
+    font-family: var(--font-sans, 'Inter', sans-serif);
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: background-color 0.15s, transform 0.1s;
+  }
+
+  .btn-wizard-next:hover,
+  .btn-wizard-submit:hover {
+    background-color: #24293D;
+  }
+
+  .btn-wizard-back {
+    background: transparent;
+    color: #475569;
+    border: 1px solid #CBD5E1;
+    border-radius: 6px;
+    padding: 10px 20px;
+    font-family: var(--font-sans, 'Inter', sans-serif);
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+
+  .btn-wizard-back:hover {
+    border-color: #1E293B;
+    color: #1E293B;
+    background: #F8FAFC;
+  }
+
+  /* SUMMARY REVIEW BOX */
+  .quote-summary-box {
+    background: #F8FAFC;
+    border: 1px solid #E2E8F0;
+    border-radius: 6px;
+    padding: 18px 20px;
+    margin-bottom: 22px;
+  }
+
+  .summary-title {
+    font-family: var(--font-sans, 'Inter', sans-serif);
+    font-size: 13.5px;
+    font-weight: 700;
+    color: #0F172A;
+    margin: 0 0 12px 0;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .summary-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .summary-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12.5px;
+    border-bottom: 1px dashed #E2E8F0;
+    padding-bottom: 6px;
+  }
+
+  .summary-row:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+  }
+
+  .summary-label {
+    color: #64748B;
+    font-weight: 500;
+  }
+
+  .summary-val {
+    color: #0F172A;
+    font-weight: 600;
+    text-align: right;
+    max-width: 60%;
+  }
+
+  .form-error-banner {
+    background: #FEF2F2;
+    border: 1px solid #FCA5A5;
+    color: #B91C1C;
+    padding: 10px 14px;
+    border-radius: 6px;
+    font-size: 12.5px;
+    margin-bottom: 16px;
+  }
+
+  /* SUCCESS STATE */
+  .wizard-success-state {
+    text-align: center;
+    padding: 24px 10px;
+  }
+
+  .success-check-icon {
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    background: #ECFDF5;
+    border: 2px solid #10B981;
+    color: #10B981;
+    font-size: 24px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 16px;
+  }
+
+  .success-heading {
+    font-family: var(--font-serif, 'Outfit', 'Plus Jakarta Sans', sans-serif);
+    font-size: 24px;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    color: #0F172A;
+    margin: 0 0 8px 0;
+  }
+
+  .success-text {
+    font-size: 14px;
+    color: #475569;
+    margin: 0 0 12px 0;
+  }
+
+  .success-ref-badge {
+    display: inline-block;
+    background: #FEF3C7;
+    color: #92400E;
+    border: 1px solid #FDE68A;
+    font-size: 15px;
+    font-weight: 700;
+    padding: 6px 18px;
+    border-radius: 4px;
+    letter-spacing: 0.08em;
+    margin-bottom: 16px;
+  }
+
+  .success-sub {
+    font-size: 13px;
+    color: #64748B;
+    line-height: 1.55;
+    max-width: 480px;
+    margin: 0 auto 24px;
+  }
+
+  .success-actions-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  .btn-whatsapp-chat {
+    background: #16A34A;
+    color: #FFFFFF;
+    text-decoration: none;
+    font-size: 13.5px;
+    font-weight: 600;
+    padding: 11px 20px;
+    border-radius: 6px;
+    transition: background 0.2s;
+  }
+
+  .btn-whatsapp-chat:hover {
+    background: #15803D;
+  }
+
+  .btn-back-home {
+    background: #F1F5F9;
+    color: #334155;
+    text-decoration: none;
+    font-size: 13.5px;
+    font-weight: 600;
+    padding: 11px 18px;
+    border-radius: 6px;
+    transition: background 0.2s;
+  }
+
+  .btn-back-home:hover {
+    background: #E2E8F0;
+  }
+
+  @media (max-width: 640px) {
+    .quote-hero-header {
+      padding: 30px 0;
+    }
+    .quote-hero-title {
+      font-size: 26px;
+    }
+    .wizard-form-card {
+      padding: 24px 20px;
+    }
+    .stepper-line {
+      margin: 0 8px;
+      min-width: 24px;
+    }
+  }
+</style>

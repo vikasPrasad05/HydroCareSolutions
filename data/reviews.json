@@ -1,0 +1,22 @@
+[
+  {
+    "id": "rev-1",
+    "date": "Jan 19, 2026",
+    "reviewer": "Purva",
+    "company": "Anshuukam",
+    "rating": 5,
+    "message": "Super experience",
+    "status": "Approved",
+    "visibility": "Hidden"
+  },
+  {
+    "id": "rev-2",
+    "date": "Jan 13, 2026",
+    "reviewer": "test",
+    "company": "test company",
+    "rating": 5,
+    "message": "test review",
+    "status": "Approved",
+    "visibility": "Hidden"
+  }
+]

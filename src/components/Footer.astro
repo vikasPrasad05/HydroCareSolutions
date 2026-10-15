@@ -1,0 +1,503 @@
+---
+const currentYear = new Date().getFullYear();
+const siteName = 'HydroCare Solutions';
+const phone = '+91 76239 06747';
+const email = 'Hydrocaresolutions5@gmail.com';
+const location = 'Gala No. 20, Poonamji Industrial Park, Vapi-Nashik Road, Near Indian Petrol Pump, Karvad, Vapi, Dist. Valsad, Gujarat - 396195';
+const whatsapp = '917623906747';
+---
+
+<footer class="site-footer">
+  <div class="footer-container">
+    <div class="footer-grid">
+      <!-- Col 1: Brand & About -->
+      <div class="footer-col col-brand">
+        <a href="/" class="brand-logo-card" aria-label={siteName}>
+          <div class="footer-logo-badge">
+            <img 
+              src="/favicon.svg" 
+              alt={siteName} 
+              class="footer-brand-logo" 
+              width="42" 
+              height="42" 
+            />
+          </div>
+          <div class="footer-name-stack">
+            <span class="footer-brand-line-1">
+              <span class="brand-hydro">HYDRO</span><span class="brand-care">CARE</span>
+            </span>
+            <span class="footer-brand-line-2">
+              <span class="brand-sol-line"></span>
+              <span class="brand-sol-text">SOLUTIONS</span>
+              <span class="brand-sol-line"></span>
+            </span>
+          </div>
+        </a>
+
+        <p class="footer-desc">
+          Primary manufacturer of food-grade absorbent drip pads, meat soaker liners, and berry cushioning pads. Certified for direct food contact in retail supermarkets, slaughterhouses, and export cold chains.
+        </p>
+
+        <!-- Social Icons Row -->
+        <div class="social-links-row">
+          <a 
+            href={`https://wa.me/${whatsapp}?text=Hello%20${encodeURIComponent(siteName)}%2C%20I%20would%20like%20to%20inquire%20about%20your%20products.`} 
+            target="_blank" 
+            rel="noopener noreferrer" 
+            class="social-circle-btn social-whatsapp" 
+            aria-label="WhatsApp"
+            title="Chat on WhatsApp"
+          >
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91C2.13 13.66 2.59 15.36 3.45 16.86L2.05 22L7.3 20.63C8.75 21.41 10.38 21.83 12.04 21.83C17.5 21.83 21.95 17.38 21.95 11.92C21.95 6.46 17.5 2 12.04 2ZM12.04 20.15C10.56 20.15 9.11 19.76 7.85 19.01L7.55 18.83L4.43 19.65L5.26 16.61L5.06 16.29C4.24 14.99 3.81 13.47 3.81 11.91C3.81 7.37 7.5 3.69 12.04 3.69C16.58 3.69 20.27 7.37 20.27 11.91C20.27 16.46 16.58 20.15 12.04 20.15ZM16.55 14.41C16.3 14.28 15.08 13.68 14.85 13.6C14.62 13.52 14.46 13.48 14.29 13.73C14.12 13.98 13.65 14.54 13.51 14.71C13.37 14.88 13.22 14.9 12.97 14.78C12.72 14.65 11.92 14.39 10.97 13.54C10.23 12.88 9.73 12.07 9.59 11.82C9.45 11.57 9.57 11.44 9.7 11.31C9.81 11.2 9.95 11.02 10.07 10.87C10.2 10.73 10.24 10.63 10.32 10.46C10.4 10.29 10.36 10.15 10.3 10.03C10.24 9.9 9.75 8.7 9.54 8.2C9.34 7.71 9.14 7.78 8.99 7.77C8.85 7.76 8.68 7.76 8.52 7.76C8.35 7.76 8.08 7.82 7.86 8.07C7.63 8.31 7 8.9 7 10.11C7 11.32 7.88 12.48 8.01 12.65C8.13 12.81 9.75 15.31 12.23 16.38C12.82 16.64 13.28 16.79 13.64 16.91C14.23 17.1 14.77 17.07 15.2 17.01C15.67 16.94 16.66 16.41 16.86 15.83C17.07 15.26 17.07 14.77 17.01 14.66C16.95 14.55 16.8 14.53 16.55 14.41Z"/>
+            </svg>
+          </a>
+
+          <a 
+            href="#" 
+            class="social-circle-btn social-instagram" 
+            aria-label="Instagram"
+            title="Instagram"
+          >
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+              <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+              <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+            </svg>
+          </a>
+
+          <a 
+            href="#" 
+            class="social-circle-btn social-facebook" 
+            aria-label="Facebook"
+            title="Facebook"
+          >
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+            </svg>
+          </a>
+        </div>
+
+
+      </div>
+
+      <!-- Col 2: Quick Links -->
+      <div class="footer-col">
+        <h4 class="col-title">QUICK LINKS</h4>
+        <ul class="col-links-list">
+          <li><a href="/catalogue">All Products</a></li>
+          <li><a href="/catalogue">Categories</a></li>
+          <li><a href="/track">Track Quotation (RFQ)</a></li>
+          <li><a href="/contact">Sell on HydroCare Solutions</a></li>
+          <li><a href="/catalogue">Absorbency Matrix</a></li>
+          <li><a href="/blogs">Industry Articles</a></li>
+        </ul>
+      </div>
+
+      <!-- Col 3: Categories -->
+      <div class="footer-col">
+        <h4 class="col-title">CATEGORIES</h4>
+        <ul class="col-links-list">
+          <li><a href="/products/meat-and-poultry-absorbent-pads">Meat & Poultry Drip Pads</a></li>
+          <li><a href="/products/marine-seafood-absorbent-pads">Marine Seafood & Fish Pads</a></li>
+          <li><a href="/products/fruit-and-berry-absorbent-pads">Fruit & Berry Cushioning</a></li>
+          <li><a href="/products/industrial-commercial-soaker-pads">Industrial Prep Soakers</a></li>
+          <li><a href="/specifications#custom-diecut">Custom Die-Cut Liners</a></li>
+          <li><a href="/about">Cleanroom Ultrasonic Lines</a></li>
+          <li><a href="/specifications">Testing & Migration Reports</a></li>
+          <li><a href="/specifications">Technical Specifications</a></li>
+        </ul>
+      </div>
+
+      <!-- Col 4: Contact Us -->
+      <div class="footer-col">
+        <h4 class="col-title">CONTACT US</h4>
+        
+        <ul class="col-links-list nav-support-links">
+          <li><a href="/contact">Help & Support</a></li>
+          <li><a href="/about">About Us</a></li>
+          <li><a href="/contact">Contact Us</a></li>
+        </ul>
+
+        <div class="contact-info-list">
+          <div class="contact-entry">
+            <svg class="entry-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+              <circle cx="12" cy="10" r="3"></circle>
+            </svg>
+            <span class="entry-text">{location}</span>
+          </div>
+
+          <div class="contact-entry">
+            <svg class="entry-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+              <polyline points="22,6 12,13 2,6"></polyline>
+            </svg>
+            <a href={`mailto:${email}`} class="entry-text entry-link">{email}</a>
+          </div>
+
+          <div class="contact-entry">
+            <svg class="entry-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+            </svg>
+            <a href={`tel:${phone.replace(/\s+/g, '')}`} class="entry-text entry-link">{phone}</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bottom Copyright & Policies Bar -->
+    <div class="footer-bottom-bar" style="margin-top: 56px; padding-top: 24px; border-top: 1px solid rgba(255, 255, 255, 0.07); width: 100%;">
+      <div class="footer-bottom-inner" style="display: flex; justify-content: space-between; align-items: center; width: 100%; gap: 16px; flex-wrap: wrap;">
+        <div class="bottom-legal-text" style="font-size: 12px; color: #71717A; display: flex; align-items: center; gap: 8px; margin: 0; text-align: left;">
+          <span>© {currentYear} {siteName}. All rights reserved.</span>
+          <span class="legal-sep" style="color: rgba(255, 255, 255, 0.15);">|</span>
+          <span>B2B Food-Grade Absorbent Pads Manufacturer</span>
+        </div>
+        <div class="footer-dev-credit" style="font-size: 12px; color: #71717A; text-align: right; white-space: nowrap; margin-left: auto;">
+          Designed &amp; Developed by <a href="https://davlabs.in" target="_blank" rel="noopener noreferrer" class="dev-credit-link" style="color: #9CA3AF; text-decoration: none; font-weight: 500;">davlabs.in</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    background-color: #121212;
+    color: #9CA3AF;
+    font-family: var(--font-sans, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif);
+    margin-top: auto;
+    border-top: 1px solid #1C1C1C;
+    position: relative;
+    z-index: 10;
+  }
+
+  .footer-container {
+    max-width: 1240px;
+    margin: 0 auto;
+    padding: 64px 24px 28px;
+  }
+
+  .footer-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+
+  @media (min-width: 640px) {
+    .footer-grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 36px;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .footer-grid {
+      grid-template-columns: 1.35fr 1fr 1.05fr 1.25fr;
+      gap: 48px;
+    }
+  }
+
+  /* Col 1: Brand */
+  .brand-logo-card {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: #FFFFFF;
+    border-radius: 8px;
+    padding: 8px 14px;
+    text-decoration: none;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35);
+    transition: transform 0.2s ease;
+  }
+
+  .brand-logo-card:hover {
+    transform: scale(1.03);
+  }
+
+  .footer-logo-badge {
+    width: 42px;
+    height: 42px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .footer-brand-logo {
+    width: 42px;
+    height: 42px;
+    object-fit: contain;
+    display: block;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+  }
+
+  .footer-name-stack {
+    display: inline-flex;
+    flex-direction: column;
+    width: fit-content;
+    line-height: 1;
+    text-align: left;
+    user-select: none;
+  }
+
+  .footer-brand-line-1 {
+    font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-size: 20px;
+    font-weight: 900;
+    letter-spacing: -0.2px;
+    display: flex;
+    align-items: center;
+    line-height: 1;
+  }
+
+  .footer-name-stack .brand-hydro {
+    color: #004B98;
+    font-weight: 900;
+  }
+
+  .footer-name-stack .brand-care {
+    color: #1CA444;
+    font-weight: 900;
+  }
+
+  .footer-brand-line-2 {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    margin-top: 3px;
+    gap: 4px;
+    line-height: 1;
+  }
+
+  .footer-name-stack .brand-sol-line {
+    flex: 1;
+    height: 1.5px;
+    background-color: #003876;
+    border-radius: 1px;
+    min-width: 5px;
+  }
+
+  .footer-name-stack .brand-sol-text {
+    font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-size: 8px;
+    font-weight: 800;
+    color: #003876;
+    letter-spacing: 1.8px;
+    padding-left: 1.8px;
+    line-height: 1;
+    white-space: nowrap;
+    text-transform: uppercase;
+  }
+
+  .footer-desc {
+    color: #9CA3AF;
+    font-size: 13px;
+    line-height: 1.6;
+    margin-top: 18px;
+    margin-bottom: 20px;
+    max-width: 320px;
+  }
+
+  /* Social Icons */
+  .social-links-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+
+  .social-circle-btn {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: #202020;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: #D1D5DB;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .social-circle-btn:hover {
+    background: #2E2E2E;
+    color: #FFFFFF;
+    border-color: rgba(255, 255, 255, 0.2);
+    transform: translateY(-2px);
+  }
+
+  .social-circle-btn.social-whatsapp:hover {
+    background: #25D366;
+    border-color: #25D366;
+    color: #FFFFFF;
+  }
+
+  .social-circle-btn.social-instagram:hover {
+    background: #E1306C;
+    border-color: #E1306C;
+    color: #FFFFFF;
+  }
+
+  .social-circle-btn.social-facebook:hover {
+    background: #1877F2;
+    border-color: #1877F2;
+    color: #FFFFFF;
+  }
+
+
+  /* Column Titles & Lists */
+  .col-title {
+    font-size: 13px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: #FFFFFF;
+    margin-bottom: 20px;
+    line-height: 1.2;
+  }
+
+  .col-links-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .col-links-list a {
+    color: #9CA3AF;
+    font-size: 13.5px;
+    text-decoration: none;
+    transition: color 0.2s ease, transform 0.2s ease;
+    display: inline-block;
+  }
+
+  .col-links-list a:hover {
+    color: #FFFFFF;
+    transform: translateX(3px);
+  }
+
+  /* Col 4: Contact & Support */
+  .nav-support-links {
+    margin-bottom: 24px;
+  }
+
+  .contact-info-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+    padding-top: 20px;
+  }
+
+  .contact-entry {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    font-size: 13px;
+    color: #9CA3AF;
+    line-height: 1.45;
+  }
+
+  .entry-icon {
+    flex-shrink: 0;
+    color: #9CA3AF;
+    margin-top: 2px;
+  }
+
+  .entry-text {
+    color: #9CA3AF;
+  }
+
+  .entry-link {
+    text-decoration: none;
+    transition: color 0.2s ease;
+  }
+
+  .entry-link:hover {
+    color: #FFFFFF;
+    text-decoration: underline;
+  }
+
+  /* Bottom Legal Bar */
+  .footer-bottom-bar {
+    margin-top: 56px;
+    padding-top: 24px;
+    border-top: 1px solid rgba(255, 255, 255, 0.07);
+    width: 100%;
+  }
+
+  .footer-bottom-inner {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+
+  .bottom-legal-text {
+    font-size: 12px;
+    color: #71717A;
+    line-height: 1.8;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    text-align: left;
+    margin: 0;
+  }
+
+  .footer-dev-credit {
+    font-size: 12px;
+    color: #71717A;
+    text-align: right;
+    white-space: nowrap;
+    margin-left: auto;
+  }
+
+  .dev-credit-link {
+    color: #9CA3AF !important;
+    text-decoration: none !important;
+    font-weight: 500;
+    transition: color 0.2s ease;
+  }
+
+  .dev-credit-link:hover {
+    color: #FFFFFF !important;
+    text-decoration: underline !important;
+  }
+
+  .legal-sep {
+    color: rgba(255, 255, 255, 0.15);
+    user-select: none;
+  }
+
+  @media (max-width: 640px) {
+    .footer-container {
+      padding: 48px 16px 24px;
+    }
+
+    .footer-bottom-bar {
+      margin-top: 40px;
+    }
+
+    .footer-bottom-inner {
+      gap: 8px;
+    }
+
+    .bottom-legal-text {
+      font-size: 11.5px;
+      text-align: left;
+    }
+
+    .footer-dev-credit {
+      font-size: 11.5px;
+      margin-left: 0;
+      text-align: left;
+    }
+  }
+</style>

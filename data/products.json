@@ -1,0 +1,1145 @@
+[
+  {
+    "id": "pad-017",
+    "code": "HYDSAP-COLOR-5P",
+    "name": "Multi-Color Food-Grade Soaker Pads",
+    "slug": "multi-color-food-grade-soaker-pads",
+    "category": "Meat & Poultry Packaging",
+    "short_description": "Certified food-grade absorbent pads in 5 vibrant tray-contrast shades (White, Jet Black, Ocean Blue, Peach Pink, Sunny Yellow) with sealed diamond-quilted absorption core.",
+    "full_description": "Our flagship multi-color food-grade absorbent pads are engineered specifically for high-volume meat, poultry, seafood, and fruit tray packaging. Featuring 5 certified non-bleeding food contact pigments (Clean Food White, Jet Black, Marine Ocean Blue, Peach Pink, and Sunny Yellow), these pads deliver superior visual presentation on supermarket shelves while instantly capturing excess fluids with locked SAP crystals.",
+    "image_url": "/images/products/soaker-pads-color-variants.jpg",
+    "gallery": [
+      {
+        "url": "/images/products/quilted-meat-tray-pad.jpg",
+        "title": "Quilted Tray Pad",
+        "alt": "Diamond-quilted absorbent soaker pad in meat packaging tray"
+      },
+      {
+        "url": "/images/products/soaker-pad-meat-demo.jpg",
+        "title": "Embossed Pad Demo",
+        "alt": "Diamond-embossed meat soaker pad preview"
+      },
+      {
+        "url": "/images/products/steak-on-absorbent-pad.png",
+        "title": "Steak On Pad Demo",
+        "alt": "Fresh raw steak cut on absorbent drip pad"
+      },
+      {
+        "url": "/images/products/food-grade-printed-soaker-pad.jpg",
+        "title": "Cleanroom Stamped Rim",
+        "alt": "Food contact cleanroom stamped pad"
+      }
+    ],
+    "moq": 5000,
+    "lead_time": "3-5 Days Dispatch",
+    "gsm_range": "40 \u2013 600 gsm/m\u00b2 absorbency",
+    "fabric_options": [
+      "Micro-Perforated PE Film (Non-Stick)",
+      "Virgin Cellulose Tissue Core",
+      "Food-Safe Super Absorbent Polymer (SAP)",
+      "Ultrasonically Sealed 4-Sided Rim"
+    ],
+    "sizes": [
+      "75 x 120 mm",
+      "95 x 160 mm",
+      "100 x 170 mm",
+      "125 x 165 mm",
+      "165 x 210 mm",
+      "Custom Die-Cut"
+    ],
+    "colors": [
+      "Clean Food White",
+      "Jet Black",
+      "Marine Ocean Blue",
+      "Peach Pink",
+      "Sunny Yellow"
+    ],
+    "price_tiers": [
+      {
+        "qty_range": "5,000 \u2013 24,999 pcs",
+        "price": "Standard Factory RFQ"
+      },
+      {
+        "qty_range": "25,000 \u2013 99,999 pcs",
+        "price": "Volume Tiered Discount"
+      },
+      {
+        "qty_range": "100,000+ pcs (Bulk OEM)",
+        "price": "Direct Mill Contract"
+      }
+    ],
+    "specifications": {
+      "Absorption Capacity": "40g to 600g fluid retention per pad",
+      "Edge Seal": "Ultrasonic 4-sided continuous welded perimeter",
+      "Certification": "FDA 21 CFR 177.1520 & FSSAI Compliant",
+      "Color Pigments": "Food-safe non-bleeding aqueous pigments",
+      "Packaging": "500 pcs/polybag, 2,000 to 5,000 pcs/export carton"
+    },
+    "is_active": true,
+    "display_order": 1
+  },
+  {
+    "id": "pad-001",
+    "code": "PAD-01",
+    "name": "Fresh Meat Drip Pads",
+    "slug": "fresh-meat-drip-pads",
+    "category": "Meat & Poultry Packaging",
+    "short_description": "Food-grade certified drip soaker pads for raw beef & chicken trays. Absorbs excess meat purge, prevents bacterial pooling, and extends retail shelf-life.",
+    "full_description": "Engineered with FDA & FSSAI certified food contact materials. Features a micro-perforated food-grade polyethylene non-stick contact film, a virgin cellulose pulp core with food-safe Super Absorbent Polymer (SAP), and an impermeable leak-proof backing. Locks in meat juice and purging liquid under cold storage (-18\u00b0C to +4\u00b0C) without delaminating or leaving fiber residue on meat cuts.",
+    "image_url": "/images/products/quilted-meat-tray-pad.jpg",
+    "moq": 5000,
+    "lead_time": "3-5 Days Dispatch",
+    "gsm_range": "40ml \u2013 120ml / pad absorbency",
+    "fabric_options": [
+      "Food-Grade PE Perforated Film (Top Layer)",
+      "FSC Certified Virgin Fluff Pulp",
+      "Food Contact Approved SAP Core",
+      "Ultrasonically Sealed Rim"
+    ],
+    "sizes": [
+      "80 x 140 mm",
+      "100 x 160 mm",
+      "120 x 180 mm",
+      "150 x 200 mm",
+      "Custom Die-Cut"
+    ],
+    "colors": [
+      "Clean Food White",
+      "Jet Black",
+      "Marine Ocean Blue",
+      "Peach Pink",
+      "Sunny Yellow"
+    ],
+    "price_tiers": [
+      {
+        "qty_range": "5,000 \u2013 24,999 pcs",
+        "price": "\u20b90.75 \u2013 \u20b90.95 / pad"
+      },
+      {
+        "qty_range": "25,000 \u2013 99,999 pcs",
+        "price": "\u20b90.58 \u2013 \u20b90.72 / pad"
+      },
+      {
+        "qty_range": "100,000+ pcs (Bulk OEM)",
+        "price": "\u20b90.42 \u2013 \u20b90.52 / pad"
+      }
+    ],
+    "specifications": {
+      "Liquid Absorption Capacity": "40ml to 120ml distilled water / saline test",
+      "Food Safety Compliance": "FDA 21 CFR 177.1520, FSSAI Grade, EU 10/2011",
+      "Operating Temperature Range": "-25\u00b0C Blast Freeze to +10\u00b0C Chilled Display",
+      "Edge Sealing Technology": "4-Side Ultrasonic Thermal Hermetic Seal (Zero Powder Leakage)",
+      "Tensile Strength": "Wet burst strength > 320 kPa"
+    },
+    "is_active": true,
+    "display_order": 2,
+    "gallery": [
+      {
+        "url": "/images/products/soaker-pad-meat-demo.jpg",
+        "title": "Tray Absorption",
+        "alt": "Diamond soaker pad moisture capture"
+      },
+      {
+        "url": "/images/products/food-grade-printed-soaker-pad.jpg",
+        "title": "Ultrasonic Edge Seal",
+        "alt": "Ultrasonically sealed edge pad"
+      },
+      {
+        "url": "/images/products/meat-pads.jpg",
+        "title": "Retail Pack View",
+        "alt": "Commercial pack view"
+      }
+    ]
+  },
+  {
+    "id": "pad-002",
+    "code": "PAD-02",
+    "name": "Black Gourmet Beef Pads",
+    "slug": "black-beef-steak-absorbent-pads",
+    "category": "Meat & Poultry Packaging",
+    "short_description": "Jet black food pads for gourmet steak & supermarket display. Conceals blood purge for attractive retail display.",
+    "full_description": "Engineered for premium butchery cases and high-end supermarket cuts. The deep jet black non-stick surface masks blood discoloration while the central SAP core locks purge liquid securely away without delaminating or fiber transfer.",
+    "image_url": "/images/products/black-beef-steak-pad.jpg",
+    "moq": 5000,
+    "lead_time": "3-5 Days Dispatch",
+    "gsm_range": "60ml \u2013 140ml absorbency",
+    "fabric_options": [
+      "Black Micro-Perforated Food Contact Film",
+      "High-Density Pure Cellulose Fluff",
+      "Food-Safe Super Absorbent Polymer",
+      "Ultrasonically Sealed Rim"
+    ],
+    "sizes": [
+      "100 x 160 mm",
+      "120 x 180 mm",
+      "140 x 200 mm",
+      "Custom Die-Cut"
+    ],
+    "colors": [
+      "Clean Food White",
+      "Jet Black",
+      "Marine Ocean Blue",
+      "Peach Pink",
+      "Sunny Yellow"
+    ],
+    "price_tiers": [
+      {
+        "qty_range": "5,000 \u2013 24,999 pcs",
+        "price": "\u20b90.80 \u2013 \u20b90.98 / pad"
+      },
+      {
+        "qty_range": "25,000 \u2013 99,999 pcs",
+        "price": "\u20b90.62 \u2013 \u20b90.75 / pad"
+      },
+      {
+        "qty_range": "100,000+ pcs (Bulk OEM)",
+        "price": "\u20b90.46 \u2013 \u20b90.55 / pad"
+      }
+    ],
+    "specifications": {
+      "Absorbency Capacity": "60ml to 140ml saline purge retention",
+      "Food Safety Compliance": "FDA 21 CFR 177.1520, FSSAI Approved",
+      "Display Aesthetics": "Jet black opaque finish prevents customer blood visibility",
+      "Burst Strength": "Wet burst strength > 350 kPa"
+    },
+    "is_active": true,
+    "display_order": 3,
+    "gallery": [
+      {
+        "url": "/images/products/white-black-pads.jpg",
+        "title": "Black & White Contrast",
+        "alt": "Black and white pads comparison"
+      },
+      {
+        "url": "/images/products/ultrasonic-sealed-pad-macro.jpg",
+        "title": "Quilted Texture",
+        "alt": "Macro quilted non-woven texture"
+      },
+      {
+        "url": "/images/products/soaker-pads-color-variants.jpg",
+        "title": "Color Range",
+        "alt": "Color range assortment"
+      }
+    ]
+  },
+  {
+    "id": "pad-003",
+    "code": "PAD-03",
+    "name": "Ultrasonic Sealed Pads",
+    "slug": "ultrasonic-sealed-pads",
+    "category": "Meat & Poultry Packaging",
+    "short_description": "4-side sealed hermetic edges preventing powder leakage. Clean white and jet-black pads with pristine edge finish.",
+    "full_description": "High-precision ultrasonically welded borders guarantee zero Super Absorbent Polymer (SAP) powder loss during cold transit, cutting, and customer unboxing. Ideal for demanding automated packing lines and vacuum-sealed food packaging.",
+    "image_url": "/images/products/ultrasonic-sealed-pad-macro.jpg",
+    "moq": 5000,
+    "lead_time": "3-5 Days Dispatch",
+    "gsm_range": "50ml \u2013 150ml absorbency",
+    "fabric_options": [
+      "Embossed Diamond-Weld Non-Woven",
+      "Virgin Fluff Pulp Fiber Core",
+      "Zero-Leak Ultrasonic 4-Edge Rim",
+      "Leak-Proof Poly Barrier Back"
+    ],
+    "sizes": [
+      "85 x 145 mm",
+      "110 x 160 mm",
+      "130 x 190 mm",
+      "Custom Die-Cut"
+    ],
+    "colors": [
+      "Clean Food White",
+      "Jet Black",
+      "Marine Ocean Blue",
+      "Peach Pink",
+      "Sunny Yellow"
+    ],
+    "price_tiers": [
+      {
+        "qty_range": "5,000 \u2013 24,999 pcs",
+        "price": "\u20b90.78 \u2013 \u20b90.95 / pad"
+      },
+      {
+        "qty_range": "25,000 \u2013 99,999 pcs",
+        "price": "\u20b90.60 \u2013 \u20b90.72 / pad"
+      },
+      {
+        "qty_range": "100,000+ pcs (Bulk OEM)",
+        "price": "\u20b90.45 \u2013 \u20b90.52 / pad"
+      }
+    ],
+    "specifications": {
+      "Edge Sealing": "4-Side Ultrasonic Thermal Hemmetic Seal (Zero Powder Leakage)",
+      "Absorption Speed": "< 2.5 seconds liquid strike-through",
+      "Compliance": "FDA 21 CFR, FSSAI Cleanroom Grade, EU 10/2011"
+    },
+    "is_active": true,
+    "display_order": 4,
+    "gallery": [
+      {
+        "url": "/images/products/food-grade-printed-soaker-pad.jpg",
+        "title": "Cleanroom Stamped Rim",
+        "alt": "Ultrasonic sealed rim"
+      },
+      {
+        "url": "/images/products/quilted-meat-tray-pad.jpg",
+        "title": "Diamond Quilted Surface",
+        "alt": "Diamond quilted surface"
+      },
+      {
+        "url": "/images/products/antimicrobial-odor-liner.jpg",
+        "title": "Layered Edge Bonding",
+        "alt": "Layered edge bonding"
+      }
+    ]
+  },
+  {
+    "id": "pad-004",
+    "code": "PAD-04",
+    "name": "Poultry Purge Absorbers",
+    "slug": "poultry-purge-absorbers",
+    "category": "Meat & Poultry Packaging",
+    "short_description": "High absorption 40ml\u2013120ml retention for fresh chicken & turkey. Stops purge pooling in retail fresh poultry trays.",
+    "full_description": "Specially formulated for high moisture exudation of chilled chicken fillets, whole broilers, and turkey cuts. High retention capacity locks in liquid under packaging compression, keeping poultry firm, appetizing, and bacteria-free.",
+    "image_url": "/images/products/poultry-purge-absorbers.jpg",
+    "moq": 5000,
+    "lead_time": "3-5 Days Dispatch",
+    "gsm_range": "40ml \u2013 120ml retention",
+    "fabric_options": [
+      "Micro-Perforated Non-Stick White Film",
+      "Rapid Strike-Through Acquisition Layer",
+      "High-Absorption Polymer Matrix Core",
+      "Impermeable PE Protective Base"
+    ],
+    "sizes": [
+      "80 x 130 mm",
+      "90 x 150 mm",
+      "110 x 170 mm",
+      "Custom Die-Cut"
+    ],
+    "colors": [
+      "Clean Food White",
+      "Jet Black",
+      "Marine Ocean Blue",
+      "Peach Pink",
+      "Sunny Yellow"
+    ],
+    "price_tiers": [
+      {
+        "qty_range": "5,000 \u2013 24,999 pcs",
+        "price": "\u20b90.72 \u2013 \u20b90.88 / pad"
+      },
+      {
+        "qty_range": "25,000 \u2013 99,999 pcs",
+        "price": "\u20b90.55 \u2013 \u20b90.68 / pad"
+      },
+      {
+        "qty_range": "100,000+ pcs (Bulk OEM)",
+        "price": "\u20b90.40 \u2013 \u20b90.49 / pad"
+      }
+    ],
+    "specifications": {
+      "Purge Retention": "> 96% liquid retention under tray stack pressure",
+      "Bacteria Inhibition": "Prevents pooling that accelerates Salmonella & Campylobacter growth",
+      "Safety Compliance": "FDA 21 CFR 177.1520, FSSAI Certified"
+    },
+    "is_active": true,
+    "display_order": 5,
+    "gallery": [
+      {
+        "url": "/images/products/quilted-meat-tray-pad.jpg",
+        "title": "Fluff & SAP Core",
+        "alt": "High absorption core pad"
+      },
+      {
+        "url": "/images/products/soaker-pad-meat-demo.jpg",
+        "title": "Poultry Tray Demo",
+        "alt": "Poultry tray pad demo"
+      },
+      {
+        "url": "/images/products/food-grade-printed-soaker-pad.jpg",
+        "title": "Zero-Leak Rim",
+        "alt": "Zero leak rim"
+      }
+    ]
+  },
+  {
+    "id": "pad-005",
+    "code": "PAD-05",
+    "name": "Marine Seafood Drip Pads",
+    "slug": "marine-seafood-absorbent-pads",
+    "category": "Seafood & Fishery Logistics",
+    "short_description": "Saline-stable high fluid locking pads for salmon & fish fillets. Controls marine drip and preserves seafood freshness.",
+    "full_description": "Designed specifically for fresh and thawed seafood. Built with saline-stable absorbent gel matrices that absorb salt water melt and biological fluids without breaking down or dissolving in cold chain transit.",
+    "image_url": "/images/products/marine-seafood-pad-macro.jpg",
+    "moq": 5000,
+    "lead_time": "3-7 Days Dispatch",
+    "gsm_range": "60ml \u2013 200ml / pad absorbency",
+    "fabric_options": [
+      "Anti-Stick Embossed Polypropylene Film",
+      "Heavy-Density Saline Stable SAP Core",
+      "Hydrophilic Non-Woven Diffusion Layer",
+      "Food-Safe Antimicrobial Odor Blocker"
+    ],
+    "sizes": [
+      "90 x 150 mm",
+      "110 x 180 mm",
+      "130 x 220 mm",
+      "200 x 300 mm (Salmon Box Size)"
+    ],
+    "colors": [
+      "Clean Food White",
+      "Jet Black",
+      "Marine Ocean Blue",
+      "Peach Pink",
+      "Sunny Yellow"
+    ],
+    "price_tiers": [
+      {
+        "qty_range": "5,000 \u2013 24,999 pcs",
+        "price": "\u20b90.85 \u2013 \u20b91.15 / pad"
+      },
+      {
+        "qty_range": "25,000 \u2013 99,999 pcs",
+        "price": "\u20b90.68 \u2013 \u20b90.85 / pad"
+      },
+      {
+        "qty_range": "100,000+ pcs (Export Container)",
+        "price": "\u20b90.49 \u2013 \u20b90.62 / pad"
+      }
+    ],
+    "specifications": {
+      "Saline Retention Rate": "> 98% retention under 5.0 kg compressive weight",
+      "Microbiological Safety": "Total plate count < 10 CFU/g (Sterile Batch Tested)",
+      "Odor Suppression": "Integrated active mineral carbon & food-grade cyclodextrin",
+      "Packaging Format": "Moisture-proof cleanroom vacuum bags of 250 or 500 pcs"
+    },
+    "is_active": true,
+    "display_order": 6,
+    "gallery": [
+      {
+        "url": "/images/products/seafood-pads.jpg",
+        "title": "Seafood Drip Sheets",
+        "alt": "Seafood drip sheets"
+      },
+      {
+        "url": "/images/products/salmon-export-sheets.jpg",
+        "title": "Saline Meltwater Core",
+        "alt": "Saline meltwater core"
+      },
+      {
+        "url": "/images/products/antimicrobial-odor-liner.jpg",
+        "title": "Odor Trap Core",
+        "alt": "Odor trap core"
+      }
+    ]
+  },
+  {
+    "id": "pad-006",
+    "code": "PAD-06",
+    "name": "Prawn & Shrimp Soakers",
+    "slug": "prawn-shrimp-soaker-sheets",
+    "category": "Seafood & Fishery Logistics",
+    "short_description": "Non-stick micro-embossed film prevents delicate seafood skin tears and absorbs saltwater purge in shrimp trays.",
+    "full_description": "Specially embossed non-stick surface protects fragile prawn shells, whiskers, and delicate seafood surfaces from clinging to the pad. Superior salinity retention ensures clean retail packaging display.",
+    "image_url": "/images/products/prawn-shrimp-soakers.jpg",
+    "moq": 5000,
+    "lead_time": "3-5 Days Dispatch",
+    "gsm_range": "80ml \u2013 160ml absorbency",
+    "fabric_options": [
+      "Saline-Resistant Gel Matrix",
+      "Smooth Non-Stick Contact Web",
+      "Marine Grade Odor Neutralizer"
+    ],
+    "sizes": [
+      "110 x 170 mm",
+      "130 x 210 mm",
+      "200 x 300 mm"
+    ],
+    "colors": [
+      "Clean Food White",
+      "Jet Black",
+      "Marine Ocean Blue",
+      "Peach Pink",
+      "Sunny Yellow"
+    ],
+    "price_tiers": [
+      {
+        "qty_range": "5,000 \u2013 24,999 pcs",
+        "price": "\u20b90.90 \u2013 \u20b91.20 / pad"
+      },
+      {
+        "qty_range": "25,000+ pcs",
+        "price": "\u20b90.65 \u2013 \u20b90.78 / pad"
+      }
+    ],
+    "specifications": {
+      "Salinity Resistance": "Stable in 3.5% NaCl solution",
+      "Compliance": "FDA & Export Health Standards"
+    },
+    "is_active": true,
+    "display_order": 7,
+    "gallery": [
+      {
+        "url": "/images/products/marine-seafood-pad-macro.jpg",
+        "title": "Non-Stick Mesh Film",
+        "alt": "Non-stick mesh top film"
+      },
+      {
+        "url": "/images/products/ultrasonic-sealed-pad-macro.jpg",
+        "title": "Ultrasonic Edge Seal",
+        "alt": "Ultrasonic edge seal"
+      },
+      {
+        "url": "/images/products/food-grade-printed-soaker-pad.jpg",
+        "title": "Cleanroom Certified",
+        "alt": "Cleanroom certified pad"
+      }
+    ]
+  },
+  {
+    "id": "pad-007",
+    "code": "PAD-07",
+    "name": "Antimicrobial Odor Liners",
+    "slug": "antimicrobial-odor-liners",
+    "category": "Seafood & Fishery Logistics",
+    "short_description": "Food-grade odor blockers for cold chain fishery air freight. Suppresses amine odors and extends export flight shelf-life.",
+    "full_description": "Incorporates active food-safe odor neutralizing minerals that actively trap volatile amine and sulfur compounds exuded by fresh seafood during air transport and chilled export transit.",
+    "image_url": "/images/products/antimicrobial-odor-liner.jpg",
+    "moq": 5000,
+    "lead_time": "3-6 Days Dispatch",
+    "gsm_range": "75ml \u2013 180ml absorbency",
+    "fabric_options": [
+      "Active Food-Safe Mineral Carbon Layer",
+      "Virgin Fluff Pulp Fiber Core",
+      "Non-Stick Perforated Surface",
+      "Fluid-Lock Poly Barrier Back"
+    ],
+    "sizes": [
+      "100 x 160 mm",
+      "120 x 180 mm",
+      "140 x 220 mm"
+    ],
+    "colors": [
+      "Clean Food White",
+      "Jet Black",
+      "Marine Ocean Blue",
+      "Peach Pink",
+      "Sunny Yellow"
+    ],
+    "price_tiers": [
+      {
+        "qty_range": "5,000 \u2013 24,999 pcs",
+        "price": "\u20b90.95 \u2013 \u20b91.25 / pad"
+      },
+      {
+        "qty_range": "25,000+ pcs",
+        "price": "\u20b90.70 \u2013 \u20b90.85 / pad"
+      }
+    ],
+    "specifications": {
+      "Odor Reduction": "Reduces trimethylamine odor emission by > 85%",
+      "Compliance": "FDA 21 CFR, FSSAI Certified"
+    },
+    "is_active": true,
+    "display_order": 8,
+    "gallery": [
+      {
+        "url": "/images/products/ultrasonic-sealed-pad-macro.jpg",
+        "title": "Micro-Perforated Film",
+        "alt": "Micro-perforated film"
+      },
+      {
+        "url": "/images/products/marine-seafood-pad-macro.jpg",
+        "title": "Heavy Moisture Core",
+        "alt": "Heavy moisture core"
+      },
+      {
+        "url": "/images/products/food-grade-printed-soaker-pad.jpg",
+        "title": "FDA & FSSAI Stamped",
+        "alt": "FDA & FSSAI stamped pad"
+      }
+    ]
+  },
+  {
+    "id": "pad-008",
+    "code": "PAD-08",
+    "name": "Salmon Box Export Sheets",
+    "slug": "salmon-box-export-sheets",
+    "category": "Seafood & Fishery Logistics",
+    "short_description": "200x300mm large-format pads designed for commercial air cargo, whole salmon, and iced airline shipping containers.",
+    "full_description": "Large-format heavy duty absorbent pads engineered to fit standard commercial airline export styrofoam shipping boxes. Absorbs up to 1000ml of melted ice water without leaking or tearing under heavy whole fish weight.",
+    "image_url": "/images/products/salmon-export-sheets.jpg",
+    "moq": 2000,
+    "lead_time": "4-7 Days Dispatch",
+    "gsm_range": "500ml \u2013 1200ml sheet absorbency",
+    "fabric_options": [
+      "Heavy-Duty Hydrophobic Membrane",
+      "High-Density SAP Polymer Fluff Blend",
+      "Puncture-Resistant Spunbond Web"
+    ],
+    "sizes": [
+      "200 x 300 mm",
+      "250 x 350 mm",
+      "300 x 450 mm"
+    ],
+    "colors": [
+      "Clean Food White",
+      "Jet Black",
+      "Marine Ocean Blue",
+      "Peach Pink",
+      "Sunny Yellow"
+    ],
+    "price_tiers": [
+      {
+        "qty_range": "2,000 \u2013 9,999 pcs",
+        "price": "\u20b92.40 \u2013 \u20b93.50 / sheet"
+      },
+      {
+        "qty_range": "10,000+ pcs",
+        "price": "\u20b91.80 \u2013 \u20b92.50 / sheet"
+      }
+    ],
+    "specifications": {
+      "Melted Ice Absorption": "Holds up to 1200ml fluid per sheet without backflow",
+      "Burst Strength": "> 450 kPa under heavy fish stack"
+    },
+    "is_active": true,
+    "display_order": 9,
+    "gallery": [
+      {
+        "url": "/images/products/marine-seafood-pad-macro.jpg",
+        "title": "High Capacity Saline Trap",
+        "alt": "High capacity saline trap"
+      },
+      {
+        "url": "/images/products/industrial-soaker-pads.jpg",
+        "title": "Multi-Ply Meltblown Core",
+        "alt": "Multi-ply meltblown core"
+      },
+      {
+        "url": "/images/products/antimicrobial-odor-liner.jpg",
+        "title": "Export Box Liner",
+        "alt": "Export box liner"
+      }
+    ]
+  },
+  {
+    "id": "pad-009",
+    "code": "PAD-09",
+    "name": "Fresh Berry Cushioning Pads",
+    "slug": "fruit-and-berry-absorbent-pads",
+    "category": "Fresh Produce & Berries",
+    "short_description": "Air-cushioned bubble embossed pads protecting soft strawberries, raspberries, and blueberries from impact shock.",
+    "full_description": "Features a soft micro-embossed honeycomb bubble cushioning matrix that cushions delicate fruit against road vibration, while the moisture regulation layer absorbs condensation and leaking juices to stop mold growth.",
+    "image_url": "/images/products/fruit-punnet-cushion-pad.jpg",
+    "moq": 10000,
+    "lead_time": "3-5 Days Dispatch",
+    "gsm_range": "25ml \u2013 65ml / pad + Air Cushioning",
+    "fabric_options": [
+      "Micro-Perforated Bubble Cushioning Non-Woven",
+      "Pure Unbleached Food Grade Cellulose",
+      "Breathable Vapor-Permeable Film",
+      "Optional Food-Grade Ethylene Inhibitor"
+    ],
+    "sizes": [
+      "70 x 110 mm (125g Punnet)",
+      "90 x 130 mm (250g Punnet)",
+      "110 x 160 mm (500g Clamshell)"
+    ],
+    "colors": [
+      "Clean Food White",
+      "Jet Black",
+      "Marine Ocean Blue",
+      "Peach Pink",
+      "Sunny Yellow"
+    ],
+    "price_tiers": [
+      {
+        "qty_range": "10,000 \u2013 49,999 pcs",
+        "price": "\u20b90.48 \u2013 \u20b90.65 / pad"
+      },
+      {
+        "qty_range": "50,000 \u2013 199,999 pcs",
+        "price": "\u20b90.38 \u2013 \u20b90.48 / pad"
+      },
+      {
+        "qty_range": "200,000+ pcs (Farm Packhouses)",
+        "price": "\u20b90.26 \u2013 \u20b90.34 / pad"
+      }
+    ],
+    "specifications": {
+      "Cushioning Factor": "Honeycomb micro-emboss absorbs 40% transit drop shock",
+      "Mold Prevention": "Maintains optimal 85% RH balance without liquid pooling",
+      "Pesticide & Heavy Metal": "Zero migration (Tested as per EU 1935/2004)",
+      "Clamshell Compatibility": "Die-cut rounded corners for seamless automated machine insertion"
+    },
+    "is_active": true,
+    "display_order": 10,
+    "gallery": [
+      {
+        "url": "/images/products/fruit-punnet-colored-pads.jpg",
+        "title": "Color Punnet Pads",
+        "alt": "Color punnet pads"
+      },
+      {
+        "url": "/images/products/fruit-pads.jpg",
+        "title": "Soft Foam Cushioning",
+        "alt": "Soft foam cushioning"
+      },
+      {
+        "url": "/images/products/soaker-pads-color-variants.jpg",
+        "title": "Peach & Yellow Tints",
+        "alt": "Peach and yellow tints"
+      }
+    ]
+  },
+  {
+    "id": "pad-010",
+    "code": "PAD-10",
+    "name": "Grape & Tomato Soakers",
+    "slug": "grape-tomato-soakers",
+    "category": "Fresh Produce & Berries",
+    "short_description": "Humidity regulation layers preventing mold & juice accumulation in grape, cherry tomato, and berry punnets.",
+    "full_description": "Engineered with dual-action moisture balance. Regulates internal humidity inside sealed punnets to maintain optimal 85% RH without moisture pooling, keeping grapes and tomatoes crisp and plump for 3-5 extra days.",
+    "image_url": "/images/products/grape-tomato-soakers.jpg",
+    "moq": 10000,
+    "lead_time": "3-5 Days Dispatch",
+    "gsm_range": "30ml \u2013 75ml absorbency",
+    "fabric_options": [
+      "Air-Porous Cushioning Film",
+      "Pure Natural Fluff Pulp Core",
+      "Breathable Moisture Balance Layer"
+    ],
+    "sizes": [
+      "80 x 120 mm",
+      "100 x 140 mm",
+      "120 x 170 mm"
+    ],
+    "colors": [
+      "Clean Food White",
+      "Jet Black",
+      "Marine Ocean Blue",
+      "Peach Pink",
+      "Sunny Yellow"
+    ],
+    "price_tiers": [
+      {
+        "qty_range": "10,000 \u2013 49,999 pcs",
+        "price": "\u20b90.45 \u2013 \u20b90.60 / pad"
+      },
+      {
+        "qty_range": "50,000+ pcs",
+        "price": "\u20b90.32 \u2013 \u20b90.42 / pad"
+      }
+    ],
+    "specifications": {
+      "Humidity Control": "Prevents botrytis / gray mold formation on tomato calyx and grapes",
+      "Compliance": "FDA 21 CFR 177.1520"
+    },
+    "is_active": true,
+    "display_order": 11,
+    "gallery": [
+      {
+        "url": "/images/products/fruit-punnet-cushion-pad.jpg",
+        "title": "Air-Bubble Cushioning",
+        "alt": "Air bubble cushioning"
+      },
+      {
+        "url": "/images/products/fruit-punnet-colored-pads.jpg",
+        "title": "Yellow & White Liners",
+        "alt": "Yellow and white liners"
+      },
+      {
+        "url": "/images/products/food-grade-printed-soaker-pad.jpg",
+        "title": "Ventilated Sealed Rim",
+        "alt": "Ventilated sealed rim"
+      }
+    ]
+  },
+  {
+    "id": "pad-011",
+    "code": "PAD-11",
+    "name": "Clamshell Punnet Liners",
+    "slug": "clamshell-punnet-berry-liners",
+    "category": "Fresh Produce & Berries",
+    "short_description": "Die-cut rounded corner liners for 125g, 250g & 500g punnet boxes. Available in white, yellow, peach, red and black.",
+    "full_description": "Precision die-cut with rounded corners for effortless automatic or manual insertion into standard supermarket plastic punnets and clamshell packaging. 100% certified direct food contact safe.",
+    "image_url": "/images/products/fruit-punnet-colored-pads.jpg",
+    "moq": 10000,
+    "lead_time": "3-5 Days Dispatch",
+    "gsm_range": "30ml \u2013 70ml absorbency",
+    "fabric_options": [
+      "Embossed Air-Cushion Non-Woven",
+      "Food-Grade Pure Fluff Pulp",
+      "Breathable Base Barrier"
+    ],
+    "sizes": [
+      "75 x 115 mm (125g)",
+      "95 x 135 mm (250g)",
+      "115 x 165 mm (500g)"
+    ],
+    "colors": [
+      "Clean Food White",
+      "Jet Black",
+      "Marine Ocean Blue",
+      "Peach Pink",
+      "Sunny Yellow"
+    ],
+    "price_tiers": [
+      {
+        "qty_range": "10,000 \u2013 49,999 pcs",
+        "price": "\u20b90.42 \u2013 \u20b90.58 / pad"
+      },
+      {
+        "qty_range": "50,000+ pcs",
+        "price": "\u20b90.30 \u2013 \u20b90.38 / pad"
+      }
+    ],
+    "specifications": {
+      "Cushioning": "Reduces transit bruising by 45%",
+      "Compliance": "FDA 21 CFR 177.1520"
+    },
+    "is_active": true,
+    "display_order": 12,
+    "gallery": [
+      {
+        "url": "/images/products/fruit-punnet-cushion-pad.jpg",
+        "title": "Honeycomb Punnet Pad",
+        "alt": "Honeycomb punnet pad"
+      },
+      {
+        "url": "/images/products/fruit-pads.jpg",
+        "title": "Moisture Balance Sheet",
+        "alt": "Moisture balance sheet"
+      },
+      {
+        "url": "/images/products/soaker-pads-color-variants.jpg",
+        "title": "Multi-Color Range",
+        "alt": "Multi-color range"
+      }
+    ]
+  },
+  {
+    "id": "pad-012",
+    "code": "PAD-012",
+    "name": "Breathable Produce Pads",
+    "slug": "breathable-produce-pads",
+    "category": "Fresh Produce & Berries",
+    "short_description": "Food-grade cellulose layers extending produce shelf-life 3-5 days. Permeable membrane prevents anaerobic decay.",
+    "full_description": "Combines breathable microporous film with pure virgin unbleached fluff pulp. Allows air exchange while preventing excess liquid accumulation that accelerates rotting in fresh supermarket produce.",
+    "image_url": "/images/products/fruit-pads.jpg",
+    "moq": 10000,
+    "lead_time": "3-5 Days Dispatch",
+    "gsm_range": "35ml \u2013 80ml absorbency",
+    "fabric_options": [
+      "Microporous Breathable Membrane",
+      "Virgin Wood Fluff Pulp",
+      "Hydrophilic Contact Layer"
+    ],
+    "sizes": [
+      "80 x 130 mm",
+      "100 x 150 mm",
+      "120 x 180 mm"
+    ],
+    "colors": [
+      "Clean Food White",
+      "Jet Black",
+      "Marine Ocean Blue",
+      "Peach Pink",
+      "Sunny Yellow"
+    ],
+    "price_tiers": [
+      {
+        "qty_range": "10,000 \u2013 49,999 pcs",
+        "price": "\u20b90.45 \u2013 \u20b90.62 / pad"
+      },
+      {
+        "qty_range": "50,000+ pcs",
+        "price": "\u20b90.32 \u2013 \u20b90.44 / pad"
+      }
+    ],
+    "specifications": {
+      "Gas Permeability": "Optimized O2/CO2 breathability rate",
+      "Food Safety": "EU 1935/2004 & FSSAI"
+    },
+    "is_active": true,
+    "display_order": 13,
+    "gallery": [
+      {
+        "url": "/images/products/fruit-punnet-cushion-pad.jpg",
+        "title": "Micro-Ventilated Cushion",
+        "alt": "Micro-ventilated cushion"
+      },
+      {
+        "url": "/images/products/grape-tomato-soakers.jpg",
+        "title": "Humidity Trap Film",
+        "alt": "Humidity trap film"
+      },
+      {
+        "url": "/images/products/food-grade-printed-soaker-pad.jpg",
+        "title": "Hygienic Sealed Border",
+        "alt": "Hygienic sealed border"
+      }
+    ]
+  },
+  {
+    "id": "pad-013",
+    "code": "PAD-13",
+    "name": "Frozen Thermal Gel Ice Pads",
+    "slug": "cold-chain-ice-absorbent-pads",
+    "category": "Industrial Processing & Cold Chain",
+    "short_description": "Refrigerant gel cooling packs for insulated shipper transit boxes, seafood export, and pharma cold chains.",
+    "full_description": "Multi-cell hydrating refrigerant polymer sheets. Hydrates in tap water within minutes and freezes solid to provide sustained 48 to 72 hour sub-zero temperature protection in insulated shipping cartons.",
+    "image_url": "/images/products/industrial-soaker-pads.jpg",
+    "moq": 3000,
+    "lead_time": "3-6 Days Dispatch",
+    "gsm_range": "350ml \u2013 900ml gel retention",
+    "fabric_options": [
+      "Multi-Cell Polymer Pocket Matrix",
+      "Heavy-Duty Laminated Non-Woven",
+      "Puncture-Proof Barrier Film"
+    ],
+    "sizes": [
+      "140 x 200 mm (4-cell)",
+      "200 x 300 mm (6-cell)",
+      "Continuous Roll"
+    ],
+    "colors": [
+      "Clean Food White",
+      "Jet Black",
+      "Marine Ocean Blue",
+      "Peach Pink",
+      "Sunny Yellow"
+    ],
+    "price_tiers": [
+      {
+        "qty_range": "3,000 \u2013 19,999 pcs",
+        "price": "\u20b93.20 \u2013 \u20b94.80 / sheet"
+      },
+      {
+        "qty_range": "20,000+ pcs",
+        "price": "\u20b92.20 \u2013 \u20b93.10 / sheet"
+      }
+    ],
+    "specifications": {
+      "Thermal Rating": "Maintains 2\u00b0C to 8\u00b0C up to 72 hours in EPS box",
+      "Compliance": "Food & Pharma Safe Polymer"
+    },
+    "is_active": true,
+    "display_order": 14,
+    "gallery": [
+      {
+        "url": "/images/products/continuous-perforated-rolls.jpg",
+        "title": "Polymer Crystal Grid",
+        "alt": "Polymer crystal grid"
+      },
+      {
+        "url": "/images/products/marine-seafood-pad-macro.jpg",
+        "title": "High Thermal Core",
+        "alt": "High thermal core"
+      },
+      {
+        "url": "/images/products/carcass-soaker-liners.jpg",
+        "title": "Heavy Cold Barrier",
+        "alt": "Heavy cold barrier"
+      }
+    ]
+  },
+  {
+    "id": "pad-014",
+    "code": "PAD-14",
+    "name": "Heavy-Duty Prep Soakers",
+    "slug": "industrial-commercial-soaker-pads",
+    "category": "Industrial Processing & Cold Chain",
+    "short_description": "High-capacity sheets holding up to 1500ml liquid per sheet for commercial butcheries and food processors.",
+    "full_description": "Extra-large format heavy-duty absorption sheets engineered for slaughterhouses, meat processing plants, wholesale fish markets, and catering prep stations. Holds up to 1500ml liquid per square meter.",
+    "image_url": "/images/products/industrial-soaker-pads.jpg",
+    "moq": 2000,
+    "lead_time": "4-7 Days Dispatch",
+    "gsm_range": "250ml \u2013 1500ml / sheet high capacity",
+    "fabric_options": [
+      "Heavy-Duty Spunbond Top Layer (Tear Resistant)",
+      "High-Polymer Density Absorbing Fluff Core",
+      "Anti-Slip Poly Barrier Backing",
+      "Perforated Roll Format or Pre-Cut Large Sheets"
+    ],
+    "sizes": [
+      "250 x 350 mm",
+      "300 x 450 mm",
+      "400 x 600 mm (Bulk Box)",
+      "Roll: 400mm x 50m Continuous"
+    ],
+    "colors": [
+      "Clean Food White",
+      "Jet Black",
+      "Marine Ocean Blue",
+      "Peach Pink",
+      "Sunny Yellow"
+    ],
+    "price_tiers": [
+      {
+        "qty_range": "2,000 \u2013 9,999 pcs",
+        "price": "\u20b92.80 \u2013 \u20b94.50 / sheet"
+      },
+      {
+        "qty_range": "10,000 \u2013 49,999 pcs",
+        "price": "\u20b92.10 \u2013 \u20b93.20 / sheet"
+      },
+      {
+        "qty_range": "50,000+ pcs (Factory Direct)",
+        "price": "\u20b91.65 \u2013 \u20b92.40 / sheet"
+      }
+    ],
+    "specifications": {
+      "Extreme Absorbency": "Tested up to 1500ml liquid per square meter",
+      "Puncture Resistance": "> 45N resistance to bone shards and cartilage",
+      "Dispensing Format": "Pre-slit cartons or coreless rolls with 250mm tear-perforations",
+      "Cold Chain Reliability": "Maintains structural integrity through 72-hour air transit"
+    },
+    "is_active": true,
+    "display_order": 15,
+    "gallery": [
+      {
+        "url": "/images/products/carcass-soaker-liners.jpg",
+        "title": "800 GSM Heavy Core",
+        "alt": "800 GSM heavy core"
+      },
+      {
+        "url": "/images/products/continuous-perforated-rolls.jpg",
+        "title": "Commercial Converting Reel",
+        "alt": "Commercial converting reel"
+      },
+      {
+        "url": "/images/products/ultrasonic-sealed-pad-macro.jpg",
+        "title": "Heavy-Duty Edge Bond",
+        "alt": "Heavy duty edge bond"
+      }
+    ]
+  },
+  {
+    "id": "pad-015",
+    "code": "PAD-15",
+    "name": "Continuous Perforated Rolls",
+    "slug": "continuous-perforated-rolls",
+    "category": "Industrial Processing & Cold Chain",
+    "short_description": "Automated dispensing rolls for industrial food processing lines with tear perforations.",
+    "full_description": "Continuous roll format wound on standard industrial machine cores. Features precision laser or die perforations every 200mm to 300mm for high-speed automated pad dispensers in MAP tray production lines.",
+    "image_url": "/images/products/continuous-perforated-rolls.jpg",
+    "moq": 10,
+    "lead_time": "5-8 Days Dispatch",
+    "gsm_range": "Continuous roll 50m \u2013 250m",
+    "fabric_options": [
+      "Spunbond Polypropylene Contact Surface",
+      "High-Tear Resistance Cellulose Pulp Core",
+      "Machine-Core Wound (76mm standard core)"
+    ],
+    "sizes": [
+      "Width: 100mm x 100m Roll",
+      "Width: 150mm x 150m Roll",
+      "Width: 200mm x 200m Roll"
+    ],
+    "colors": [
+      "Clean Food White",
+      "Jet Black",
+      "Marine Ocean Blue",
+      "Peach Pink",
+      "Sunny Yellow"
+    ],
+    "price_tiers": [
+      {
+        "qty_range": "10 \u2013 49 rolls",
+        "price": "\u20b91,250 \u2013 \u20b91,800 / roll"
+      },
+      {
+        "qty_range": "50+ rolls",
+        "price": "\u20b9950 \u2013 \u20b91,350 / roll"
+      }
+    ],
+    "specifications": {
+      "Perforation Interval": "200mm / 250mm / 300mm clean tear-off",
+      "Machine Speed": "Compatible with automated applicators up to 120 pads/min"
+    },
+    "is_active": true,
+    "display_order": 16,
+    "gallery": [
+      {
+        "url": "/images/products/ultrasonic-sealed-pad-macro.jpg",
+        "title": "Laser Perforation Line",
+        "alt": "Laser perforation line"
+      },
+      {
+        "url": "/images/products/quilted-meat-tray-pad.jpg",
+        "title": "Separated Pad View",
+        "alt": "Separated pad view"
+      },
+      {
+        "url": "/images/products/food-grade-printed-soaker-pad.jpg",
+        "title": "High-Speed Inserter Roll",
+        "alt": "High-speed inserter roll"
+      }
+    ]
+  },
+  {
+    "id": "pad-016",
+    "code": "PAD-16",
+    "name": "Slaughterhouse Carcass Liners",
+    "slug": "slaughterhouse-carcass-liners",
+    "category": "Industrial Processing & Cold Chain",
+    "short_description": "Puncture-resistant backing protecting against bone shards and excessive carcass blood drainage.",
+    "full_description": "Built with reinforced puncture-resistant spunbond polypropylene backing that prevents sharp bone shards and cartilage from tearing the liner. Absorbs heavy blood purge during hanging, chilling, and carcass transit.",
+    "image_url": "/images/products/carcass-soaker-liners.jpg",
+    "moq": 1000,
+    "lead_time": "4-7 Days Dispatch",
+    "gsm_range": "800ml \u2013 2000ml / liner high capacity",
+    "fabric_options": [
+      "Heavy-Duty Puncture Proof Web (55 GSM)",
+      "High-Absorbency Virgin Cellulose & SAP Matrix",
+      "Liquid-Barrier Outer Membrane"
+    ],
+    "sizes": [
+      "400 x 600 mm",
+      "500 x 800 mm",
+      "600 x 1000 mm"
+    ],
+    "colors": [
+      "Clean Food White",
+      "Jet Black",
+      "Marine Ocean Blue",
+      "Peach Pink",
+      "Sunny Yellow"
+    ],
+    "price_tiers": [
+      {
+        "qty_range": "1,000 \u2013 4,999 pcs",
+        "price": "\u20b94.50 \u2013 \u20b96.80 / liner"
+      },
+      {
+        "qty_range": "5,000+ pcs",
+        "price": "\u20b93.60 \u2013 \u20b94.90 / liner"
+      }
+    ],
+    "specifications": {
+      "Burst Strength": "> 500 kPa wet strength",
+      "Puncture Resistance": "> 55N puncture resistance against rib bone ends"
+    },
+    "is_active": true,
+    "display_order": 17,
+    "gallery": [
+      {
+        "url": "/images/products/industrial-soaker-pads.jpg",
+        "title": "Virgin Cellulose Core",
+        "alt": "Virgin cellulose core"
+      },
+      {
+        "url": "/images/products/continuous-perforated-rolls.jpg",
+        "title": "Industrial Continuous Format",
+        "alt": "Industrial continuous format"
+      },
+      {
+        "url": "/images/products/quilted-meat-tray-pad.jpg",
+        "title": "Heavy Blood Purge Capture",
+        "alt": "Heavy blood purge capture"
+      }
+    ]
+  }
+]

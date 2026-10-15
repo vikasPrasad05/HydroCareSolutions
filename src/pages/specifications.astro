@@ -1,0 +1,439 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+const agsCodes = [
+  { code: 'HYDSAP75120', size: '75 x 120 MM', weight: '0.01 kg', absorbency: '40 Grams', app: 'Small Poultry Cuts, Mutton Chops, Berries' },
+  { code: 'HYDSAP95160', size: '95 x 160 MM', weight: 'Standard', absorbency: '120 Grams', app: 'Standard Supermarket Fresh Meat Trays' },
+  { code: 'HYDSAP115115', size: '115 x 115 MM', weight: 'Standard', absorbency: '50 Grams', app: 'Square Burger Patties, Soft Fruit Punnets' },
+  { code: 'HYDSAP100170', size: '100 x 170 MM', weight: 'Standard', absorbency: '135 Grams', app: 'Poultry Breast Fillets & Salmon Steaks' },
+  { code: 'HYDSAP125165', size: '125 x 165 MM', weight: 'Standard', absorbency: '140 Grams', app: 'Large Red Meat Cuts & Seafood Packs' },
+  { code: 'HYDSAP165210', size: '165 x 210 MM', weight: 'Standard', absorbency: '600 Grams', app: 'High-Capacity Bulk Meat, Whole Fish & Export' }
+];
+
+const visualDemos = [
+  { img: '/images/products/quilted-meat-tray-pad.jpg', title: 'Diamond Quilted Tray Absorber Pads', desc: 'Moisture wicking with locked SAP core without drying out fresh cuts' },
+  { img: '/images/products/soaker-pads-color-variants.jpg', title: '5 Certified Food-Grade Color Variants', desc: 'Clean White, Jet Black, Ocean Blue, Peach Pink & Sunny Yellow' },
+  { img: '/images/products/steak-on-absorbent-pad.png', title: 'Steak & Fresh Meat Purge Retention', desc: 'Extended retail shelf-life, bacteria inhibition and dry tray presentation' },
+  { img: '/images/products/food-grade-printed-soaker-pad.jpg', title: 'Ultrasonically Sealed Food-Safe Rim', desc: 'Zero toxic migration, 100% compliant with FDA 21 CFR & FSSAI' }
+];
+---
+
+<Layout 
+  title="Food Safety & Absorbency Specifications — HydroCare Solutions"
+  description="Explore technical absorption capacity curves, migration limits, FDA 21 CFR 177.1520, and FSSAI standards across our 4 food absorbent pad lines."
+  currentPath="/specifications"
+>
+  <div class="page-header bg-blueprint">
+    <div class="industrial-stripe-accent"></div>
+    <div class="container-industrial page-header-content">
+      <h1 class="page-title">Technical Absorbency & Food Safety Standards</h1>
+      <p class="page-subtitle">
+        Every food packaging absorbent pad manufactured at our cleanroom facility complies with strict international food contact regulations, zero toxic migration, and verifiable liquid retention under mechanical pressure.
+      </p>
+    </div>
+  </div>
+
+  <section class="specs-body-section">
+    <div class="container-industrial">
+
+      <!-- Official AGS Green Sorb Sizing & Capacity Matrix -->
+      <div class="ags-specs-banner card-factory">
+        <div class="card-top">
+          <span class="font-mono text-accent">AGS GREEN SORB™ DATA SHEET</span>
+          <span class="font-mono text-xs">STANDARD CODES &amp; ABSORBENCY</span>
+        </div>
+        <h2 class="ags-specs-title">Standard Code, Dimensions &amp; Absorbency Capacity Chart</h2>
+        <p class="ags-specs-lead">
+          Soaker Pads absorb excess moisture exuded from fresh food such as <strong>Red Meat, Fish, Poultry, Fruit and Berries</strong> that are prepacked in <strong>Trays, Punnets, Vacuum or Shrink Bags</strong>. Super Absorbent Polymer (SAP) Crystals and absorbent backing quickly absorb and retain all moisture even under pressure without drying out the food itself.
+        </p>
+
+        <!-- Technical Table -->
+        <div class="table-scroll-wrap">
+          <table class="ags-matrix-table font-mono">
+            <thead>
+              <tr>
+                <th>Code</th>
+                <th>Size (Dimensions)</th>
+                <th>Unit Weight</th>
+                <th>Absorbency</th>
+                <th>Recommended Application</th>
+              </tr>
+            </thead>
+            <tbody>
+              {agsCodes.map((row) => (
+                <tr>
+                  <td class="text-bold text-accent">{row.code}</td>
+                  <td>{row.size}</td>
+                  <td>{row.weight}</td>
+                  <td><span class="badge-absorb">{row.absorbency}</span></td>
+                  <td class="font-sans text-muted-app">{row.app}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+
+        <!-- 4 Visual Applications -->
+        <div class="ags-specs-visuals-grid">
+          {visualDemos.map((demo) => (
+            <div class="visual-mini-card">
+              <img src={demo.img} alt={demo.title} class="visual-mini-img" loading="lazy" />
+              <div class="visual-mini-body">
+                <h5>{demo.title}</h5>
+                <p>{demo.desc}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <!-- 4 Core Products Spec Grid -->
+      <div class="grid-2 specs-comparison-blocks">
+        <!-- Block 1 -->
+        <div class="card-factory spec-detail-card">
+          <div class="card-top">
+            <span class="font-mono text-accent">PAD-01 SPEC SHEET</span>
+            <span class="font-mono text-xs">MEAT DIVISION</span>
+          </div>
+          <h3 class="card-title">Fresh Meat & Poultry Absorbent Drip Pads</h3>
+          <table class="spec-matrix-table font-mono">
+            <tbody>
+              <tr><td>Food Contact Film</td><td>Micro-Perforated Food-Grade Polyethylene (One-Way Flow)</td></tr>
+              <tr><td>Absorbent Core</td><td>High-Purity Virgin Cellulose Fluff + Food Safe SAP Polymer</td></tr>
+              <tr><td>Absorption Rating</td><td>40ml to 120ml / pad (Water & Purge Equivalent)</td></tr>
+              <tr><td>Sealing Method</td><td>Continuous 4-Edge Ultrasonic Hemmetic Fusion (No Glue)</td></tr>
+              <tr><td>Temperature Limits</td><td>-25°C Blast Freezing to +10°C Chilled Supermarket Display</td></tr>
+              <tr><td>Purge Retention</td><td>&gt; 97% Liquid Locked under 4.0 kg Compressive Weight</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Block 2 -->
+        <div class="card-factory spec-detail-card">
+          <div class="card-top">
+            <span class="font-mono text-accent">PAD-02 SPEC SHEET</span>
+            <span class="font-mono text-xs">SEAFOOD DIVISION</span>
+          </div>
+          <h3 class="card-title">Marine Seafood & Fish Absorbent Pads</h3>
+          <table class="spec-matrix-table font-mono">
+            <tbody>
+              <tr><td>Saline Compatibility</td><td>Heavy Saline Stable SAP (Retains Seawater & Melt Ice)</td></tr>
+              <tr><td>Surface Texture</td><td>Diamond Micro-Embossed Anti-Stick Contact Surface</td></tr>
+              <tr><td>Absorption Rating</td><td>60ml to 200ml / pad (High-Capacity Marine Drip)</td></tr>
+              <tr><td>Odor Suppression</td><td>Active Mineral Core neutralizing volatile amine/fish odors</td></tr>
+              <tr><td>Skin Adhesion</td><td>Zero Fiber Sticking on delicate Salmon & Prawn flesh</td></tr>
+              <tr><td>Air Freight Safe</td><td>Maintains integrity during 48-72h international cold chain</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Block 3 -->
+        <div class="card-factory spec-detail-card">
+          <div class="card-top">
+            <span class="font-mono text-accent">PAD-03 SPEC SHEET</span>
+            <span class="font-mono text-xs">PRODUCE DIVISION</span>
+          </div>
+          <h3 class="card-title">Fruit & Berry Cushioning Absorbent Pads</h3>
+          <table class="spec-matrix-table font-mono">
+            <tbody>
+              <tr><td>Cushion Matrix</td><td>Air-pocket honeycomb non-woven absorbing transport shock</td></tr>
+              <tr><td>Moisture Regulating</td><td>Traps bottom condensation while maintaining 85% RH balance</td></tr>
+              <tr><td>Absorption Rating</td><td>25ml to 65ml / pad (Suited for 125g, 250g, 500g punnets)</td></tr>
+              <tr><td>Mold Prevention</td><td>Eliminates juice pooling to arrest fungal/botrytis growth</td></tr>
+              <tr><td>Machine Compatibility</td><td>Curved die-cut corners for high-speed automated tray inserters</td></tr>
+              <tr><td>Chemical Purity</td><td>100% Free of chlorine, optical brighteners, and BPA</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Block 4 -->
+        <div class="card-factory spec-detail-card">
+          <div class="card-top">
+            <span class="font-mono text-accent">PAD-04 SPEC SHEET</span>
+            <span class="font-mono text-xs">INDUSTRIAL DIVISION</span>
+          </div>
+          <h3 class="card-title">Industrial Food Prep Soaker Pads & Rolls</h3>
+          <table class="spec-matrix-table font-mono">
+            <tbody>
+              <tr><td>Format Availability</td><td>Pre-cut sheets (up to 400x600mm) or continuous tear rolls</td></tr>
+              <tr><td>Tensile Strength</td><td>Puncture resistant to bone fragments and sharp carcass edges</td></tr>
+              <tr><td>Absorption Rating</td><td>250ml to 1500ml / sheet high-volume industrial retention</td></tr>
+              <tr><td>Backing Layer</td><td>Impermeable anti-slip blue/white barrier film</td></tr>
+              <tr><td>Target Applications</td><td>Slaughterhouses, central butchery commissaries & catering</td></tr>
+              <tr><td>Packaging</td><td>Individually banded cleanroom packs inside heavy duty cartons</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Certifications & Compliance -->
+      <div class="custom-branding-block" id="compliance">
+        <h2 class="block-headline">Food Contact Safety Certifications</h2>
+
+        <div class="grid-4 branding-grid">
+          <div class="card-factory branding-card">
+            <span class="font-mono text-accent">REGULATION 01</span>
+            <h4>FDA 21 CFR 177.1520</h4>
+            <p>Certified safe for direct contact with fatty, acidic, and aqueous food items under all refrigeration temperatures.</p>
+          </div>
+          <div class="card-factory branding-card">
+            <span class="font-mono text-accent">REGULATION 02</span>
+            <h4>FSSAI Central Compliant</h4>
+            <p>Manufactured under valid central FSSAI license with routine heavy metal and overall migration lab testing.</p>
+          </div>
+          <div class="card-factory branding-card">
+            <span class="font-mono text-accent">REGULATION 03</span>
+            <h4>EU 10/2011 Plastic Regulation</h4>
+            <p>Overall migration limits (OML) consistently below 10 mg/dm² compliant with European food export standards.</p>
+          </div>
+          <div class="card-factory branding-card">
+            <span class="font-mono text-accent">REGULATION 04</span>
+            <h4>ISO 22000 & HACCP Facility</h4>
+            <p>Converted in an enclosed positive-pressure cleanroom with strict pest exclusion and zero biological contamination.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .page-header {
+    padding: 48px 0 36px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .page-title {
+    font-size: 36px;
+    color: var(--primary);
+    margin: 12px 0 8px;
+  }
+
+  .page-subtitle {
+    font-size: 16px;
+    color: var(--muted-foreground);
+    max-width: 680px;
+    line-height: 1.5;
+  }
+
+  .specs-body-section {
+    padding: 56px 0 80px;
+  }
+
+  .specs-comparison-blocks {
+    margin-bottom: 64px;
+  }
+
+  .spec-detail-card {
+    padding: 28px;
+    background: #FFFFFF;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+  }
+
+  .card-top {
+    display: flex;
+    justify-content: space-between;
+    font-size: 11px;
+    margin-bottom: 8px;
+    color: var(--muted-foreground);
+  }
+
+  .card-title {
+    font-size: 19px;
+    color: var(--primary);
+    margin-bottom: 16px;
+  }
+
+  .spec-matrix-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12px;
+  }
+
+  .spec-matrix-table td {
+    padding: 10px 12px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .spec-matrix-table tr:last-child td {
+    border-bottom: none;
+  }
+
+  .spec-matrix-table td:first-child {
+    background: #F8FAFC;
+    color: var(--muted-foreground);
+    width: 38%;
+  }
+
+  .spec-matrix-table td:last-child {
+    color: var(--primary);
+    font-weight: 600;
+  }
+
+  .block-headline {
+    font-size: 28px;
+    color: var(--primary);
+    margin: 8px 0 32px;
+  }
+
+  .branding-grid {
+    gap: 20px;
+  }
+
+  .branding-card {
+    padding: 24px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .branding-card h4 {
+    font-size: 16px;
+    color: var(--primary);
+  }
+
+  .branding-card p {
+    font-size: 13px;
+    color: var(--muted-foreground);
+    line-height: 1.5;
+  }
+
+  /* AGS Green Sorb Banner Styles */
+  .ags-specs-banner {
+    padding: 36px 32px;
+    background: #FFFFFF;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    margin-bottom: 50px;
+  }
+
+  .ags-specs-title {
+    font-size: 24px;
+    color: var(--primary);
+    margin: 8px 0 12px;
+    font-weight: 700;
+  }
+
+  .ags-specs-lead {
+    font-size: 14.5px;
+    line-height: 1.65;
+    color: var(--muted-foreground);
+    margin-bottom: 24px;
+    max-width: 900px;
+  }
+
+  .ags-specs-lead strong {
+    color: var(--primary);
+  }
+
+  .table-scroll-wrap {
+    overflow-x: auto;
+    margin-bottom: 36px;
+  }
+
+  .ags-matrix-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+    text-align: left;
+  }
+
+  .ags-matrix-table th {
+    background: #F8FAFC;
+    color: var(--muted-foreground);
+    font-weight: 700;
+    font-size: 11.5px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .ags-matrix-table td {
+    padding: 12px 16px;
+    border-bottom: 1px solid #F1F5F9;
+    color: var(--primary);
+  }
+
+  .ags-matrix-table tr:hover td {
+    background: #F8FAFC;
+  }
+
+  .text-bold {
+    font-weight: 700;
+  }
+
+  .text-muted-app {
+    color: var(--muted-foreground);
+    font-size: 12.5px;
+  }
+
+  .badge-absorb {
+    display: inline-block;
+    background: #EFF6FF;
+    color: #1D4ED8;
+    font-weight: 700;
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    border: 1px solid #DBEAFE;
+  }
+
+  .ags-specs-visuals-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+  }
+
+  .visual-mini-card {
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    overflow: hidden;
+    background: #FFFFFF;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+
+  .visual-mini-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 16px rgba(15, 23, 42, 0.06);
+  }
+
+  .visual-mini-img {
+    width: 100%;
+    height: 140px;
+    object-fit: cover;
+  }
+
+  .visual-mini-body {
+    padding: 12px 14px;
+  }
+
+  .visual-mini-body h5 {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--primary);
+    margin-bottom: 4px;
+    line-height: 1.3;
+  }
+
+  .visual-mini-body p {
+    font-size: 11.5px;
+    color: var(--muted-foreground);
+    line-height: 1.45;
+  }
+
+  @media (max-width: 900px) {
+    .ags-specs-visuals-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (max-width: 500px) {
+    .ags-specs-visuals-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

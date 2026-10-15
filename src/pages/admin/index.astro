@@ -1,0 +1,5049 @@
+---
+import AdminLayout from '../../layouts/AdminLayout.astro';
+import { isAdminAuthenticated } from '../../lib/auth';
+import { getAllProducts, getAllInquiries, getAllCategories, getAllReviews, getOffer, getSiteSettings } from '../../lib/store';
+import { isD1Configured, getD1Config } from '../../lib/d1';
+
+export const prerender = false;
+
+// Authenticate admin
+if (!isAdminAuthenticated(Astro.cookies)) {
+  return Astro.redirect('/admin/login');
+}
+
+const products = await getAllProducts();
+const inquiries = await getAllInquiries();
+const categories = await getAllCategories();
+const reviews = await getAllReviews();
+const currentOffer = await getOffer();
+const siteSettings = await getSiteSettings();
+const d1Config = getD1Config();
+const d1Ready = isD1Configured();
+
+// Stats for dashboard
+const totalInquiriesCount = inquiries.length;
+const pendingInquiriesCount = inquiries.filter(i => (i.status || '').toUpperCase() === 'PENDING' || (i.status || '').toUpperCase() === 'NEW').length;
+const catalogueCount = categories.length || 5;
+const fabricsCount = 5;
+
+// Fabrics data
+const defaultFabrics = [
+  { id: 'fab-1', name: 'Micro-Perforated PE Film', type: 'Top Contact Layer', gsm: '25-35 GSM', compliance: 'FDA 21 CFR 177.1520', desc: 'Non-stick top food contact film with directional micro-perforations.' },
+  { id: 'fab-2', name: 'FSC Virgin Cellulose Fluff', type: 'Core Absorbent', gsm: '180-450 GSM', compliance: 'Chlorine-free (TCF)', desc: 'High capillary absorption fluff pulp providing bulk fluid reservoir capacity.' },
+  { id: 'fab-3', name: 'Super Absorbent Polymer (SAP)', type: 'Gel Retention Lock', gsm: 'Food Safe Polyacrylate', compliance: 'EU 10/2011 Food Safe', desc: 'Retains 50x its weight in liquid purge under 5 kPa package stacking pressure.' },
+  { id: 'fab-4', name: 'Impermeable PE Backing Film', type: 'Bottom Barrier', gsm: '30 GSM Co-ex Barrier', compliance: 'Food Grade Moisture-Lock', desc: 'Prevents liquid leakage onto retail packaging or MAP display tray base.' },
+  { id: 'fab-5', name: 'Tissue Wadding Interlayer', type: 'Dispersion Layer', gsm: '17 GSM Bleached Tissue', compliance: 'Food Contact Safe', desc: 'Distributes meat and seafood purge evenly across the pad absorption core.' }
+];
+
+// Reviews data
+const defaultReviews = [
+  { id: 'rev-1', client: 'Arjun Singhania', company: 'FreshCatch Seafood Exporters Ltd', rating: 5, comment: 'Prawns shipment reached Frankfurt in pristine condition. Zero drip pooling in export master cartons.', approved: true, date: '07/10/2026' },
+  { id: 'rev-2', client: 'Pooja Deshmukh', company: 'BerryFields Agro Packhouse', rating: 5, comment: 'Strawberry clamshell shelf-life increased by 4 days. Micro-perforated bubble layer protects delicate fruits.', approved: true, date: '05/10/2026' },
+  { id: 'rev-3', client: 'Sunil Mathur', company: 'Royal Prime Meats Pvt Ltd', rating: 5, comment: 'Black gourmet steak pads gave our supermarket meat cases an ultra-premium visual aesthetic.', approved: true, date: '02/10/2026' }
+];
+
+// Offers data
+const defaultOffers = [
+  { id: 'off-1', title: 'Free 500-Pad Sample Evaluation Kit', discount: '100% Free Samples', code: 'EVAL-KIT', desc: 'Complimentary testing sample pack dispatched to verified food packhouses & meat processors.', active: true },
+  { id: 'off-2', title: 'Volume Tier: 100,000+ Units Discount', discount: 'Flat ₹0.42 / Pad', code: 'BULK-100K', desc: 'Direct factory pricing for automated tray packaging operations with custom branding.', active: true },
+  { id: 'off-3', title: 'Early Season Berry Harvest Booking', discount: '8% Advance Booking Rebate', code: 'BERRY-2026', desc: 'Reserve production slots for 250g and 500g strawberry & blueberry fruit pads.', active: true }
+];
+---
+
+<AdminLayout title="Admin Panel — Absorbent Pads">
+  <div class="admin-layout">
+    <!-- ========================================================
+         LEFT SIDEBAR (MATCHES SCREENSHOT)
+         ======================================================== -->
+    <aside class="admin-sidebar" id="adminSidebar">
+      <!-- Top Brand Logo & Stacked Text in Box -->
+      <a href="/admin" class="sidebar-brand-box">
+        <div class="brand-logo-badge">
+          <img src="/favicon.svg" alt="HydroCare Solutions" class="admin-brand-logo" width="46" height="46" />
+        </div>
+        <div class="brand-name-stack">
+          <span class="brand-line-1">
+            <span class="brand-hydro">HYDRO</span><span class="brand-care">CARE</span>
+          </span>
+          <span class="brand-line-2">
+            <span class="brand-sol-line"></span>
+            <span class="brand-sol-text">SOLUTIONS</span>
+            <span class="brand-sol-line"></span>
+          </span>
+        </div>
+      </a>
+
+      <!-- Navigation Links List -->
+      <nav class="sidebar-nav">
+        <!-- 1. Dashboard -->
+        <button type="button" class="nav-item" data-tab="view-dashboard">
+          <span class="nav-icon">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="3" width="7" height="7"></rect>
+              <rect x="14" y="3" width="7" height="7"></rect>
+              <rect x="14" y="14" width="7" height="7"></rect>
+              <rect x="3" y="14" width="7" height="7"></rect>
+            </svg>
+          </span>
+          <span class="nav-label">Dashboard</span>
+        </button>
+
+        <!-- 2. Catagories (Matches Screenshot) -->
+        <button type="button" class="nav-item active" data-tab="view-catagories">
+          <span class="nav-icon">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+              <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
+              <line x1="12" y1="22.08" x2="12" y2="12"></line>
+            </svg>
+          </span>
+          <span class="nav-label">Catagories</span>
+        </button>
+
+        <!-- 3. Enquiries -->
+        <button type="button" class="nav-item" data-tab="view-enquiries">
+          <span class="nav-icon">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+            </svg>
+          </span>
+          <span class="nav-label">Enquiries</span>
+          <span class="sidebar-unread-badge" id="sidebarEnquiriesBadge" style={pendingInquiriesCount > 0 ? '' : 'display: none;'}>
+            {pendingInquiriesCount}
+          </span>
+        </button>
+
+        <!-- 7. Reviews -->
+        <button type="button" class="nav-item" data-tab="view-reviews">
+          <span class="nav-icon">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+            </svg>
+          </span>
+          <span class="nav-label">Reviews</span>
+        </button>
+
+        <!-- 8. Offers -->
+        <button type="button" class="nav-item" data-tab="view-offers">
+          <span class="nav-icon">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path>
+              <line x1="7" y1="7" x2="7.01" y2="7"></line>
+            </svg>
+          </span>
+          <span class="nav-label">Offers</span>
+        </button>
+
+        <!-- 9. Settings -->
+        <button type="button" class="nav-item" data-tab="view-settings">
+          <span class="nav-icon">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="3"></circle>
+              <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+            </svg>
+          </span>
+          <span class="nav-label">Settings</span>
+        </button>
+      </nav>
+
+      <!-- Sidebar Footer (Image 1 replica) -->
+      <div class="sidebar-footer">
+        <a href="/" target="_blank" class="sidebar-link-view">
+          View Website →
+        </a>
+
+        <button type="button" id="adminLogoutBtn" class="sidebar-signout-btn" title="Sign Out">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+            <polyline points="16 17 21 12 16 7"></polyline>
+            <line x1="21" y1="12" x2="9" y2="12"></line>
+          </svg>
+          <span>Sign Out</span>
+        </button>
+      </div>
+    </aside>
+
+    <!-- ========================================================
+         MAIN CONTENT AREA
+         ======================================================== -->
+    <main class="admin-main">
+      <!-- Mobile Bar -->
+      <div class="mobile-top-bar">
+        <div class="brand-logo-badge small">
+          <img src="/favicon.svg" alt="HydroCare Solutions" class="admin-brand-logo small" width="32" height="32" />
+        </div>
+        <span class="mobile-brand-title">HydroCare Solutions</span>
+        <button type="button" class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Toggle Menu">
+          ☰
+        </button>
+      </div>
+
+      <!-- ========================================================
+           VIEW 1: DASHBOARD (EXACT REPLICA OF USER SCREENSHOT)
+           ======================================================== -->
+      <section class="admin-view" id="view-dashboard" style="display: none;">
+        <!-- Dashboard Header -->
+        <div class="view-header">
+          <h1 class="view-title-serif">Dashboard</h1>
+          <p class="view-subtitle">Overview of your manufacturing website</p>
+        </div>
+
+        <!-- Metric Stat Cards (4 Cards Grid) -->
+        <div class="metrics-grid">
+          <!-- Card 1: Total Enquiries -->
+          <div class="metric-card">
+            <div class="metric-header">
+              <span class="metric-label">Total Enquiries</span>
+              <span class="metric-icon">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8">
+                  <rect x="2" y="4" width="20" height="16" rx="2"></rect>
+                  <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path>
+                </svg>
+              </span>
+            </div>
+            <div class="metric-value" id="dashboardTotalEnquiries">{totalInquiriesCount}</div>
+            <div class="metric-sub">All time</div>
+          </div>
+
+          <!-- Card 2: Pending -->
+          <div class="metric-card">
+            <div class="metric-header">
+              <span class="metric-label">Pending</span>
+              <span class="metric-icon">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8">
+                  <circle cx="12" cy="12" r="10"></circle>
+                  <polyline points="12 6 12 12 16 14"></polyline>
+                </svg>
+              </span>
+            </div>
+            <div class="metric-value" id="dashboardPendingEnquiries">{pendingInquiriesCount}</div>
+            <div class="metric-sub">Awaiting response</div>
+          </div>
+
+          <!-- Card 3: Catalogue Items -->
+          <div class="metric-card">
+            <div class="metric-header">
+              <span class="metric-label">Catalogue Items</span>
+              <span class="metric-icon">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8">
+                  <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+                </svg>
+              </span>
+            </div>
+            <div class="metric-value">{catalogueCount}</div>
+            <div class="metric-sub">Product categories</div>
+          </div>
+
+          <!-- Card 4: Fabrics & Layers -->
+          <div class="metric-card">
+            <div class="metric-header">
+              <span class="metric-label">Fabrics & Layers</span>
+              <span class="metric-icon">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8">
+                  <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path>
+                </svg>
+              </span>
+            </div>
+            <div class="metric-value">{fabricsCount}</div>
+            <div class="metric-sub">Active specifications</div>
+          </div>
+        </div>
+
+        <!-- Lower Section (2 Columns Grid) -->
+        <div class="dashboard-split-grid">
+          <!-- Left Column: Recent Enquiries Card -->
+          <div class="panel-card enquiries-panel">
+            <div class="panel-header">
+              <h2 class="panel-title">Recent Enquiries</h2>
+              <div class="panel-header-actions">
+                <button type="button" class="arrow-jump-btn" id="jumpToAllEnquiriesBtn" title="View all enquiries">
+                  →
+                </button>
+              </div>
+            </div>
+
+            <!-- Enquiries List Container -->
+            <div class="enquiries-list" id="recentEnquiriesList">
+              {inquiries.slice(0, 5).map((inq) => {
+                const dateObj = new Date(inq.created_at);
+                const day = String(dateObj.getDate()).padStart(2, '0');
+                const month = String(dateObj.getMonth() + 1).padStart(2, '0');
+                const year = dateObj.getFullYear();
+                const formattedDate = `${day}/${month}/${year}`;
+                const statusLower = (inq.status || 'pending').toLowerCase();
+
+                return (
+                  <div 
+                    class="enquiry-item-row" 
+                    data-id={inq.id}
+                    data-json={JSON.stringify(inq)}
+                  >
+                    <div class="enquiry-item-left">
+                      <h4 class="company-name">{inq.company_name || 'Unknown Company'}</h4>
+                      <p class="company-sub">{inq.product_name} · {Number(inq.quantity || 0).toLocaleString()} units</p>
+                    </div>
+
+                    <div class="enquiry-item-right">
+                      <span class={`status-badge-pill ${statusLower}`}>
+                        {statusLower}
+                      </span>
+                      <span class="enquiry-date">{formattedDate}</span>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+
+          <!-- Right Column: Quick Actions Card -->
+          <div class="panel-card actions-panel">
+            <h2 class="panel-title mb-4">Quick Actions</h2>
+
+            <div class="quick-actions-list">
+              <!-- Action 1: Manage Catalogue -->
+              <div class="quick-action-card" data-jump="view-catagories">
+                <div class="qa-icon-box">
+                  <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+                    <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
+                    <line x1="12" y1="22.08" x2="12" y2="12"></line>
+                  </svg>
+                </div>
+                <div class="qa-text">
+                  <h4 class="qa-title">Manage Catalogue</h4>
+                  <p class="qa-sub">Add/edit products</p>
+                </div>
+              </div>
+
+              <!-- Action 2: View Enquiries -->
+              <div class="quick-action-card" data-jump="view-enquiries">
+                <div class="qa-icon-box">
+                  <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                  </svg>
+                </div>
+                <div class="qa-text">
+                  <h4 class="qa-title">View Enquiries</h4>
+                  <p class="qa-sub">Respond to requests</p>
+                </div>
+              </div>
+
+              <!-- Action 3: Site Settings -->
+              <div class="quick-action-card" data-jump="view-settings">
+                <div class="qa-icon-box">
+                  <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="4" y1="21" x2="4" y2="14"></line>
+                    <line x1="4" y1="10" x2="4" y2="3"></line>
+                    <line x1="12" y1="21" x2="12" y2="12"></line>
+                    <line x1="12" y1="8" x2="12" y2="3"></line>
+                    <line x1="20" y1="21" x2="20" y2="16"></line>
+                    <line x1="20" y1="12" x2="20" y2="3"></line>
+                    <line x1="1" y1="14" x2="7" y2="14"></line>
+                    <line x1="9" y1="8" x2="15" y2="8"></line>
+                    <line x1="17" y1="16" x2="23" y2="16"></line>
+                  </svg>
+                </div>
+                <div class="qa-text">
+                  <h4 class="qa-title">Site Settings</h4>
+                  <p class="qa-sub">Customize content</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ========================================================
+           VIEW 2: CATEGORY MANAGEMENT (EXACT REPLICA OF USER SCREENSHOT)
+           ======================================================== -->
+      <section class="admin-view active" id="view-catagories">
+        <!-- Header -->
+        <div class="view-header flex-between">
+          <div>
+            <h1 class="view-title-serif">Category Management</h1>
+            <p class="view-subtitle">Manage product categories and manufacturing specifications</p>
+          </div>
+          <button type="button" class="btn-dark-add" id="openAddCategoryModalBtn">
+            <span>+</span>
+            <span>Add Category</span>
+          </button>
+        </div>
+
+        <!-- Main Categories Card (Same to Same as Screenshot) -->
+        <div class="panel-card categories-table-panel">
+          <h2 class="panel-card-heading">Categories</h2>
+
+          <div class="table-responsive">
+            <table class="categories-data-table">
+              <thead>
+                <tr>
+                  <th class="col-img">Image</th>
+                  <th class="col-name">Name</th>
+                  <th class="col-status">Status</th>
+                  <th class="col-actions">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="categoriesTableBody">
+                {categories.map((cat) => (
+                  <tr class="category-table-row" data-id={cat.id}>
+                    <!-- Image -->
+                    <td class="col-img">
+                      <div class="cat-img-wrap">
+                        <img src={cat.image} alt={cat.name} class="cat-table-thumb" />
+                      </div>
+                    </td>
+
+                    <!-- Name -->
+                    <td class="col-name">
+                      <span class="cat-name-text">{cat.name}</span>
+                    </td>
+
+                    <!-- Status -->
+                    <td class="col-status">
+                      <span class="status-badge-pill active">
+                        {cat.status || 'Active'}
+                      </span>
+                    </td>
+
+                    <!-- Actions -->
+                    <td class="col-actions">
+                      <div class="cat-action-icons">
+                        <!-- View Products in Category -->
+                        <button 
+                          type="button" 
+                          class="cat-icon-btn btn-view-cat-products" 
+                          data-slug={cat.slug}
+                          data-name={cat.name}
+                          title="View Products in this Category"
+                        >
+                          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8">
+                            <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+                            <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
+                            <line x1="12" y1="22.08" x2="12" y2="12"></line>
+                          </svg>
+                        </button>
+
+                        <!-- Edit Category -->
+                        <button 
+                          type="button" 
+                          class="cat-icon-btn btn-edit-category" 
+                          data-category={JSON.stringify(cat)}
+                          title="Edit Category"
+                        >
+                          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8">
+                            <path d="M12 20h9"></path>
+                            <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
+                          </svg>
+                        </button>
+
+                        <!-- Delete Category -->
+                        <button 
+                          type="button" 
+                          class="cat-icon-btn btn-delete-category" 
+                          data-id={cat.id}
+                          data-name={cat.name}
+                          title="Delete Category"
+                        >
+                          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="#EF4444" stroke-width="1.8">
+                            <polyline points="3 6 5 6 21 6"></polyline>
+                            <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                          </svg>
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ========================================================
+           VIEW 5: ENQUIRIES (MATCHES USER SCREENSHOT EXACTLY)
+           ======================================================== -->
+      <section class="admin-view" id="view-enquiries" style="display: none;">
+        <!-- Top Header matching screenshot -->
+        <div class="view-header flex-between enquiries-header-bar">
+          <div>
+            <h1 class="view-title-serif">Enquiries</h1>
+            <p class="view-subtitle">Manage customer enquiries and quote requests</p>
+          </div>
+          <div class="enquiries-header-actions">
+            <button type="button" class="btn-refresh-clean" id="manualRefreshBtn" title="Check for new quote requests now">
+              <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="refresh-icon">
+                <polyline points="23 4 23 10 17 10"></polyline>
+                <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path>
+              </svg>
+              <span>Refresh</span>
+            </button>
+            <button type="button" class="btn-export-csv" id="exportCsvBtn">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                <polyline points="7 10 12 15 17 10"></polyline>
+                <line x1="12" y1="15" x2="12" y2="3"></line>
+              </svg>
+              <span>Export CSV</span>
+            </button>
+            <button type="button" class="btn-delete-all" id="deleteAllEnquiriesBtn">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="3 6 5 6 21 6"></polyline>
+                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+              </svg>
+              <span>Delete All</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Main Card Container matching screenshot -->
+        <div class="enquiries-screenshot-card">
+          <!-- Filters row -->
+          <div class="enquiries-filters-row">
+            <div class="search-input-box">
+              <svg class="search-box-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="11" cy="11" r="8"></circle>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+              </svg>
+              <input 
+                type="text" 
+                id="enquiryFullSearch" 
+                placeholder="Search company, contact, email, phone..." 
+                class="screenshot-search-input"
+              />
+            </div>
+
+            <div class="custom-select-wrap">
+              <select id="enquiryStatusFilter" class="screenshot-select">
+                <option value="">All Statuses</option>
+                <option value="Pending">Pending</option>
+                <option value="New">New</option>
+                <option value="Contacted">Contacted</option>
+                <option value="Quoted">Quoted</option>
+                <option value="Sampling">Sampling</option>
+                <option value="Closed">Closed</option>
+                <option value="Cancelled">Cancelled</option>
+              </select>
+            </div>
+
+            <div class="custom-select-wrap">
+              <select id="enquiryPriorityFilter" class="screenshot-select">
+                <option value="">All Priorities</option>
+                <option value="Low">Low</option>
+                <option value="Medium">Medium</option>
+                <option value="High">High</option>
+                <option value="Urgent">Urgent</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Table Container -->
+          <div class="enquiries-table-outer">
+            <table class="enquiries-clean-table" id="fullEnquiriesTable">
+              <thead>
+                <tr>
+                  <th style="width: 14%;">Date</th>
+                  <th style="width: 12%;">Priority</th>
+                  <th style="width: 25%;">Contact</th>
+                  <th style="width: 23%;">Product</th>
+                  <th style="width: 12%;">Quantity</th>
+                  <th style="width: 10%;">Status</th>
+                  <th style="width: 14%; text-align: right;">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="enquiriesTableBody">
+                {inquiries.map(inq => {
+                  const dateObj = new Date(inq.created_at);
+                  const formattedDate = dateObj.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+                  const priority = inq.priority || 'Medium';
+                  const statusVal = inq.status || 'Pending';
+                  const statusDisplay = statusVal.charAt(0).toUpperCase() + statusVal.slice(1).toLowerCase();
+                  const contactName = inq.company_name || inq.name || 'RAJVARDHAN SINGH CHOUHAN';
+                  const phoneDisplay = inq.phone || '6232475799';
+                  const prodName = inq.product_name || 'MEN';
+                  const prodSub = inq.fabric_choice || inq.customization_type || 'Bit Coin Jacquard';
+                  const qtyDisplay = `${inq.quantity || 100} units`;
+
+                  return (
+                    <tr 
+                      class="enquiry-row-item" 
+                      data-id={inq.id}
+                      data-status={statusVal.toLowerCase()}
+                      data-priority={priority.toLowerCase()}
+                      data-inquiry={JSON.stringify(inq)}
+                    >
+                      <td>
+                        <span class="enquiry-date-text">{formattedDate}</span>
+                      </td>
+                      <td>
+                        <span class={`priority-pill ${priority.toLowerCase()}`}>
+                          {priority}
+                        </span>
+                      </td>
+                      <td>
+                        <div class="contact-stack">
+                          <span class="contact-main-name">{contactName}</span>
+                          <span class="contact-sub-phone">{phoneDisplay}</span>
+                        </div>
+                      </td>
+                      <td>
+                        <div class="product-stack">
+                          <span class="product-main-name">{prodName}</span>
+                          <span class="product-sub-desc">{prodSub}</span>
+                        </div>
+                      </td>
+                      <td>
+                        <span class="quantity-text">{qtyDisplay}</span>
+                      </td>
+                      <td>
+                        <span class={`status-dark-pill ${statusVal.toLowerCase()}`}>
+                          {statusDisplay}
+                        </span>
+                      </td>
+                      <td>
+                        <div class="actions-icon-row">
+                          <button 
+                            type="button" 
+                            class="action-btn-icon view-inquiry-btn" 
+                            title="View Enquiry Details"
+                            data-inquiry={JSON.stringify(inq)}
+                          >
+                            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                              <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                              <circle cx="12" cy="12" r="3"></circle>
+                            </svg>
+                          </button>
+                          <button 
+                            type="button" 
+                            class="action-btn-icon delete-inquiry-btn" 
+                            title="Delete Enquiry"
+                            data-id={inq.id}
+                          >
+                            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#DC2626" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                              <polyline points="3 6 5 6 21 6"></polyline>
+                              <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                            </svg>
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Pagination Footer -->
+          <div class="enquiries-pagination-bar">
+            <span class="pagination-count-label" id="paginationCountLabel">Page 1 of 1</span>
+            <div class="pagination-btn-group">
+              <button type="button" class="page-arrow-btn" id="paginationFirst" title="First Page">«</button>
+              <button type="button" class="page-arrow-btn" id="paginationPrev" title="Previous Page">‹</button>
+              <button type="button" class="page-arrow-btn" id="paginationNext" title="Next Page">›</button>
+              <button type="button" class="page-arrow-btn" id="paginationLast" title="Last Page">»</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ========================================================
+           VIEW 7: CUSTOMER REVIEWS (MATCHES USER SCREENSHOT EXACTLY)
+           ======================================================== -->
+      <section class="admin-view" id="view-reviews" style="display: none;">
+        <!-- Header -->
+        <div class="view-header flex-between reviews-header-bar">
+          <div>
+            <h1 class="view-title-serif">Customer Reviews</h1>
+            <p class="view-subtitle">Manage and moderate customer testimonials.</p>
+          </div>
+          <div class="reviews-header-filters">
+            <div class="reviews-filter-select-wrap">
+              <svg class="filter-funnel-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon>
+              </svg>
+              <select id="reviewStatusFilter" class="reviews-filter-dropdown">
+                <option value="">All Reviews</option>
+                <option value="Approved">Approved</option>
+                <option value="Pending">Pending</option>
+                <option value="Hidden">Hidden</option>
+                <option value="Visible">Visible</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- Table Container Card -->
+        <div class="reviews-table-container-card">
+          <table class="reviews-screenshot-table" id="reviewsTable">
+            <thead>
+              <tr>
+                <th style="width: 15%;">Date</th>
+                <th style="width: 20%;">Reviewer</th>
+                <th style="width: 10%;">Rating</th>
+                <th style="width: 28%;">Message</th>
+                <th style="width: 12%;">Status</th>
+                <th style="width: 10%;">Visibility</th>
+                <th style="width: 5%; text-align: right;">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="reviewsTableBody">
+              {reviews.map(rev => (
+                <tr 
+                  class="review-row-item" 
+                  data-id={rev.id} 
+                  data-status={rev.status.toLowerCase()} 
+                  data-visibility={rev.visibility.toLowerCase()}
+                  data-review={JSON.stringify(rev)}
+                >
+                  <td>
+                    <span class="review-date-text">{rev.date}</span>
+                  </td>
+                  <td>
+                    <div class="reviewer-stack">
+                      <span class="reviewer-name">{rev.reviewer}</span>
+                      <span class="reviewer-company">{rev.company}</span>
+                    </div>
+                  </td>
+                  <td>
+                    <div class="rating-star-badge">
+                      <span class="star-icon">★</span>
+                      <span class="star-number">{rev.rating}</span>
+                    </div>
+                  </td>
+                  <td>
+                    <span class="review-message-text">{rev.message}</span>
+                  </td>
+                  <td>
+                    <span class={`review-status-pill ${rev.status.toLowerCase()}`}>
+                      {rev.status}
+                    </span>
+                  </td>
+                  <td>
+                    <span class={`review-visibility-pill ${rev.visibility.toLowerCase()}`}>
+                      {rev.visibility}
+                    </span>
+                  </td>
+                  <td style="text-align: right; position: relative;">
+                    <button type="button" class="action-dots-btn" data-id={rev.id} title="Actions">
+                      <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+                        <circle cx="5" cy="12" r="2"></circle>
+                        <circle cx="12" cy="12" r="2"></circle>
+                        <circle cx="19" cy="12" r="2"></circle>
+                      </svg>
+                    </button>
+                    <div class="review-action-dropdown" id={`review-menu-${rev.id}`} style="display: none;">
+                      <button type="button" class="review-menu-item toggle-visibility-btn" data-id={rev.id}>
+                        {rev.visibility === 'Hidden' ? '👁 Show on Site' : '🚫 Hide from Site'}
+                      </button>
+                      <button type="button" class="review-menu-item toggle-status-btn" data-id={rev.id}>
+                        {rev.status === 'Approved' ? '⏳ Set Pending' : '✓ Approve Review'}
+                      </button>
+                      <button type="button" class="review-menu-item delete-review-btn danger-text" data-id={rev.id}>
+                        🗑 Delete Review
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Bottom Pagination Controls (Exact from Screenshot) -->
+        <div class="reviews-bottom-bar">
+          <div class="reviews-showing-count-box">
+            <span class="reviews-showing-text" id="reviewsShowingText">
+              Showing 1 to {reviews.length} of {reviews.length} reviews
+            </span>
+            <div class="page-size-wrap">
+              <select id="reviewsPageSizeSelect" class="reviews-pagesize-dropdown">
+                <option value="10">10</option>
+                <option value="25">25</option>
+                <option value="50">50</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="reviews-pagination-group">
+            <button type="button" class="page-arrow-btn" id="reviewsFirstBtn" title="First Page">«</button>
+            <button type="button" class="page-arrow-btn" id="reviewsPrevBtn" title="Previous Page">‹</button>
+            <span class="reviews-page-label" id="reviewsPageLabel">Page 1 of 1</span>
+            <button type="button" class="page-arrow-btn" id="reviewsNextBtn" title="Next Page">›</button>
+            <button type="button" class="page-arrow-btn" id="reviewsLastBtn" title="Last Page">»</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ========================================================
+           VIEW 8: OFFERS & PROMOTIONS (MATCHES USER SCREENSHOT EXACTLY)
+           ======================================================== -->
+      <section class="admin-view" id="view-offers" style="display: none;">
+        <!-- Header -->
+        <div class="view-header offers-header-bar">
+          <h1 class="view-title-serif">Offers & Promotions</h1>
+          <p class="view-subtitle">Create popup offers that visitors will see when they visit the site</p>
+        </div>
+
+        <!-- Card 1: Current Offer Configuration -->
+        <div class="offers-config-card">
+          <div class="offers-card-header">
+            <div class="offers-card-title-row">
+              <svg class="offer-tag-icon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path>
+                <line x1="7" y1="7" x2="7.01" y2="7"></line>
+              </svg>
+              <h2 class="offers-card-title">Current Offer</h2>
+            </div>
+            <p class="offers-card-desc">Configure the popup offer that visitors will see once per session</p>
+          </div>
+
+          <!-- Toggle Box -->
+          <div class="offer-toggle-box">
+            <div class="offer-toggle-left">
+              <h3 class="offer-toggle-title">Offer Active</h3>
+              <p class="offer-toggle-sub">When enabled, visitors will see this offer popup once per session</p>
+            </div>
+            <label class="switch-toggle" for="offerActiveSwitch">
+              <input type="checkbox" id="offerActiveSwitch" checked={currentOffer.active} />
+              <span class="slider-round"></span>
+            </label>
+          </div>
+
+          <!-- Status Notice Banner -->
+          <div class={`offer-status-notice ${currentOffer.active ? 'active' : ''}`} id="offerStatusNotice">
+            <span class="status-dot-bullet" id="statusDotBullet"></span>
+            <span id="offerStatusNoticeText">
+              {currentOffer.active ? '• Offer is currently active' : '• Offer is currently disabled'}
+            </span>
+          </div>
+
+          <form id="offerConfigForm" class="offer-form-layout">
+            <!-- Field: Title -->
+            <div class="offer-form-group">
+              <label class="offer-label" for="offerTitleInput">Offer Title *</label>
+              <input 
+                type="text" 
+                id="offerTitleInput" 
+                class="offer-input-field" 
+                value={currentOffer.title || '10% off on tshirt bulk order'} 
+                required 
+              />
+              <span class="offer-field-hint">The main headline of your offer</span>
+            </div>
+
+            <!-- Field: Description -->
+            <div class="offer-form-group">
+              <label class="offer-label" for="offerDescInput">Offer Description *</label>
+              <input 
+                type="text" 
+                id="offerDescInput" 
+                class="offer-input-field" 
+                value={currentOffer.description || '10% off on tshirt bulk order above 5000 quant'} 
+                required 
+              />
+              <span class="offer-field-hint">Details about the offer</span>
+            </div>
+
+            <!-- Grid 2-cols: Link URL & Button Text -->
+            <div class="offer-form-grid-2">
+              <div class="offer-form-group">
+                <label class="offer-label" for="offerLinkInput">Link URL (Optional)</label>
+                <input 
+                  type="text" 
+                  id="offerLinkInput" 
+                  class="offer-input-field" 
+                  placeholder="e.g., /enquiry or /catalogue" 
+                  value={currentOffer.linkUrl || ''} 
+                />
+                <span class="offer-field-hint">Page to redirect when user clicks the offer button</span>
+              </div>
+
+              <div class="offer-form-group">
+                <label class="offer-label" for="offerButtonTextInput">Button Text (Optional)</label>
+                <input 
+                  type="text" 
+                  id="offerButtonTextInput" 
+                  class="offer-input-field" 
+                  placeholder="Claim offer" 
+                  value={currentOffer.buttonText || 'Claim offer'} 
+                />
+                <span class="offer-field-hint">Text for the call-to-action button (default: "View Offer")</span>
+              </div>
+            </div>
+
+            <!-- Save Offer Button -->
+            <div class="offer-form-actions">
+              <button type="submit" class="btn-save-offer" id="saveOfferBtn">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
+                  <polyline points="17 21 17 13 7 13 7 21"></polyline>
+                  <polyline points="7 3 7 8 15 8"></polyline>
+                </svg>
+                <span>Save Offer</span>
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <!-- Card 2: Preview Card -->
+        <div class="offers-preview-card">
+          <h2 class="preview-card-title">Preview</h2>
+          <p class="preview-card-sub">This is how the offer will appear to visitors</p>
+
+          <div class="offer-live-banner" id="offerLiveBanner">
+            <div class="banner-tag-badge">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path>
+                <line x1="7" y1="7" x2="7.01" y2="7"></line>
+              </svg>
+            </div>
+            <div class="banner-content">
+              <h3 class="banner-headline" id="previewHeadline">
+                {currentOffer.title || '10% off on tshirt bulk order'}
+              </h3>
+              <p class="banner-subtext" id="previewSubtext">
+                {currentOffer.description || '10% off on tshirt bulk order above 5000 quant'}
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ========================================================
+           VIEW 9: SETTINGS
+           ======================================================== -->
+      <section class="admin-view" id="view-settings" style="display: none;">
+        <div class="view-header">
+          <h1 class="view-title-serif">Site Settings</h1>
+          <p class="view-subtitle">Manage company contact info and admin credentials</p>
+        </div>
+
+        <div class="settings-grid">
+          <!-- Card 1: Website & WhatsApp Credentials -->
+          <div class="panel-card">
+            <div class="flex-align-gap mb-3">
+              <span class="settings-icon">⚙️</span>
+              <div>
+                <h3 class="font-semibold">General Site Info</h3>
+                <p class="text-xs text-muted">Contact numbers and notification receivers</p>
+              </div>
+            </div>
+
+            <form id="settingsForm" class="settings-form">
+              <div class="form-group mb-3">
+                <label class="form-label" for="settingWhatsApp">Company Official WhatsApp</label>
+                <input type="text" id="settingWhatsApp" class="input-field" value={siteSettings.company_whatsapp || '+91 76239 06747'} />
+              </div>
+              <div class="form-group mb-3">
+                <label class="form-label" for="settingEmail">Inquiry Notification Email</label>
+                <input type="email" id="settingEmail" class="input-field" value={siteSettings.notification_email || 'Hydrocaresolutions5@gmail.com'} />
+              </div>
+              <div class="form-group mb-3">
+                <label class="form-label" for="settingAdminPin">Admin Access Key / PIN</label>
+                <input type="password" id="settingAdminPin" class="input-field" value={siteSettings.admin_pin || 'admin12345'} />
+              </div>
+              <button type="button" class="btn-gold-action" id="saveSettingsBtn">
+                Save Settings
+              </button>
+            </form>
+          </div>
+
+          <!-- Card 2: Cloudflare D1 Database Status & Sync -->
+          <div class="panel-card">
+            <div class="flex-align-gap mb-3">
+              <span class="settings-icon">🗄️</span>
+              <div>
+                <h3 class="font-semibold">Cloudflare D1 Database</h3>
+                <p class="text-xs text-muted">Database sync & table management</p>
+              </div>
+            </div>
+
+            <div class="settings-status-box mb-3">
+              <div class="status-row">
+                <span class="text-muted">Status:</span>
+                <span class={`status-badge-pill ${d1Ready ? 'approved' : 'pending'}`}>
+                  {d1Ready ? 'Configured' : 'Local Fallback'}
+                </span>
+              </div>
+              <div class="status-row">
+                <span class="text-muted">Database ID:</span>
+                <span class="font-mono text-xs">{d1Config.databaseId ? d1Config.databaseId.slice(0, 12) + '...' : 'Not set'}</span>
+              </div>
+              <div class="status-row">
+                <span class="text-muted">Account ID:</span>
+                <span class="font-mono text-xs">{d1Config.accountId ? d1Config.accountId.slice(0, 10) + '...' : 'Not set'}</span>
+              </div>
+            </div>
+
+            <div id="d1SyncResult" style="display: none; margin-bottom: 12px; font-size: 12.5px; padding: 10px; border-radius: 6px;"></div>
+
+            <button type="button" class="btn-dark-add" id="syncD1Btn" style="width: 100%; justify-content: center;">
+              <span>⚡</span>
+              <span>Test & Sync D1 Tables</span>
+            </button>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- ========================================================
+       MODAL 1: ADD / EDIT CATEGORY MODAL (MATCHES SCREENSHOT)
+       ======================================================== -->
+  <div class="modal-backdrop" id="categoryModal" style="display: none;">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 id="categoryModalTitle">Add New Category</h3>
+        <button type="button" class="close-modal-btn" id="closeCategoryModalBtn">&times;</button>
+      </div>
+
+      <form id="categoryForm" class="modal-form">
+        <input type="hidden" id="editCategoryId" />
+
+        <div class="form-group">
+          <label class="form-label">Category Name *</label>
+          <input type="text" id="catNameInput" required class="input-field" placeholder="e.g. MEAT & POULTRY PADS" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Image Path / URL *</label>
+          <select id="catImagePreset" class="input-field mb-2">
+            <option value="/images/products/meat-pads.jpg">Meat Pads Image (/images/products/meat-pads.jpg)</option>
+            <option value="/images/products/seafood-pads.jpg">Seafood Pads Image (/images/products/seafood-pads.jpg)</option>
+            <option value="/images/products/fruit-pads.jpg">Fruit Pads Image (/images/products/fruit-pads.jpg)</option>
+            <option value="/images/products/industrial-soaker-pads.jpg">Cold Chain Image (/images/products/industrial-soaker-pads.jpg)</option>
+            <option value="/images/products/white-black-pads.jpg">Black Gourmet Image (/images/products/white-black-pads.jpg)</option>
+            <option value="custom">Custom URL...</option>
+          </select>
+          <input type="text" id="catImageInput" class="input-field" value="/images/products/meat-pads.jpg" placeholder="Enter image URL" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Status</label>
+          <select id="catStatusInput" class="input-field">
+            <option value="Active">Active</option>
+            <option value="Inactive">Inactive</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Manufacturing Description</label>
+          <textarea id="catDescInput" class="input-field text-area" rows="2" placeholder="Food-grade certified absorbent soaker pads for fresh trays..."></textarea>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn-cancel" id="cancelCategoryBtn">Cancel</button>
+          <button type="submit" class="btn-gold-action" id="saveCategoryBtn">Save Category</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ========================================================
+       MODAL 2: ADD / EDIT PRODUCT MODAL
+       ======================================================== -->
+  <div class="modal-backdrop" id="productModal" style="display: none;">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 id="modalTitle">Add Food Absorbent Pad Line</h3>
+        <button type="button" class="close-modal-btn" id="closeProductModalBtn">&times;</button>
+      </div>
+
+      <form id="productForm" class="modal-form">
+        <input type="hidden" id="editProductId" />
+
+        <div class="form-grid-2">
+          <div class="form-group">
+            <label class="form-label">Product Name *</label>
+            <input type="text" id="prodName" required class="input-field" placeholder="e.g. Meat & Poultry Absorbent Pads" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Product Code *</label>
+            <input type="text" id="prodCode" required class="input-field" placeholder="e.g. PAD-05" />
+          </div>
+        </div>
+
+        <div class="form-grid-2">
+          <div class="form-group">
+            <label class="form-label">Category *</label>
+            <select id="prodCategory" class="input-field" required>
+              {categories.map(c => (
+                <option value={c.name}>{c.name}</option>
+              ))}
+              <option value="Meat & Poultry Packaging">Meat & Poultry Packaging</option>
+              <option value="Seafood & Fishery Logistics">Seafood & Fishery Logistics</option>
+              <option value="Fresh Produce & Fruit Trays">Fresh Produce & Fruit Trays</option>
+              <option value="Cold Chain & Ice Pads">Cold Chain & Ice Pads</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Liquid Absorbency *</label>
+            <input type="text" id="prodGsmRange" required class="input-field" placeholder="e.g. 50ml – 120ml / pad" />
+          </div>
+        </div>
+
+        <div class="form-grid-2">
+          <div class="form-group">
+            <label class="form-label">Minimum Order Qty (MOQ) *</label>
+            <input type="number" id="prodMoq" required class="input-field" placeholder="5000" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Lead Time *</label>
+            <input type="text" id="prodLeadTime" required class="input-field" placeholder="3-5 Days Dispatch" />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Short Description *</label>
+          <textarea id="prodShortDesc" required class="input-field text-area" rows="2"></textarea>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Wholesale Price Tiers (e.g. 5k-25k: ₹0.75, 100k+: ₹0.42)</label>
+          <input type="text" id="prodPriceTiersStr" class="input-field" placeholder="5k-25k: ₹0.75, 25k-100k: ₹0.58, 100k+: ₹0.42" />
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn-cancel" id="cancelProductBtn">Cancel</button>
+          <button type="submit" class="btn-gold-action" id="saveProductBtn">Save Product Line</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ========================================================
+       MODAL 3: INQUIRY DETAILS & NOTES MODAL
+       ======================================================== -->
+  <div class="modal-backdrop" id="inquiryDetailModal" style="display: none;">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 id="inquiryModalTitle">Enquiry Details</h3>
+        <button type="button" class="close-modal-btn" id="closeInquiryModalBtn">&times;</button>
+      </div>
+
+      <div class="modal-body" id="inquiryModalBody">
+        <!-- Rendered via JS -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Element -->
+  <div class="admin-toast" id="adminToast"></div>
+</AdminLayout>
+
+<style>
+  /* ==========================================================
+     GLOBAL ADMIN LAYOUT STYLES
+     ========================================================== */
+  .admin-layout {
+    display: flex;
+    min-height: 100vh;
+    background-color: #F0F4F8;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  }
+
+  /* ==========================================================
+     LEFT SIDEBAR STYLES (EXACT REPLICA OF IMAGE 1)
+     ========================================================== */
+  .admin-sidebar {
+    width: 350px;
+    background-color: #FFFFFF;
+    border-right: 1px solid #E2E8F0;
+    display: flex;
+    flex-direction: column;
+    padding: 28px 22px;
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    flex-shrink: 0;
+    box-sizing: border-box;
+    z-index: 50;
+  }
+
+  .sidebar-brand-box {
+    background-color: transparent;
+    border: none;
+    padding: 8px 4px;
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    text-decoration: none;
+  }
+
+  .brand-logo-badge {
+    width: 46px;
+    height: 46px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .admin-brand-logo {
+    width: 46px;
+    height: 46px;
+    object-fit: contain;
+    display: block;
+    filter: drop-shadow(0 2px 5px rgba(0, 0, 0, 0.08));
+  }
+
+  .admin-brand-logo.small {
+    width: 32px;
+    height: 32px;
+  }
+
+  .brand-name-stack {
+    display: inline-flex;
+    flex-direction: column;
+    width: fit-content;
+    line-height: 1;
+    user-select: none;
+  }
+
+  .brand-line-1 {
+    font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-size: 22px;
+    font-weight: 900;
+    letter-spacing: -0.2px;
+    display: flex;
+    align-items: center;
+    line-height: 1;
+  }
+
+  .brand-name-stack .brand-hydro {
+    color: #004B98;
+    font-weight: 900;
+  }
+
+  .brand-name-stack .brand-care {
+    color: #1CA444;
+    font-weight: 900;
+  }
+
+  .brand-line-2 {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    margin-top: 3px;
+    gap: 4px;
+    line-height: 1;
+  }
+
+  .brand-name-stack .brand-sol-line {
+    flex: 1;
+    height: 1.8px;
+    background-color: #003876;
+    border-radius: 1px;
+    min-width: 6px;
+  }
+
+  .brand-name-stack .brand-sol-text {
+    font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-size: 10px;
+    font-weight: 800;
+    color: #003876;
+    letter-spacing: 2.2px;
+    padding-left: 2px;
+    line-height: 1;
+    white-space: nowrap;
+    text-transform: uppercase;
+  }
+
+  .sidebar-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    flex: 1;
+    overflow-y: auto;
+  }
+
+  /* Navigation Button States */
+  .nav-item {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    width: 100%;
+    padding: 13.5px 20px;
+    border: none;
+    background: transparent;
+    border-radius: 10px;
+    color: #4B5563;
+    font-size: 16.5px;
+    font-weight: 500;
+    cursor: pointer;
+    text-align: left;
+    letter-spacing: 0.2px;
+    transition: background-color 0.15s ease, color 0.15s ease;
+  }
+
+  .nav-item:hover {
+    background-color: #FDF2F2;
+    color: #6E2219;
+  }
+
+  .nav-item.active {
+    background-color: #6E2219; /* Maroon theme matching Request Quote */
+    color: #FFFFFF;
+    font-weight: 600;
+    box-shadow: 0 4px 14px rgba(110, 34, 25, 0.28);
+  }
+
+  .nav-item.active:hover {
+    background-color: #842A1F;
+    color: #FFFFFF;
+  }
+
+  .nav-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 22px;
+    height: 22px;
+    flex-shrink: 0;
+  }
+
+  .nav-icon svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  .sidebar-footer {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    padding-top: 24px;
+    margin-top: auto;
+  }
+
+  .sidebar-link-view {
+    font-size: 15px;
+    color: #64748B;
+    font-weight: 500;
+    text-decoration: none;
+    padding-left: 4px;
+    transition: color 0.15s;
+  }
+
+  .sidebar-link-view:hover {
+    color: #0F172A;
+  }
+
+  .sidebar-signout-btn {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 13px 20px;
+    border: 1px solid #E2E8F0;
+    border-radius: 10px;
+    background: #FFFFFF;
+    color: #1E293B;
+    font-size: 15.5px;
+    font-weight: 600;
+    cursor: pointer;
+    width: 100%;
+    transition: all 0.15s;
+  }
+
+  .sidebar-signout-btn:hover {
+    background-color: #F8FAFC;
+    border-color: #CBD5E1;
+  }
+
+  .sidebar-signout-btn svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  /* ==========================================================
+     MAIN CANVAS STYLES
+     ========================================================== */
+  .admin-main {
+    flex: 1;
+    padding: 32px 48px 60px 48px;
+    overflow-y: auto;
+    box-sizing: border-box;
+  }
+
+  .mobile-top-bar {
+    display: none;
+  }
+
+  /* View Header */
+  .view-header {
+    margin-bottom: 28px;
+  }
+
+  .view-header.flex-between {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+  }
+
+  .view-title-serif {
+    font-family: 'Outfit', 'Plus Jakarta Sans', sans-serif;
+    font-size: 24px;
+    font-weight: 800;
+    color: #1E293B;
+    letter-spacing: -0.02em;
+    line-height: 1.25;
+  }
+
+  .view-subtitle {
+    font-size: 13.5px;
+    color: #64748B;
+    margin-top: 5px;
+    font-weight: 400;
+  }
+
+  /* Button: Add Category (Maroon theme matching Request Quote) */
+  .btn-dark-add {
+    background-color: #6E2219;
+    color: #FFFFFF;
+    font-size: 13px;
+    font-weight: 600;
+    padding: 9px 18px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: background-color 0.2s, transform 0.1s, box-shadow 0.2s;
+    box-shadow: 0 2px 6px rgba(110, 34, 25, 0.2);
+  }
+
+  .btn-dark-add:hover {
+    background-color: #842A1F;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 14px rgba(110, 34, 25, 0.3);
+  }
+
+  /* ==========================================================
+     CATEGORY MANAGEMENT TABLE CARD (EXACT REPLICA OF IMAGE 1)
+     ========================================================== */
+  .categories-table-panel {
+    background: #FFFFFF;
+    border: 1px solid #E2E8F0;
+    border-radius: 16px;
+    padding: 24px 28px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
+    min-height: max(580px, calc(100vh - 240px));
+  }
+
+  .panel-card-heading {
+    font-size: 16px;
+    font-weight: 600;
+    color: #0F172A;
+    margin-bottom: 20px;
+  }
+
+  .categories-data-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+
+  .categories-data-table th {
+    padding: 14px 18px;
+    font-weight: 600;
+    color: #0F172A;
+    border-bottom: 1px solid #EDF2F7;
+    font-size: 13px;
+    letter-spacing: 0.2px;
+  }
+
+  .categories-data-table td {
+    padding: 14px 18px;
+    border-bottom: 1px solid #F1F5F9;
+    vertical-align: middle;
+    font-size: 13px;
+  }
+
+  .category-table-row:hover td {
+    background-color: #FAFCFE;
+  }
+
+  .categories-data-table .col-img {
+    width: 80px;
+    text-align: left;
+  }
+
+  .categories-data-table .col-name {
+    width: 320px;
+    text-align: left;
+  }
+
+  .categories-data-table .col-status {
+    width: 200px;
+    text-align: left;
+  }
+
+  .categories-data-table .col-actions {
+    text-align: right;
+  }
+
+  .cat-img-wrap {
+    width: 56px;
+    height: 42px;
+    border-radius: 8px;
+    overflow: hidden;
+    background: #F1F5F9;
+    border: 1px solid #E2E8F0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .cat-table-thumb {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .cat-name-text {
+    font-size: 13.5px;
+    font-weight: 600;
+    color: #0F172A;
+    letter-spacing: 0.3px;
+    text-transform: uppercase;
+  }
+
+  .status-badge-pill.active {
+    background-color: #0F172A; /* Solid black pill from Image 1 */
+    color: #FFFFFF;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 4px 14px;
+    border-radius: 9999px;
+    display: inline-block;
+    line-height: 1.4;
+    letter-spacing: 0.3px;
+  }
+
+  .cat-action-icons {
+    display: inline-flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 20px;
+  }
+
+  .cat-icon-btn {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    color: #1E293B;
+    padding: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.15s ease, color 0.15s ease;
+  }
+
+  .cat-icon-btn svg {
+    width: 19px;
+    height: 19px;
+  }
+
+  .cat-icon-btn:hover {
+    transform: scale(1.15);
+  }
+
+  .cat-icon-btn.btn-delete-category {
+    color: #EF4444;
+  }
+
+  .cat-icon-btn.btn-delete-category:hover {
+    transform: scale(1.15);
+  }
+
+  /* ==========================================================
+     TOP METRIC CARDS (4 CARDS GRID)
+     ========================================================== */
+  .metrics-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 18px;
+    margin-bottom: 24px;
+  }
+
+  .metric-card {
+    background: #FFFFFF;
+    border: 1px solid #E2E8F0;
+    border-radius: 16px;
+    padding: 28px 24px;
+    min-height: 190px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+    box-sizing: border-box;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+  }
+
+  .metric-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+  }
+
+  .metric-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .metric-label {
+    font-size: 13px;
+    font-weight: 500;
+    color: #475569;
+  }
+
+  .metric-icon {
+    color: #64748B;
+    display: flex;
+    align-items: center;
+  }
+
+  .metric-icon svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  .metric-value {
+    font-size: 28px;
+    font-weight: 700;
+    color: #0F172A;
+    margin: 8px 0 3px 0;
+    line-height: 1.1;
+  }
+
+  .metric-sub {
+    font-size: 12px;
+    color: #64748B;
+  }
+
+  /* ==========================================================
+     LOWER SPLIT GRID (RECENT ENQUIRIES + QUICK ACTIONS) - EXTENDED TO BOTTOM
+     ========================================================== */
+  .dashboard-split-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 24px;
+    align-items: stretch;
+    min-height: max(560px, calc(100vh - 390px));
+    margin-bottom: 24px;
+  }
+
+  .panel-card {
+    background: #FFFFFF;
+    border: 1px solid #E2E8F0;
+    border-radius: 16px;
+    padding: 24px 26px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+    box-sizing: border-box;
+  }
+
+  .enquiries-panel, .actions-panel {
+    display: flex;
+    flex-direction: column;
+    min-height: max(560px, calc(100vh - 390px));
+  }
+
+  .panel-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid #F1F5F9;
+  }
+
+  .panel-title {
+    font-size: 16px;
+    font-weight: 600;
+    color: #0F172A;
+  }
+
+  .panel-header-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .toggle-pill-group {
+    display: flex;
+    background: #F8FAFC;
+    border: 1px solid #E2E8F0;
+    border-radius: 8px;
+    padding: 3px;
+    gap: 3px;
+  }
+
+  .pill-btn {
+    border: none;
+    background: transparent;
+    padding: 5px 12px;
+    font-size: 13px;
+    font-weight: 500;
+    color: #64748B;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+
+  .pill-btn.active {
+    background: #FFFFFF;
+    color: #0F172A;
+    font-weight: 600;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  }
+
+  .arrow-jump-btn {
+    border: 1px solid #E2E8F0;
+    background: #FFFFFF;
+    border-radius: 8px;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #64748B;
+    cursor: pointer;
+    font-size: 13px;
+    transition: all 0.15s;
+  }
+
+  .arrow-jump-btn:hover {
+    background: #F8FAFC;
+    color: #0F172A;
+    border-color: #CBD5E1;
+  }
+
+  /* Enquiry Row List */
+  .enquiries-list, .designs-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .enquiry-item-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 14px 16px;
+    border-radius: 10px;
+    border: 1px solid #F1F5F9;
+    background: #FAFCFE;
+    transition: all 0.15s;
+    cursor: pointer;
+  }
+
+  .enquiry-item-row:hover {
+    background-color: #FFFFFF;
+    border-color: #CBD5E1;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
+  }
+
+  .enquiry-item-left .company-name {
+    font-size: 13.5px;
+    font-weight: 600;
+    color: #0F172A;
+  }
+
+  .enquiry-item-left .company-sub {
+    font-size: 12.5px;
+    color: #64748B;
+    margin-top: 3px;
+  }
+
+  .enquiry-item-right {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 5px;
+  }
+
+  .status-badge-pill {
+    display: inline-block;
+    padding: 3px 12px;
+    border-radius: 9999px;
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: capitalize;
+    background-color: #B45309;
+    color: #FFFFFF;
+  }
+
+  .status-badge-pill.closed, .status-badge-pill.approved {
+    background-color: #15803D;
+    color: #FFFFFF;
+  }
+
+  .status-badge-pill.cancelled, .status-badge-pill.canceled, .status-badge-pill.rejected {
+    background-color: #DC2626;
+    color: #FFFFFF;
+  }
+
+  .status-badge-pill.pending, .status-badge-pill.new, .status-badge-pill.in-review, .status-badge-pill.contacted, .status-badge-pill.quoted, .status-badge-pill.sampling {
+    background-color: #B45309;
+    color: #FFFFFF;
+  }
+
+  .enquiry-date {
+    font-size: 12px;
+    color: #94A3B8;
+  }
+
+  /* ==========================================================
+     QUICK ACTIONS (EXACT MATCH TO SCREENSHOT)
+     ========================================================== */
+  .quick-actions-list {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .quick-action-card {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 16px 18px;
+    border: 1px solid #E2E8F0;
+    border-radius: 12px;
+    background: #FFFFFF;
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+
+  .quick-action-card:hover {
+    border-color: #6E2219;
+    background-color: #FFF8F8;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(110, 34, 25, 0.1);
+  }
+
+  .qa-icon-box {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    background: #FDF2F2;
+    border: 1px solid #FECACA;
+    color: #6E2219;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .qa-icon-box svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  .qa-title {
+    font-size: 13.5px;
+    font-weight: 600;
+    color: #0F172A;
+  }
+
+  .qa-sub {
+    font-size: 12.5px;
+    color: #64748B;
+    margin-top: 2px;
+  }
+
+  /* ==========================================================
+     MODERN DATA TABLES & CATALOGUE GRIDS
+     ========================================================== */
+  .modern-data-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+    text-align: left;
+  }
+
+  .modern-data-table th {
+    padding: 12px 14px;
+    font-weight: 600;
+    color: #475569;
+    border-bottom: 1px solid #E2E8F0;
+    background: #F8FAFC;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .modern-data-table td {
+    padding: 14px;
+    border-bottom: 1px solid #F1F5F9;
+    vertical-align: middle;
+  }
+
+  .modern-data-table tr:hover td {
+    background-color: #F8FAFC;
+  }
+
+  .fabrics-table-card, .enquiries-table-card {
+    background: #FFFFFF;
+    border: 1px solid #E2E8F0;
+    border-radius: 12px;
+    overflow: hidden;
+  }
+
+  /* ==========================================================
+     ENQUIRIES VIEW STYLES (MATCHES USER SCREENSHOT EXACTLY)
+     ========================================================== */
+  .enquiries-header-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 22px;
+  }
+
+  .enquiries-header-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .btn-refresh-clean {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    background: #FFFFFF;
+    border: 1px solid #E2E8F0;
+    color: #1E293B;
+    font-size: 13px;
+    font-weight: 500;
+    padding: 8px 14px;
+    border-radius: 6px;
+    cursor: pointer;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+    transition: all 0.15s ease;
+  }
+
+  .btn-refresh-clean:hover {
+    background: #F8FAFC;
+    border-color: #CBD5E1;
+  }
+
+  .btn-refresh-clean.refreshing .refresh-icon {
+    animation: spinRefreshIcon 0.8s linear infinite;
+  }
+
+  @keyframes spinRefreshIcon {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+
+  .sidebar-unread-badge {
+    margin-left: auto;
+    background: #DC2626;
+    color: #FFFFFF;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 2px 7px;
+    border-radius: 999px;
+    line-height: 1.2;
+    box-shadow: 0 1px 3px rgba(220, 38, 38, 0.3);
+  }
+
+  @keyframes newRowGlow {
+    0% { background-color: #D1FAE5; box-shadow: inset 4px 0 0 #10B981; }
+    60% { background-color: #ECFDF5; }
+    100% { background-color: transparent; box-shadow: none; }
+  }
+
+  .row-just-added {
+    animation: newRowGlow 4.5s ease-out;
+  }
+
+  .btn-export-csv {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: #FFFFFF;
+    border: 1px solid #E2E8F0;
+    color: #1E293B;
+    font-size: 13px;
+    font-weight: 500;
+    padding: 8px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+    transition: all 0.15s ease;
+  }
+
+  .btn-export-csv:hover {
+    background: #F8FAFC;
+    border-color: #CBD5E1;
+  }
+
+  .btn-delete-all {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: #DC2626;
+    border: none;
+    color: #FFFFFF;
+    font-size: 13px;
+    font-weight: 600;
+    padding: 8px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    box-shadow: 0 1px 2px rgba(220, 38, 38, 0.15);
+    transition: all 0.15s ease;
+  }
+
+  .btn-delete-all:hover {
+    background: #B91C1C;
+  }
+
+  .enquiries-screenshot-card {
+    background: #FFFFFF;
+    border: 1px solid #E2E8F0;
+    border-radius: 12px;
+    padding: 24px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+  }
+
+  .enquiries-filters-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+  }
+
+  .search-input-box {
+    position: relative;
+    width: 320px;
+    max-width: 100%;
+  }
+
+  .search-box-icon {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #94A3B8;
+    pointer-events: none;
+  }
+
+  .screenshot-search-input {
+    width: 100%;
+    height: 38px;
+    padding: 0 14px 0 36px;
+    border: 1px solid #E2E8F0;
+    border-radius: 8px;
+    font-size: 13px;
+    color: #1E293B;
+    background: #FFFFFF;
+    box-sizing: border-box;
+    transition: border-color 0.15s;
+  }
+
+  .screenshot-search-input:focus {
+    outline: none;
+    border-color: #6E2219;
+    box-shadow: 0 0 0 3px rgba(110, 34, 25, 0.12);
+  }
+
+  .custom-select-wrap {
+    position: relative;
+  }
+
+  .screenshot-select {
+    height: 38px;
+    padding: 0 32px 0 14px;
+    border: 1px solid #E2E8F0;
+    border-radius: 8px;
+    font-size: 13px;
+    color: #1E293B;
+    background: #FFFFFF url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2364748B' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E") no-repeat right 12px center;
+    appearance: none;
+    -webkit-appearance: none;
+    cursor: pointer;
+    box-sizing: border-box;
+    transition: border-color 0.15s, box-shadow 0.15s;
+  }
+
+  .screenshot-select:focus {
+    outline: none;
+    border-color: #6E2219;
+    box-shadow: 0 0 0 3px rgba(110, 34, 25, 0.12);
+  }
+
+  .enquiries-table-outer {
+    border: 1px solid #E2E8F0;
+    border-radius: 8px;
+    overflow-x: auto;
+  }
+
+  .enquiries-clean-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+
+  .enquiries-clean-table th {
+    background: #FFFFFF;
+    color: #0F172A;
+    font-size: 13px;
+    font-weight: 600;
+    padding: 14px 18px;
+    text-align: left;
+    border-bottom: 1px solid #E2E8F0;
+    white-space: nowrap;
+  }
+
+  .enquiries-clean-table td {
+    padding: 16px 18px;
+    border-bottom: 1px solid #F1F5F9;
+    vertical-align: middle;
+    background: #FFFFFF;
+  }
+
+  .enquiries-clean-table tbody tr:last-child td {
+    border-bottom: none;
+  }
+
+  .enquiries-clean-table tbody tr:hover td {
+    background-color: #F8FAFC;
+  }
+
+  .enquiry-date-text {
+    color: #334155;
+    font-size: 13px;
+    font-weight: 500;
+    white-space: nowrap;
+  }
+
+  /* Priority Pills */
+  .priority-pill {
+    display: inline-block;
+    padding: 3px 12px;
+    border-radius: 9999px;
+    font-size: 12px;
+    font-weight: 600;
+    line-height: 1.3;
+    text-align: center;
+  }
+
+  .priority-pill.medium {
+    background: #FEF9C3;
+    color: #854D0E;
+  }
+
+  .priority-pill.low {
+    background: #F1F5F9;
+    color: #475569;
+  }
+
+  .priority-pill.high, .priority-pill.urgent {
+    background: #FEE2E2;
+    color: #B91C1C;
+  }
+
+  /* Contact Column */
+  .contact-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+  }
+
+  .contact-main-name {
+    font-size: 13px;
+    font-weight: 700;
+    color: #0F172A;
+    line-height: 1.3;
+  }
+
+  .contact-sub-phone {
+    font-size: 12px;
+    color: #64748B;
+  }
+
+  /* Product Column */
+  .product-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+  }
+
+  .product-main-name {
+    font-size: 13px;
+    font-weight: 600;
+    color: #0F172A;
+    line-height: 1.3;
+  }
+
+  .product-sub-desc {
+    font-size: 12px;
+    color: #64748B;
+  }
+
+  .quantity-text {
+    font-size: 13px;
+    color: #334155;
+    font-weight: 500;
+    white-space: nowrap;
+  }
+
+  /* Status Dark Pill Colors (Closed: Green, Cancelled: Red, Baki Steps: Dark Yellow) */
+  .status-dark-pill {
+    display: inline-block;
+    background: #B45309; /* Dark Yellow default for pending, new, contacted, etc. */
+    color: #FFFFFF;
+    font-size: 12px;
+    font-weight: 700;
+    padding: 3px 12px;
+    border-radius: 9999px;
+    text-align: center;
+    white-space: nowrap;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.06);
+  }
+
+  /* Closed: Green */
+  .status-dark-pill.closed {
+    background: #15803D;
+    color: #FFFFFF;
+  }
+
+  /* Cancelled: Red */
+  .status-dark-pill.cancelled,
+  .status-dark-pill.canceled {
+    background: #DC2626;
+    color: #FFFFFF;
+  }
+
+  /* Baki Steps: Dark Yellow */
+  .status-dark-pill.pending,
+  .status-dark-pill.new,
+  .status-dark-pill.contacted,
+  .status-dark-pill.quoted,
+  .status-dark-pill.sampling,
+  .status-dark-pill.in-progress,
+  .status-dark-pill.in-review {
+    background: #B45309;
+    color: #FFFFFF;
+  }
+
+  /* Action Buttons */
+  .actions-icon-row {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 12px;
+  }
+
+  .action-btn-icon {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 4px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: #475569;
+    border-radius: 4px;
+    transition: transform 0.1s, opacity 0.15s;
+  }
+
+  .action-btn-icon:hover {
+    opacity: 0.8;
+    transform: scale(1.1);
+  }
+
+  .action-btn-icon.delete-inquiry-btn {
+    color: #DC2626;
+  }
+
+  /* Pagination Bar (Exact from screenshot) */
+  .enquiries-pagination-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 18px;
+    padding-top: 6px;
+  }
+
+  .pagination-count-label {
+    font-size: 13px;
+    color: #64748B;
+    font-weight: 400;
+  }
+
+  .pagination-btn-group {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .page-arrow-btn {
+    width: 32px;
+    height: 32px;
+    background: #FFFFFF;
+    border: 1px solid #E2E8F0;
+    border-radius: 6px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    color: #64748B;
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+
+  .page-arrow-btn:hover:not(:disabled) {
+    background: #F8FAFC;
+    color: #0F172A;
+    border-color: #CBD5E1;
+  }
+
+  .page-arrow-btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+
+  /* ==========================================================
+     CUSTOMER REVIEWS VIEW (MATCHES USER SCREENSHOT EXACTLY)
+     ========================================================== */
+  .reviews-header-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 22px;
+  }
+
+  .reviews-header-filters {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .reviews-filter-select-wrap {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+  }
+
+  .filter-funnel-icon {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #64748B;
+    pointer-events: none;
+    width: 15px;
+    height: 15px;
+  }
+
+  .reviews-filter-dropdown {
+    height: 38px;
+    padding: 0 34px 0 36px;
+    border: 1px solid #E2E8F0;
+    border-radius: 8px;
+    font-size: 13px;
+    color: #1E293B;
+    background: #FFFFFF url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2364748B' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E") no-repeat right 12px center;
+    appearance: none;
+    -webkit-appearance: none;
+    cursor: pointer;
+    box-sizing: border-box;
+    transition: border-color 0.15s;
+  }
+
+  .reviews-filter-dropdown:focus {
+    outline: none;
+    border-color: #94A3B8;
+  }
+
+  .reviews-table-container-card {
+    background: #FFFFFF;
+    border: 1px solid #E2E8F0;
+    border-radius: 12px;
+    overflow: visible;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+  }
+
+  .reviews-screenshot-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+
+  .reviews-screenshot-table th {
+    background: #FFFFFF;
+    color: #0F172A;
+    font-size: 13px;
+    font-weight: 600;
+    padding: 14px 18px;
+    text-align: left;
+    border-bottom: 1px solid #F1F5F9;
+    white-space: nowrap;
+  }
+
+  .reviews-screenshot-table td {
+    padding: 16px 18px;
+    border-bottom: 1px solid #F1F5F9;
+    vertical-align: middle;
+    background: #FFFFFF;
+  }
+
+  .reviews-screenshot-table tbody tr:last-child td {
+    border-bottom: none;
+  }
+
+  .reviews-screenshot-table tbody tr:hover td {
+    background-color: #F8FAFC;
+  }
+
+  .review-date-text {
+    color: #334155;
+    font-size: 13px;
+    font-weight: 500;
+    white-space: nowrap;
+  }
+
+  .reviewer-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .reviewer-name {
+    font-size: 13px;
+    font-weight: 600;
+    color: #0F172A;
+  }
+
+  .reviewer-company {
+    font-size: 12px;
+    color: #64748B;
+  }
+
+  .rating-star-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-weight: 600;
+    font-size: 13px;
+    color: #0F172A;
+  }
+
+  .rating-star-badge .star-icon {
+    color: #EAB308;
+    font-size: 15px;
+    line-height: 1;
+  }
+
+  .review-message-text {
+    font-size: 13px;
+    color: #475569;
+    line-height: 1.4;
+  }
+
+  /* Status Pill - Matches Screenshot (Green) */
+  .review-status-pill {
+    display: inline-block;
+    padding: 3px 12px;
+    border-radius: 9999px;
+    font-size: 12px;
+    font-weight: 600;
+    line-height: 1.3;
+    text-align: center;
+    white-space: nowrap;
+  }
+
+  .review-status-pill.approved {
+    background: #10B981;
+    color: #FFFFFF;
+  }
+
+  .review-status-pill.pending {
+    background: #FEF9C3;
+    color: #854D0E;
+  }
+
+  .review-status-pill.rejected {
+    background: #FEE2E2;
+    color: #DC2626;
+  }
+
+  /* Visibility Pill - Matches Screenshot (Grey) */
+  .review-visibility-pill {
+    display: inline-block;
+    padding: 3px 12px;
+    border-radius: 9999px;
+    font-size: 12px;
+    font-weight: 500;
+    line-height: 1.3;
+    text-align: center;
+    white-space: nowrap;
+  }
+
+  .review-visibility-pill.hidden {
+    background: #F1F5F9;
+    color: #64748B;
+  }
+
+  .review-visibility-pill.visible {
+    background: #EFF6FF;
+    color: #2563EB;
+  }
+
+  .action-dots-btn {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 4px 6px;
+    color: #475569;
+    border-radius: 4px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.15s, color 0.15s;
+  }
+
+  .action-dots-btn:hover {
+    background: #F1F5F9;
+    color: #0F172A;
+  }
+
+  .review-action-dropdown {
+    position: absolute;
+    right: 18px;
+    top: 42px;
+    background: #FFFFFF;
+    border: 1px solid #E2E8F0;
+    border-radius: 8px;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    z-index: 50;
+    min-width: 140px;
+    padding: 4px 0;
+    text-align: left;
+  }
+
+  .review-menu-item {
+    width: 100%;
+    text-align: left;
+    padding: 8px 12px;
+    font-size: 12.5px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #1E293B;
+    display: block;
+    transition: background 0.1s;
+  }
+
+  .review-menu-item:hover {
+    background: #F8FAFC;
+  }
+
+  .review-menu-item.danger-text {
+    color: #DC2626;
+  }
+
+  /* Bottom Controls Bar (Matches Screenshot) */
+  .reviews-bottom-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 18px;
+    padding-top: 4px;
+  }
+
+  .reviews-showing-count-box {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .reviews-showing-text {
+    font-size: 13px;
+    color: #64748B;
+  }
+
+  .reviews-pagesize-dropdown {
+    height: 32px;
+    padding: 0 24px 0 10px;
+    border: 1px solid #E2E8F0;
+    border-radius: 6px;
+    font-size: 13px;
+    color: #334155;
+    background: #FFFFFF url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 24 24' fill='none' stroke='%2364748B' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E") no-repeat right 8px center;
+    appearance: none;
+    -webkit-appearance: none;
+    cursor: pointer;
+  }
+
+  .reviews-pagination-group {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .reviews-page-label {
+    font-size: 13px;
+    color: #0F172A;
+    font-weight: 500;
+    margin: 0 4px;
+    white-space: nowrap;
+  }
+
+  /* ==========================================================
+     OFFERS & PROMOTIONS VIEW (MATCHES SCREENSHOT EXACTLY)
+     ========================================================== */
+  .offers-header-bar {
+    margin-bottom: 22px;
+  }
+
+  .offers-config-card {
+    background: #FFFFFF;
+    border: 1px solid #E2E8F0;
+    border-radius: 12px;
+    padding: 24px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+    margin-bottom: 24px;
+  }
+
+  .offers-card-header {
+    margin-bottom: 20px;
+  }
+
+  .offers-card-title-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .offer-tag-icon {
+    color: #0F172A;
+  }
+
+  .offers-card-title {
+    font-size: 16px;
+    font-weight: 600;
+    color: #0F172A;
+    margin: 0;
+  }
+
+  .offers-card-desc {
+    font-size: 13px;
+    color: #64748B;
+    margin-top: 4px;
+  }
+
+  /* Offer Toggle Box */
+  .offer-toggle-box {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 20px;
+    border: 1px solid #E2E8F0;
+    border-radius: 8px;
+    background: #FFFFFF;
+    margin-bottom: 16px;
+  }
+
+  .offer-toggle-title {
+    font-size: 13.5px;
+    font-weight: 600;
+    color: #0F172A;
+    margin: 0 0 2px 0;
+  }
+
+  .offer-toggle-sub {
+    font-size: 12.5px;
+    color: #64748B;
+    margin: 0;
+  }
+
+  /* Switch slider */
+  .switch-toggle {
+    position: relative;
+    display: inline-block;
+    width: 44px;
+    height: 24px;
+    flex-shrink: 0;
+  }
+
+  .switch-toggle input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+
+  .slider-round {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #E2E8F0;
+    border: 1px solid #CBD5E1;
+    transition: .25s ease;
+    border-radius: 24px;
+  }
+
+  .slider-round:before {
+    position: absolute;
+    content: "";
+    height: 18px;
+    width: 18px;
+    left: 2px;
+    bottom: 2px;
+    background-color: white;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
+    transition: .25s ease;
+    border-radius: 50%;
+  }
+
+  .switch-toggle input:checked + .slider-round {
+    background-color: #0F172A;
+    border-color: #0F172A;
+  }
+
+  .switch-toggle input:checked + .slider-round:before {
+    transform: translateX(20px);
+  }
+
+  /* Status notice banner */
+  .offer-status-notice {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 16px;
+    border: 1px solid #E2E8F0;
+    border-radius: 8px;
+    background: #FFFFFF;
+    font-size: 13px;
+    color: #64748B;
+    margin-bottom: 22px;
+  }
+
+  .status-dot-bullet {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background-color: #94A3B8;
+  }
+
+  .offer-status-notice.active .status-dot-bullet {
+    background-color: #10B981;
+  }
+
+  .offer-status-notice.active {
+    color: #065F46;
+  }
+
+  /* Form Layout */
+  .offer-form-layout {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+  }
+
+  .offer-form-group {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .offer-label {
+    font-size: 13px;
+    font-weight: 600;
+    color: #1E293B;
+    margin-bottom: 6px;
+  }
+
+  .offer-input-field {
+    width: 100%;
+    height: 40px;
+    padding: 0 14px;
+    border: 1px solid #E2E8F0;
+    border-radius: 8px;
+    font-size: 13.5px;
+    color: #1E293B;
+    background: #FFFFFF;
+    box-sizing: border-box;
+    transition: border-color 0.15s;
+  }
+
+  .offer-input-field:focus {
+    outline: none;
+    border-color: #94A3B8;
+  }
+
+  .offer-field-hint {
+    font-size: 12px;
+    color: #64748B;
+    margin-top: 5px;
+  }
+
+  .offer-form-grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+
+  @media (max-width: 640px) {
+    .offer-form-grid-2 {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .offer-form-actions {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 8px;
+  }
+
+  .btn-save-offer {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: #6E2219;
+    color: #FFFFFF;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 20px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 2px 6px rgba(110, 34, 25, 0.2);
+    transition: all 0.2s ease;
+  }
+
+  .btn-save-offer:hover {
+    background: #842A1F;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 14px rgba(110, 34, 25, 0.3);
+  }
+
+  /* Card 2: Preview Card */
+  .offers-preview-card {
+    background: #FFFFFF;
+    border: 1px solid #E2E8F0;
+    border-radius: 12px;
+    padding: 24px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+  }
+
+  .preview-card-title {
+    font-size: 16px;
+    font-weight: 600;
+    color: #0F172A;
+    margin: 0;
+  }
+
+  .preview-card-sub {
+    font-size: 13px;
+    color: #64748B;
+    margin: 4px 0 18px 0;
+  }
+
+  /* Live banner matching screenshot */
+  .offer-live-banner {
+    display: inline-flex;
+    align-items: center;
+    gap: 14px;
+    background: #002244;
+    background: linear-gradient(135deg, #071D3A 0%, #003876 50%, #0A2540 100%);
+    border-radius: 10px;
+    padding: 16px 22px;
+    max-width: 440px;
+    width: 100%;
+    box-sizing: border-box;
+    box-shadow: 0 4px 12px rgba(0, 34, 68, 0.25);
+  }
+
+  .banner-tag-badge {
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.18);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #FFFFFF;
+    flex-shrink: 0;
+  }
+
+  .banner-content {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+  }
+
+  .banner-headline {
+    font-size: 13.5px;
+    font-weight: 600;
+    color: #FFFFFF;
+    margin: 0;
+    line-height: 1.3;
+  }
+
+  .banner-subtext {
+    font-size: 12px;
+    color: #E0F2FE;
+    margin: 0;
+    line-height: 1.3;
+    opacity: 0.95;
+  }
+
+  .chip {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 4px;
+    background: #F1F5F9;
+    color: #334155;
+    font-size: 11.5px;
+  }
+
+  .cert-pill {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 4px;
+    background: #ECFDF5;
+    color: #065F46;
+    font-size: 11.5px;
+    font-weight: 500;
+  }
+
+  .btn-gold-action {
+    background-color: #6E2219;
+    color: #FFFFFF;
+    font-weight: 600;
+    padding: 8px 16px;
+    border-radius: 8px;
+    border: none;
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    box-shadow: 0 2px 6px rgba(110, 34, 25, 0.2);
+  }
+
+  .btn-gold-action:hover {
+    background-color: #842A1F;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 14px rgba(110, 34, 25, 0.3);
+  }
+
+  .btn-gold-action.btn-sm {
+    padding: 6px 12px;
+    font-size: 12px;
+  }
+
+  /* Product Grid */
+  .products-grid-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 20px;
+  }
+
+  .product-item-card {
+    background: #FFFFFF;
+    border: 1px solid #E2E8F0;
+    border-radius: 12px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .prod-card-thumb {
+    position: relative;
+    height: 160px;
+    background: #F1F5F9;
+  }
+
+  .prod-card-thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .code-badge {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background: #0F172A;
+    color: #FFFFFF;
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-size: 11px;
+    font-family: monospace;
+    font-weight: 600;
+  }
+
+  .prod-card-body {
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+  }
+
+  .prod-category-tag {
+    font-size: 11.5px;
+    font-weight: 600;
+    color: #6E2219;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+
+  .prod-card-title {
+    font-size: 15px;
+    font-weight: 600;
+    color: #0F172A;
+    line-height: 1.3;
+    margin-bottom: 6px;
+  }
+
+  .prod-card-desc {
+    font-size: 12px;
+    color: #64748B;
+    line-height: 1.4;
+    margin-bottom: 12px;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .prod-meta-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    font-size: 11px;
+    color: #475569;
+    margin-bottom: 12px;
+  }
+
+  .prod-pricing-preview {
+    margin-top: auto;
+    padding-top: 10px;
+    border-top: 1px solid #F1F5F9;
+    margin-bottom: 12px;
+  }
+
+  .pricing-label {
+    font-size: 11px;
+    color: #64748B;
+    display: block;
+    margin-bottom: 4px;
+  }
+
+  .price-tags-wrap {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+  }
+
+  .price-tag-item {
+    font-size: 11px;
+    color: #1E293B;
+  }
+
+  .prod-card-actions {
+    display: flex;
+    gap: 8px;
+  }
+
+  .btn-edit-product {
+    flex: 1;
+    background: #F8FAFC;
+    border: 1px solid #E2E8F0;
+    border-radius: 6px;
+    padding: 6px 10px;
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+  }
+
+  .btn-edit-product:hover {
+    background: #EEF2F6;
+    border-color: #CBD5E1;
+  }
+
+  .btn-preview-link {
+    padding: 6px 10px;
+    font-size: 12px;
+    color: #64748B;
+    text-decoration: none;
+    border: 1px solid #E2E8F0;
+    border-radius: 6px;
+  }
+
+  /* Gallery Grid */
+  .gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 16px;
+  }
+
+  .gallery-card {
+    background: #FFFFFF;
+    border: 1px solid #E2E8F0;
+    border-radius: 10px;
+    overflow: hidden;
+  }
+
+  .gallery-card img {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+  }
+
+  .gallery-info {
+    padding: 12px;
+  }
+
+  .gallery-info h4 {
+    font-size: 13px;
+    font-weight: 600;
+    color: #0F172A;
+  }
+
+  /* Enquiries full page components */
+  .contact-links-row {
+    display: flex;
+    gap: 8px;
+    margin-top: 4px;
+    font-size: 11.5px;
+  }
+
+  .link-tel, .link-mail {
+    color: #2563EB;
+    text-decoration: none;
+  }
+
+  .status-dropdown-select {
+    padding: 4px 8px;
+    font-size: 12px;
+    border-radius: 6px;
+    border: 1px solid #CBD5E1;
+    background: #FFFFFF;
+  }
+
+  .btn-whatsapp-sm {
+    background: #25D366;
+    color: #FFFFFF;
+    text-decoration: none;
+    font-size: 11.5px;
+    font-weight: 600;
+    padding: 4px 8px;
+    border-radius: 6px;
+  }
+
+  .btn-view-notes {
+    border: 1px solid #E2E8F0;
+    background: #FFFFFF;
+    border-radius: 6px;
+    padding: 4px 8px;
+    cursor: pointer;
+    font-size: 12px;
+  }
+
+  .actions-flex {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .search-input-field {
+    padding: 8px 14px;
+    font-size: 13px;
+    border: 1px solid #CBD5E1;
+    border-radius: 8px;
+    width: 260px;
+    outline: none;
+  }
+
+  /* Reviews & Offers grids */
+  .reviews-list-grid, .offers-list-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 16px;
+  }
+
+  .review-admin-card, .offer-admin-card {
+    background: #FFFFFF;
+    border: 1px solid #E2E8F0;
+    border-radius: 12px;
+    padding: 18px;
+  }
+
+  .review-stars {
+    color: #EAB308;
+    margin-bottom: 8px;
+  }
+
+  .review-text {
+    font-size: 13px;
+    color: #334155;
+    line-height: 1.5;
+    margin-bottom: 12px;
+  }
+
+  .review-author {
+    display: flex;
+    flex-direction: column;
+    font-size: 12px;
+    color: #0F172A;
+  }
+
+  .review-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 14px;
+    padding-top: 10px;
+    border-top: 1px solid #F1F5F9;
+  }
+
+  .offer-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+
+  .offer-code {
+    background: #FEF9C3;
+    color: #854D0E;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+  }
+
+  .offer-discount {
+    font-weight: 600;
+    color: #16A34A;
+    font-size: 12px;
+  }
+
+  .offer-title {
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 6px;
+  }
+
+  .offer-desc {
+    font-size: 12px;
+    color: #64748B;
+    line-height: 1.4;
+    margin-bottom: 12px;
+  }
+
+  .offer-action-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 10px;
+    border-top: 1px solid #F1F5F9;
+  }
+
+  .btn-action-sm {
+    border: 1px solid #CBD5E1;
+    background: #FFFFFF;
+    font-size: 11.5px;
+    padding: 4px 10px;
+    border-radius: 6px;
+    cursor: pointer;
+  }
+
+  /* Settings Page */
+  .settings-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+    gap: 20px;
+  }
+
+  .card-header-flex {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+  }
+
+  .flex-align-gap {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .settings-icon {
+    font-size: 20px;
+  }
+
+  .settings-status-box {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 14px;
+    background: #F8FAFC;
+    border-radius: 8px;
+    font-size: 12.5px;
+  }
+
+  .status-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .d1-result-box {
+    margin-bottom: 14px;
+    padding: 10px 14px;
+    border-radius: 8px;
+    font-size: 12px;
+    line-height: 1.4;
+  }
+
+  .d1-result-box.success {
+    background: #ECFDF5;
+    border: 1px solid #A7F3D0;
+    color: #065F46;
+  }
+
+  .d1-result-box.error {
+    background: #FEF2F2;
+    border: 1px solid #FECACA;
+    color: #991B1B;
+  }
+
+  .input-field {
+    width: 100%;
+    padding: 8px 12px;
+    border: 1px solid #CBD5E1;
+    border-radius: 6px;
+    font-size: 13.5px;
+    box-sizing: border-box;
+    margin-top: 4px;
+    transition: border-color 0.15s, box-shadow 0.15s;
+  }
+
+  .input-field:focus {
+    outline: none;
+    border-color: #6E2219;
+    box-shadow: 0 0 0 3px rgba(110, 34, 25, 0.12);
+  }
+
+  .text-area {
+    resize: vertical;
+  }
+
+  .form-label {
+    font-size: 13px;
+    font-weight: 600;
+    color: #1E293B;
+  }
+
+  /* ==========================================================
+     MODALS
+     ========================================================== */
+  .modal-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(15, 23, 42, 0.6);
+    backdrop-filter: blur(4px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    padding: 20px;
+  }
+
+  .modal-card {
+    background: #FFFFFF;
+    border-radius: 12px;
+    width: 100%;
+    max-width: 580px;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+  }
+
+  .modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 20px;
+    border-bottom: 1px solid #E2E8F0;
+  }
+
+  .modal-header h3 {
+    font-size: 16px;
+    font-weight: 600;
+    color: #0F172A;
+  }
+
+  .close-modal-btn {
+    border: none;
+    background: transparent;
+    font-size: 24px;
+    cursor: pointer;
+    color: #64748B;
+  }
+
+  .modal-form, .modal-body {
+    padding: 20px;
+  }
+
+
+
+  .form-grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    margin-bottom: 14px;
+  }
+
+  .form-group {
+    margin-bottom: 14px;
+  }
+
+  .modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 20px;
+    padding-top: 16px;
+    border-top: 1px solid #F1F5F9;
+  }
+
+  .btn-cancel {
+    border: 1px solid #CBD5E1;
+    background: #FFFFFF;
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-size: 13px;
+    cursor: pointer;
+  }
+
+  /* Utility classes */
+  .mt-6 { margin-top: 24px; }
+  .mb-2 { margin-bottom: 8px; }
+  .mb-3 { margin-bottom: 12px; }
+  .mb-4 { margin-bottom: 16px; }
+  .text-xs { font-size: 12.5px; }
+  .text-base { font-size: 13.5px; }
+  .text-muted { color: #64748B; }
+  .font-semibold { font-weight: 600; }
+  .font-mono { font-family: 'DM Mono', monospace; }
+
+  /* Responsive Breakpoints */
+  @media (max-width: 1024px) {
+    .metrics-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+    .dashboard-split-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .admin-sidebar {
+      position: fixed;
+      left: -370px;
+      transition: left 0.3s ease;
+    }
+    .admin-sidebar.open {
+      left: 0;
+    }
+    .mobile-top-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+      padding: 10px 14px;
+      background: #FFFFFF;
+      border-radius: 8px;
+      border: 1px solid #E2E8F0;
+    }
+    .mobile-brand-title {
+      font-weight: 700;
+      font-size: 15px;
+    }
+    .mobile-menu-toggle {
+      border: none;
+      background: transparent;
+      font-size: 20px;
+      cursor: pointer;
+    }
+    .admin-main {
+      padding: 16px;
+    }
+    .metrics-grid {
+      grid-template-columns: 1fr;
+    }
+    .categories-data-table {
+      min-width: 500px;
+    }
+    .table-responsive {
+      overflow-x: auto;
+    }
+  }
+</style>
+
+<script>
+  // Tab Switching Logic
+  const navItems = document.querySelectorAll<HTMLButtonElement>('.sidebar-nav .nav-item');
+  const views = document.querySelectorAll<HTMLElement>('.admin-view');
+  const toast = document.getElementById('adminToast');
+
+  function showToast(message: string, isError = false) {
+    if (!toast) return;
+    toast.textContent = message;
+    toast.className = `admin-toast visible ${isError ? 'error' : 'success'}`;
+    setTimeout(() => {
+      toast.className = 'admin-toast';
+    }, 3200);
+  }
+
+  function switchTab(targetViewId: string) {
+    views.forEach(v => {
+      v.style.display = 'none';
+      v.classList.remove('active');
+    });
+
+    const activeView = document.getElementById(targetViewId);
+    if (activeView) {
+      activeView.style.display = 'block';
+      activeView.classList.add('active');
+    }
+
+    navItems.forEach(item => {
+      if (item.getAttribute('data-tab') === targetViewId) {
+        item.classList.add('active');
+      } else {
+        item.classList.remove('active');
+      }
+    });
+
+    // Close mobile menu if open
+    document.getElementById('adminSidebar')?.classList.remove('open');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+
+    // Update URL hash
+    window.location.hash = targetViewId;
+
+    if (targetViewId === 'view-enquiries' || targetViewId === 'view-dashboard') {
+      if (typeof checkAndUpdateInquiries === 'function') {
+        checkAndUpdateInquiries(false);
+      }
+    }
+  }
+
+  navItems.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const target = btn.getAttribute('data-tab');
+      if (target) switchTab(target);
+    });
+  });
+
+  // Check URL hash on load - default to view-catagories
+  if (window.location.hash) {
+    const hashTarget = window.location.hash.replace('#', '');
+    if (document.getElementById(hashTarget)) {
+      switchTab(hashTarget);
+    } else {
+      switchTab('view-catagories');
+    }
+  } else {
+    switchTab('view-catagories');
+  }
+
+  // Quick Action Jump buttons
+  document.querySelectorAll<HTMLElement>('.quick-action-card[data-jump]').forEach(card => {
+    card.addEventListener('click', () => {
+      const target = card.getAttribute('data-jump');
+      if (target) switchTab(target);
+    });
+  });
+
+  // Toggle Enquiries vs Designs in Recent Enquiries Panel
+  const toggleEnqBtn = document.getElementById('toggleEnquiriesTabBtn');
+  const toggleDesBtn = document.getElementById('toggleDesignsTabBtn');
+  const recentEnqList = document.getElementById('recentEnquiriesList');
+  const recentDesList = document.getElementById('recentDesignsList');
+
+  toggleEnqBtn?.addEventListener('click', () => {
+    toggleEnqBtn.classList.add('active');
+    toggleDesBtn?.classList.remove('active');
+    if (recentEnqList) recentEnqList.style.display = 'flex';
+    if (recentDesList) recentDesList.style.display = 'none';
+  });
+
+  toggleDesBtn?.addEventListener('click', () => {
+    toggleDesBtn.classList.add('active');
+    toggleEnqBtn?.classList.remove('active');
+    if (recentEnqList) recentEnqList.style.display = 'none';
+    if (recentDesList) recentDesList.style.display = 'flex';
+  });
+
+  // Jump to all enquiries arrow
+  document.getElementById('jumpToAllEnquiriesBtn')?.addEventListener('click', () => {
+    switchTab('view-enquiries');
+  });
+
+  // Mobile menu toggle
+  document.getElementById('mobileMenuToggle')?.addEventListener('click', () => {
+    document.getElementById('adminSidebar')?.classList.toggle('open');
+  });
+
+  // Logout button handler
+  document.getElementById('adminLogoutBtn')?.addEventListener('click', async () => {
+    if (confirm('Are you sure you want to log out of Admin Panel?')) {
+      try {
+        await fetch('/api/admin/auth', { method: 'DELETE' });
+        window.location.href = '/admin/login';
+      } catch (e) {
+        window.location.href = '/admin/login';
+      }
+    }
+  });
+
+  // ========================================================
+  // CATEGORIES CRUD LOGIC
+  // ========================================================
+  const categoryModal = document.getElementById('categoryModal');
+  const categoryForm = document.getElementById('categoryForm') as HTMLFormElement;
+  const openAddCategoryModalBtn = document.getElementById('openAddCategoryModalBtn');
+  const closeCategoryModalBtn = document.getElementById('closeCategoryModalBtn');
+  const cancelCategoryBtn = document.getElementById('cancelCategoryBtn');
+  const catImagePreset = document.getElementById('catImagePreset') as HTMLSelectElement;
+  const catImageInput = document.getElementById('catImageInput') as HTMLInputElement;
+
+  catImagePreset?.addEventListener('change', () => {
+    if (catImagePreset.value !== 'custom') {
+      catImageInput.value = catImagePreset.value;
+    }
+  });
+
+  openAddCategoryModalBtn?.addEventListener('click', () => {
+    if (!categoryModal) return;
+    categoryForm.reset();
+    (document.getElementById('editCategoryId') as HTMLInputElement).value = '';
+    (document.getElementById('categoryModalTitle') as HTMLElement).textContent = 'Add New Category';
+    catImageInput.value = '/images/products/meat-pads.jpg';
+    categoryModal.style.display = 'flex';
+  });
+
+  closeCategoryModalBtn?.addEventListener('click', () => {
+    if (categoryModal) categoryModal.style.display = 'none';
+  });
+
+  cancelCategoryBtn?.addEventListener('click', () => {
+    if (categoryModal) categoryModal.style.display = 'none';
+  });
+
+  // Edit category buttons
+  document.querySelectorAll<HTMLButtonElement>('.btn-edit-category').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const raw = btn.getAttribute('data-category');
+      if (!raw || !categoryModal) return;
+      const cat = JSON.parse(raw);
+
+      (document.getElementById('editCategoryId') as HTMLInputElement).value = cat.id;
+      (document.getElementById('catNameInput') as HTMLInputElement).value = cat.name;
+      (document.getElementById('catImageInput') as HTMLInputElement).value = cat.image;
+      (document.getElementById('catStatusInput') as HTMLSelectElement).value = cat.status || 'Active';
+      (document.getElementById('catDescInput') as HTMLTextAreaElement).value = cat.description || '';
+      (document.getElementById('categoryModalTitle') as HTMLElement).textContent = `Edit Category: ${cat.name}`;
+
+      categoryModal.style.display = 'flex';
+    });
+  });
+
+  // Save category submission
+  categoryForm?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const id = (document.getElementById('editCategoryId') as HTMLInputElement).value;
+    const name = (document.getElementById('catNameInput') as HTMLInputElement).value;
+    const image = (document.getElementById('catImageInput') as HTMLInputElement).value;
+    const status = (document.getElementById('catStatusInput') as HTMLSelectElement).value;
+    const description = (document.getElementById('catDescInput') as HTMLTextAreaElement).value;
+
+    const payload = { name, image, status, description };
+
+    try {
+      const url = id ? `/api/categories/${id}` : '/api/categories';
+      const method = id ? 'PUT' : 'POST';
+
+      const res = await fetch(url, {
+        method,
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+
+      if (res.ok) {
+        showToast(id ? 'Category updated successfully' : 'New category created');
+        if (categoryModal) categoryModal.style.display = 'none';
+        setTimeout(() => window.location.reload(), 600);
+      } else {
+        showToast('Error saving category', true);
+      }
+    } catch (err: any) {
+      showToast(err.message || 'Network error', true);
+    }
+  });
+
+  // Delete Category
+  document.querySelectorAll<HTMLButtonElement>('.btn-delete-category').forEach(btn => {
+    btn.addEventListener('click', async (e) => {
+      e.stopPropagation();
+      const id = btn.getAttribute('data-id');
+      const name = btn.getAttribute('data-name');
+      if (!id) return;
+
+      if (confirm(`Are you sure you want to delete category "${name}"?`)) {
+        try {
+          const res = await fetch(`/api/categories/${id}`, { method: 'DELETE' });
+          if (res.ok) {
+            showToast(`Category "${name}" deleted`);
+            btn.closest('tr')?.remove();
+          } else {
+            showToast('Failed to delete category', true);
+          }
+        } catch (err: any) {
+          showToast(err.message, true);
+        }
+      }
+    });
+  });
+
+  // View Category in public catalogue
+  document.querySelectorAll<HTMLButtonElement>('.btn-view-cat-products').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const slug = btn.getAttribute('data-slug') || '';
+      window.open(`/catalogue?category=${slug}`, '_blank');
+    });
+  });
+
+  // Inquiry Status Change in full table
+  document.querySelectorAll<HTMLSelectElement>('.status-dropdown-select').forEach(sel => {
+    sel.addEventListener('change', async () => {
+      const inqId = sel.getAttribute('data-id');
+      const newStatus = sel.value;
+      if (!inqId) return;
+
+      try {
+        const res = await fetch(`/api/inquiries/${inqId}`, {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ status: newStatus })
+        });
+        if (res.ok) {
+          showToast(`Status updated to ${newStatus}`);
+        } else {
+          showToast('Failed to update status', true);
+        }
+      } catch (err: any) {
+        showToast(err.message || 'Error updating status', true);
+      }
+    });
+  });
+
+  // Inquiry Detail Modal
+  const inquiryModal = document.getElementById('inquiryDetailModal');
+  const inquiryModalBody = document.getElementById('inquiryModalBody');
+  const closeInquiryModalBtn = document.getElementById('closeInquiryModalBtn');
+
+  function openInquiryModal(inqData: any) {
+    if (!inquiryModal || !inquiryModalBody) return;
+
+    const dateObj = inqData.created_at ? new Date(inqData.created_at) : new Date();
+    const formattedDate = dateObj.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+
+    let deadlineVal = inqData.deadline || '';
+    if (deadlineVal && deadlineVal.includes('T')) {
+      deadlineVal = deadlineVal.split('T')[0];
+    }
+
+    const currentStatus = String(inqData.status || 'Pending').trim();
+    const statusOptions = ['Pending', 'New', 'Contacted', 'Quoted', 'Sampling', 'Closed', 'Cancelled'];
+
+    inquiryModalBody.innerHTML = `
+      <div style="display: flex; flex-direction: column; gap: 16px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; color: #1E293B;">
+        
+        <!-- Top Meta: ENQUIRY ID & DATE RECEIVED -->
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; padding-bottom: 12px; border-bottom: 1px solid #E2E8F0;">
+          <div>
+            <div style="font-size: 11px; font-weight: 700; color: #64748B; text-transform: uppercase; letter-spacing: 0.5px;">ENQUIRY ID</div>
+            <div style="font-size: 14px; font-weight: 600; color: #0F172A; font-family: monospace; margin-top: 3px;">${inqData.inquiry_no || inqData.id}</div>
+          </div>
+          <div>
+            <div style="font-size: 11px; font-weight: 700; color: #64748B; text-transform: uppercase; letter-spacing: 0.5px;">DATE RECEIVED</div>
+            <div style="font-size: 14px; font-weight: 600; color: #0F172A; margin-top: 3px;">${formattedDate}</div>
+          </div>
+        </div>
+
+        <!-- CUSTOMER INFORMATION -->
+        <div>
+          <div style="font-size: 11px; font-weight: 800; color: #0F172A; text-transform: uppercase; letter-spacing: 0.6px; padding-bottom: 6px; border-bottom: 1px solid #E2E8F0; margin-bottom: 12px;">CUSTOMER INFORMATION</div>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px 18px;">
+            <div>
+              <div style="font-size: 11px; font-weight: 600; color: #64748B;">Company Name</div>
+              <div style="font-size: 14px; font-weight: 600; color: #0F172A; margin-top: 2px;">${inqData.company_name || '-'}</div>
+            </div>
+            <div>
+              <div style="font-size: 11px; font-weight: 600; color: #64748B;">Contact Person</div>
+              <div style="font-size: 14px; font-weight: 600; color: #0F172A; margin-top: 2px;">${(inqData.name || '-').toUpperCase()}</div>
+            </div>
+            <div>
+              <div style="font-size: 11px; font-weight: 600; color: #64748B;">Phone Number</div>
+              <div style="font-size: 14px; font-weight: 600; color: #0F172A; margin-top: 2px;">${inqData.phone || '-'}</div>
+            </div>
+            <div>
+              <div style="font-size: 11px; font-weight: 600; color: #64748B;">Email Address</div>
+              <div style="font-size: 14px; font-weight: 600; color: #0F172A; word-break: break-all; margin-top: 2px;">${inqData.email || '-'}</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ORDER SPECIFICATIONS -->
+        <div>
+          <div style="font-size: 11px; font-weight: 800; color: #0F172A; text-transform: uppercase; letter-spacing: 0.6px; padding-bottom: 6px; border-bottom: 1px solid #E2E8F0; margin-bottom: 12px;">ORDER SPECIFICATIONS</div>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px 18px;">
+            <div>
+              <div style="font-size: 11px; font-weight: 600; color: #64748B;">Product Type</div>
+              <div style="font-size: 14px; font-weight: 600; color: #0F172A; margin-top: 2px;">${inqData.product_name || '-'}</div>
+            </div>
+            <div>
+              <div style="font-size: 11px; font-weight: 600; color: #64748B;">Fabric Selection</div>
+              <div style="font-size: 14px; font-weight: 600; color: #0F172A; margin-top: 2px;">${inqData.fabric_choice || inqData.product_slug || '-'}</div>
+            </div>
+            <div>
+              <div style="font-size: 11px; font-weight: 600; color: #64748B;">Quantity Required</div>
+              <div style="font-size: 14px; font-weight: 600; color: #0F172A; margin-top: 2px;">${Number(inqData.quantity || 100).toLocaleString()} units</div>
+            </div>
+            <div>
+              <div style="font-size: 11px; font-weight: 600; color: #64748B;">Size Range</div>
+              <div style="font-size: 14px; font-weight: 600; color: #0F172A; margin-top: 2px;">${inqData.customization_type || inqData.target_timeline || '-'}</div>
+            </div>
+          </div>
+          
+          <div style="margin-top: 12px;">
+            <div style="font-size: 11px; font-weight: 600; color: #64748B; margin-bottom: 4px;">Customer Notes</div>
+            <div style="background: #F8FAFC; border: 1px solid #CBD5E1; border-radius: 6px; padding: 10px 14px; font-size: 13.5px; color: #334155; line-height: 1.5;">${inqData.message || 'No additional notes provided.'}</div>
+          </div>
+        </div>
+
+        <!-- INTERNAL MANAGEMENT -->
+        <div>
+          <div style="font-size: 11px; font-weight: 800; color: #0F172A; text-transform: uppercase; letter-spacing: 0.6px; padding-bottom: 6px; border-bottom: 1px solid #E2E8F0; margin-bottom: 12px;">INTERNAL MANAGEMENT</div>
+          
+          <div style="display: flex; flex-direction: column; gap: 12px;">
+            <div>
+              <div style="font-size: 11px; font-weight: 600; color: #64748B; margin-bottom: 4px;">Current Status</div>
+              <div style="display: flex; gap: 10px; align-items: center;">
+                <select id="modalInqStatus" style="flex: 1; padding: 9px 12px; border: 2px solid #EAB308; border-radius: 6px; font-size: 14px; font-weight: 600; color: #0F172A; background: #FFFFFF; outline: none; cursor: pointer;">
+                  ${statusOptions.map(opt => `
+                    <option value="${opt}" ${opt.toLowerCase() === currentStatus.toLowerCase() ? 'selected' : ''}>${opt}</option>
+                  `).join('')}
+                </select>
+                <button type="button" id="btnUpdateRecord" style="background: #1E1B4B; color: #FFFFFF; border: none; padding: 10px 20px; border-radius: 6px; font-size: 13.5px; font-weight: 600; cursor: pointer; white-space: nowrap; transition: opacity 0.15s ease;">Update Record</button>
+              </div>
+            </div>
+
+            <div>
+              <div style="font-size: 11px; font-weight: 600; color: #64748B; margin-bottom: 4px;">Deadline (Priority is auto-calculated)</div>
+              <input type="date" id="modalInqDeadline" value="${deadlineVal}" style="width: 100%; box-sizing: border-box; padding: 9px 12px; border: 1px solid #CBD5E1; border-radius: 6px; font-size: 13.5px; color: #0F172A; outline: none; background: #FFFFFF;" />
+            </div>
+
+            <div>
+              <div style="font-size: 11px; font-weight: 600; color: #64748B; margin-bottom: 4px;">Admin Internal Notes</div>
+              <textarea id="modalInqNotes" placeholder="Add internal notes regarding this enquiry..." style="width: 100%; box-sizing: border-box; min-height: 72px; padding: 10px 12px; border: 1px solid #CBD5E1; border-radius: 6px; font-size: 13px; color: #0F172A; outline: none; resize: vertical; font-family: inherit; background: #FFFFFF;">${inqData.admin_notes || ''}</textarea>
+            </div>
+
+            <!-- Actions: WhatsApp and Copy Tracking Link -->
+            <div style="display: flex; gap: 10px; margin-top: 4px;">
+              <a href="https://wa.me/${String(inqData.phone || '').replace(/[^0-9]/g, '')}?text=${encodeURIComponent(`Hi ${inqData.name || ''}, regarding your Absorbent Pads enquiry #${inqData.inquiry_no || inqData.id}...`)}" target="_blank" style="flex: 1; background: #25D366; color: #FFFFFF; text-decoration: none; text-align: center; padding: 10px 14px; border-radius: 6px; font-size: 13px; font-weight: 600; display: inline-flex; align-items: center; justify-content: center; gap: 6px;">
+                💬 Chat Client on WhatsApp
+              </a>
+              <button type="button" id="btnCopyTrackLink" style="background: #F1F5F9; color: #334155; border: 1px solid #CBD5E1; padding: 10px 16px; border-radius: 6px; font-size: 13px; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 6px;">
+                🔗 Copy Tracking Link
+              </button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    `;
+
+    inquiryModal.style.display = 'flex';
+
+    // Handle Update Record button click
+    const btnUpdate = document.getElementById('btnUpdateRecord') as HTMLButtonElement;
+    btnUpdate?.addEventListener('click', async () => {
+      btnUpdate.disabled = true;
+      btnUpdate.textContent = 'Updating...';
+
+      const newStatus = (document.getElementById('modalInqStatus') as HTMLSelectElement)?.value || 'Pending';
+      const newDeadline = (document.getElementById('modalInqDeadline') as HTMLInputElement)?.value || '';
+      const newNotes = (document.getElementById('modalInqNotes') as HTMLTextAreaElement)?.value || '';
+
+      let priority = inqData.priority || 'Medium';
+      if (newDeadline) {
+        const diffDays = Math.ceil((new Date(newDeadline).getTime() - Date.now()) / (1000 * 60 * 60 * 24));
+        if (diffDays <= 2) priority = 'Urgent';
+        else if (diffDays <= 5) priority = 'High';
+        else if (diffDays <= 14) priority = 'Medium';
+        else priority = 'Low';
+      }
+
+      try {
+        const res = await fetch(`/api/inquiries/${inqData.id}`, {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            status: newStatus,
+            admin_notes: newNotes,
+            deadline: newDeadline,
+            priority: priority
+          })
+        });
+
+        if (res.ok) {
+          inqData.status = newStatus;
+          inqData.admin_notes = newNotes;
+          inqData.deadline = newDeadline;
+          inqData.priority = priority;
+
+          // Update table row if present
+          const row = document.querySelector<HTMLTableRowElement>(`tr[data-id="${inqData.id}"]`);
+          if (row) {
+            row.setAttribute('data-inquiry', JSON.stringify(inqData));
+            row.setAttribute('data-status', newStatus.toLowerCase());
+            row.setAttribute('data-priority', priority.toLowerCase());
+
+            const statusPill = row.querySelector('.status-dark-pill, .status-badge-pill');
+            if (statusPill) {
+              statusPill.textContent = newStatus;
+              statusPill.className = `status-dark-pill ${newStatus.toLowerCase()}`;
+            }
+
+            const priorityPill = row.querySelector('.priority-pill');
+            if (priorityPill) {
+              priorityPill.textContent = priority;
+              priorityPill.className = `priority-pill ${priority.toLowerCase()}`;
+            }
+
+            const viewBtn = row.querySelector('.view-inquiry-btn');
+            if (viewBtn) viewBtn.setAttribute('data-inquiry', JSON.stringify(inqData));
+          }
+
+          showToast(`Record updated! Tracking ID #${inqData.inquiry_no || inqData.id} now shows "${newStatus}".`);
+        } else {
+          showToast('Failed to update record. Please check server logs.', true);
+        }
+      } catch (err: any) {
+        showToast(err.message || 'Error updating record', true);
+      } finally {
+        btnUpdate.disabled = false;
+        btnUpdate.textContent = 'Update Record';
+      }
+    });
+
+    // Handle Copy Tracking Link
+    const btnCopy = document.getElementById('btnCopyTrackLink');
+    btnCopy?.addEventListener('click', () => {
+      const code = inqData.inquiry_no || inqData.id;
+      const url = `${window.location.origin}/track?no=${encodeURIComponent(code)}`;
+      if (navigator.clipboard) {
+        navigator.clipboard.writeText(url).then(() => {
+          showToast(`Tracking link copied: ${url}`);
+        }).catch(() => {
+          prompt('Copy this tracking link:', url);
+        });
+      } else {
+        prompt('Copy this tracking link:', url);
+      }
+    });
+  }
+
+  closeInquiryModalBtn?.addEventListener('click', () => {
+    if (inquiryModal) inquiryModal.style.display = 'none';
+  });
+
+  // Clicking an enquiry row anywhere
+  document.querySelectorAll<HTMLElement>('.enquiry-item-row').forEach(row => {
+    row.addEventListener('click', () => {
+      const dataStr = row.getAttribute('data-json');
+      if (dataStr) {
+        try {
+          openInquiryModal(JSON.parse(dataStr));
+        } catch {}
+      }
+    });
+  });
+
+  document.querySelectorAll<HTMLButtonElement>('.btn-view-notes').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const dataStr = btn.getAttribute('data-inquiry');
+      if (dataStr) openInquiryModal(JSON.parse(dataStr));
+    });
+  });
+
+  // Add / Edit Product Modal
+  const productModal = document.getElementById('productModal');
+  const openAddProdBtn = document.getElementById('openAddProductModalBtn');
+  const closeProductModalBtn = document.getElementById('closeProductModalBtn');
+  const cancelProductBtn = document.getElementById('cancelProductBtn');
+  const productForm = document.getElementById('productForm') as HTMLFormElement;
+
+  openAddProdBtn?.addEventListener('click', () => {
+    if (!productModal) return;
+    productForm.reset();
+    (document.getElementById('editProductId') as HTMLInputElement).value = '';
+    (document.getElementById('modalTitle') as HTMLElement).textContent = 'Add Food Absorbent Pad Line';
+    productModal.style.display = 'flex';
+  });
+
+  closeProductModalBtn?.addEventListener('click', () => {
+    if (productModal) productModal.style.display = 'none';
+  });
+
+  cancelProductBtn?.addEventListener('click', () => {
+    if (productModal) productModal.style.display = 'none';
+  });
+
+  // Edit product buttons
+  document.querySelectorAll<HTMLButtonElement>('.btn-edit-product').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const raw = btn.getAttribute('data-product');
+      if (!raw || !productModal) return;
+      const p = JSON.parse(raw);
+
+      (document.getElementById('editProductId') as HTMLInputElement).value = p.id;
+      (document.getElementById('prodName') as HTMLInputElement).value = p.name;
+      (document.getElementById('prodCode') as HTMLInputElement).value = p.code;
+      (document.getElementById('prodCategory') as HTMLSelectElement).value = p.category;
+      (document.getElementById('prodGsmRange') as HTMLInputElement).value = p.gsm_range;
+      (document.getElementById('prodMoq') as HTMLInputElement).value = String(p.moq);
+      (document.getElementById('prodLeadTime') as HTMLInputElement).value = p.lead_time;
+      (document.getElementById('prodShortDesc') as HTMLTextAreaElement).value = p.short_description;
+      
+      const tiersStr = (p.price_tiers || []).map((t: any) => `${t.qty_range}: ${t.price}`).join(', ');
+      (document.getElementById('prodPriceTiersStr') as HTMLInputElement).value = tiersStr;
+
+      (document.getElementById('modalTitle') as HTMLElement).textContent = `Edit Specs: ${p.name}`;
+      productModal.style.display = 'flex';
+    });
+  });
+
+  // Save product form submission
+  productForm?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const id = (document.getElementById('editProductId') as HTMLInputElement).value;
+    const name = (document.getElementById('prodName') as HTMLInputElement).value;
+    const code = (document.getElementById('prodCode') as HTMLInputElement).value;
+    const category = (document.getElementById('prodCategory') as HTMLSelectElement).value;
+    const gsm_range = (document.getElementById('prodGsmRange') as HTMLInputElement).value;
+    const moq = parseInt((document.getElementById('prodMoq') as HTMLInputElement).value, 10);
+    const lead_time = (document.getElementById('prodLeadTime') as HTMLInputElement).value;
+    const short_description = (document.getElementById('prodShortDesc') as HTMLTextAreaElement).value;
+    const tiersStr = (document.getElementById('prodPriceTiersStr') as HTMLInputElement).value;
+
+    const price_tiers = tiersStr.split(',').map(part => {
+      const [q, pr] = part.split(':').map(s => s.trim());
+      return { qty_range: q || '1,000+', price: pr || 'Contact Factory' };
+    }).filter(t => t.qty_range && t.price);
+
+    const payload = {
+      name,
+      code,
+      category,
+      gsm_range,
+      moq,
+      lead_time,
+      short_description,
+      price_tiers
+    };
+
+    try {
+      const url = id ? `/api/products/${id}` : '/api/products';
+      const method = id ? 'PUT' : 'POST';
+
+      const res = await fetch(url, {
+        method,
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+
+      if (res.ok) {
+        showToast(id ? 'Product updated successfully' : 'New product line created');
+        if (productModal) productModal.style.display = 'none';
+        setTimeout(() => window.location.reload(), 800);
+      } else {
+        showToast('Error saving product', true);
+      }
+    } catch (err: any) {
+      showToast(err.message || 'Network error', true);
+    }
+  });
+
+
+  // ==========================================
+  // ENQUIRIES VIEW LOGIC (MATCHES SCREENSHOT)
+  // ==========================================
+  const enquirySearch = document.getElementById('enquiryFullSearch') as HTMLInputElement;
+  const enquiryStatusFilter = document.getElementById('enquiryStatusFilter') as HTMLSelectElement;
+  const enquiryPriorityFilter = document.getElementById('enquiryPriorityFilter') as HTMLSelectElement;
+  const paginationLabel = document.getElementById('paginationCountLabel');
+  const btnPageFirst = document.getElementById('paginationFirst') as HTMLButtonElement;
+  const btnPagePrev = document.getElementById('paginationPrev') as HTMLButtonElement;
+  const btnPageNext = document.getElementById('paginationNext') as HTMLButtonElement;
+  const btnPageLast = document.getElementById('paginationLast') as HTMLButtonElement;
+  const btnExportCsv = document.getElementById('exportCsvBtn');
+  const btnDeleteAll = document.getElementById('deleteAllEnquiriesBtn');
+
+  let currentEnqPage = 1;
+  const enqPageSize = 10;
+
+  function getEnquiryRows(): HTMLTableRowElement[] {
+    return Array.from(document.querySelectorAll<HTMLTableRowElement>('#enquiriesTableBody tr.enquiry-row-item'));
+  }
+
+  function filterAndPaginateEnquiries() {
+    const searchTerm = (enquirySearch?.value || '').trim().toLowerCase();
+    const statusVal = (enquiryStatusFilter?.value || '').trim().toLowerCase();
+    const priorityVal = (enquiryPriorityFilter?.value || '').trim().toLowerCase();
+
+    const allRows = getEnquiryRows();
+    const matchedRows: HTMLTableRowElement[] = [];
+
+    allRows.forEach(row => {
+      const text = row.innerText.toLowerCase();
+      const rowStatus = (row.getAttribute('data-status') || '').toLowerCase();
+      const rowPriority = (row.getAttribute('data-priority') || '').toLowerCase();
+
+      const matchesSearch = !searchTerm || text.includes(searchTerm);
+      const matchesStatus = !statusVal || rowStatus === statusVal;
+      const matchesPriority = !priorityVal || rowPriority === priorityVal;
+
+      if (matchesSearch && matchesStatus && matchesPriority) {
+        matchedRows.push(row);
+      } else {
+        row.style.display = 'none';
+      }
+    });
+
+    const totalMatched = matchedRows.length;
+    const totalPages = Math.max(1, Math.ceil(totalMatched / enqPageSize));
+
+    if (currentEnqPage > totalPages) currentEnqPage = totalPages;
+    if (currentEnqPage < 1) currentEnqPage = 1;
+
+    // Display rows for current page
+    const startIndex = (currentEnqPage - 1) * enqPageSize;
+    const endIndex = startIndex + enqPageSize;
+
+    matchedRows.forEach((row, idx) => {
+      if (idx >= startIndex && idx < endIndex) {
+        row.style.display = '';
+      } else {
+        row.style.display = 'none';
+      }
+    });
+
+    // Update pagination controls
+    if (paginationLabel) {
+      paginationLabel.textContent = `Page ${currentEnqPage} of ${totalPages}`;
+    }
+
+    if (btnPageFirst) btnPageFirst.disabled = currentEnqPage <= 1;
+    if (btnPagePrev) btnPagePrev.disabled = currentEnqPage <= 1;
+    if (btnPageNext) btnPageNext.disabled = currentEnqPage >= totalPages;
+    if (btnPageLast) btnPageLast.disabled = currentEnqPage >= totalPages;
+  }
+
+  // Event listeners for filters
+  enquirySearch?.addEventListener('input', () => {
+    currentEnqPage = 1;
+    filterAndPaginateEnquiries();
+  });
+  enquiryStatusFilter?.addEventListener('change', () => {
+    currentEnqPage = 1;
+    filterAndPaginateEnquiries();
+  });
+  enquiryPriorityFilter?.addEventListener('change', () => {
+    currentEnqPage = 1;
+    filterAndPaginateEnquiries();
+  });
+
+  // Pagination button clicks
+  btnPageFirst?.addEventListener('click', () => {
+    currentEnqPage = 1;
+    filterAndPaginateEnquiries();
+  });
+  btnPagePrev?.addEventListener('click', () => {
+    if (currentEnqPage > 1) {
+      currentEnqPage--;
+      filterAndPaginateEnquiries();
+    }
+  });
+  btnPageNext?.addEventListener('click', () => {
+    currentEnqPage++;
+    filterAndPaginateEnquiries();
+  });
+  btnPageLast?.addEventListener('click', () => {
+    const allRows = getEnquiryRows();
+    const totalPages = Math.max(1, Math.ceil(allRows.length / enqPageSize));
+    currentEnqPage = totalPages;
+    filterAndPaginateEnquiries();
+  });
+
+  // ==========================================
+  // REAL-TIME AUTO-UPDATE & LIVE SYNC LOGIC
+  // ==========================================
+  function escapeHtml(str: any): string {
+    if (str === null || str === undefined) return '';
+    return String(str)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;');
+  }
+
+  function playNotificationSound() {
+    try {
+      const AudioCtx = window.AudioContext || (window as any).webkitAudioContext;
+      if (!AudioCtx) return;
+      const ctx = new AudioCtx();
+      
+      // First chime note
+      const osc1 = ctx.createOscillator();
+      const gain1 = ctx.createGain();
+      osc1.type = 'sine';
+      osc1.frequency.setValueAtTime(659.25, ctx.currentTime);
+      gain1.gain.setValueAtTime(0.15, ctx.currentTime);
+      gain1.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.35);
+      osc1.connect(gain1);
+      gain1.connect(ctx.destination);
+      osc1.start(ctx.currentTime);
+      osc1.stop(ctx.currentTime + 0.35);
+
+      // Second higher pleasant chime note
+      const osc2 = ctx.createOscillator();
+      const gain2 = ctx.createGain();
+      osc2.type = 'sine';
+      osc2.frequency.setValueAtTime(880.00, ctx.currentTime + 0.12);
+      gain2.gain.setValueAtTime(0.18, ctx.currentTime + 0.12);
+      gain2.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.55);
+      osc2.connect(gain2);
+      gain2.connect(ctx.destination);
+      osc2.start(ctx.currentTime + 0.12);
+      osc2.stop(ctx.currentTime + 0.55);
+    } catch (e) {
+      // Audio might need user interaction first
+    }
+  }
+
+  function renderEnquiryRow(inq: any, isNew: boolean = false): string {
+    const dateObj = inq.created_at ? new Date(inq.created_at) : new Date();
+    const formattedDate = dateObj.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+    const priority = inq.priority || 'Medium';
+    const statusVal = inq.status || 'Pending';
+    const statusDisplay = statusVal.charAt(0).toUpperCase() + statusVal.slice(1).toLowerCase();
+    const contactName = inq.company_name || inq.name || 'Anonymous Client';
+    const phoneDisplay = inq.phone || 'N/A';
+    const prodName = inq.product_name || 'General Inquiry';
+    const prodSub = inq.fabric_choice || inq.customization_type || (inq.message ? (inq.message.slice(0, 30) + '...') : 'Standard Specification');
+    const qtyDisplay = `${Number(inq.quantity || 100).toLocaleString()} units`;
+    const inqJsonEscaped = escapeHtml(JSON.stringify(inq));
+
+    return `
+      <tr 
+        class="enquiry-row-item ${isNew ? 'row-just-added' : ''}" 
+        data-id="${escapeHtml(inq.id)}"
+        data-status="${escapeHtml(statusVal.toLowerCase())}"
+        data-priority="${escapeHtml(priority.toLowerCase())}"
+        data-inquiry="${inqJsonEscaped}"
+      >
+        <td>
+          <span class="enquiry-date-text">${formattedDate}</span>
+        </td>
+        <td>
+          <span class="priority-pill ${escapeHtml(priority.toLowerCase())}">
+            ${escapeHtml(priority)}
+          </span>
+        </td>
+        <td>
+          <div class="contact-stack">
+            <span class="contact-main-name">${escapeHtml(contactName)}</span>
+            <span class="contact-sub-phone">${escapeHtml(phoneDisplay)}</span>
+          </div>
+        </td>
+        <td>
+          <div class="product-stack">
+            <span class="product-main-name">${escapeHtml(prodName)}</span>
+            <span class="product-sub-desc">${escapeHtml(prodSub)}</span>
+          </div>
+        </td>
+        <td>
+          <span class="quantity-text">${escapeHtml(qtyDisplay)}</span>
+        </td>
+        <td>
+          <span class="status-dark-pill ${escapeHtml(statusVal.toLowerCase())}">
+            ${escapeHtml(statusDisplay)}
+          </span>
+        </td>
+        <td>
+          <div class="actions-icon-row">
+            <button 
+              type="button" 
+              class="action-btn-icon view-inquiry-btn" 
+              title="View Enquiry Details"
+              data-inquiry="${inqJsonEscaped}"
+            >
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8z"></path>
+                <circle cx="12" cy="12" r="3"></circle>
+              </svg>
+            </button>
+            <button 
+              type="button" 
+              class="action-btn-icon delete-inquiry-btn" 
+              title="Delete Enquiry"
+              data-id="${escapeHtml(inq.id)}"
+            >
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#DC2626" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="3 6 5 6 21 6"></polyline>
+                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+              </svg>
+            </button>
+          </div>
+        </td>
+      </tr>
+    `;
+  }
+
+  function renderRecentEnquiryRow(inq: any): string {
+    const dateObj = inq.created_at ? new Date(inq.created_at) : new Date();
+    const day = String(dateObj.getDate()).padStart(2, '0');
+    const month = String(dateObj.getMonth() + 1).padStart(2, '0');
+    const year = dateObj.getFullYear();
+    const formattedDate = `${day}/${month}/${year}`;
+    const statusLower = (inq.status || 'pending').toLowerCase();
+    const inqJsonEscaped = escapeHtml(JSON.stringify(inq));
+
+    return `
+      <div 
+        class="enquiry-item-row" 
+        data-id="${escapeHtml(inq.id)}"
+        data-json="${inqJsonEscaped}"
+      >
+        <div class="enquiry-item-left">
+          <h4 class="company-name">${escapeHtml(inq.company_name || inq.name || 'Unknown Company')}</h4>
+          <p class="company-sub">${escapeHtml(inq.product_name || 'Inquiry')} · ${Number(inq.quantity || 0).toLocaleString()} units</p>
+        </div>
+
+        <div class="enquiry-item-right">
+          <span class="status-badge-pill ${escapeHtml(statusLower)}">
+            ${escapeHtml(statusLower)}
+          </span>
+          <span class="enquiry-date">${formattedDate}</span>
+        </div>
+      </div>
+    `;
+  }
+
+  // Keep track of known inquiry IDs in memory
+  const knownInquiryIds = new Set<string>();
+  document.querySelectorAll<HTMLTableRowElement>('#enquiriesTableBody tr.enquiry-row-item').forEach(r => {
+    const id = r.getAttribute('data-id');
+    if (id) knownInquiryIds.add(id);
+  });
+
+  function attachEnquiryRowEvents() {
+    // View details modal buttons
+    document.querySelectorAll<HTMLElement>('.view-inquiry-btn').forEach(btn => {
+      btn.onclick = (e) => {
+        e.stopPropagation();
+        const dataStr = btn.getAttribute('data-inquiry');
+        if (dataStr) {
+          try {
+            openInquiryModal(JSON.parse(dataStr));
+          } catch {}
+        }
+      };
+    });
+
+    // Single delete buttons
+    document.querySelectorAll<HTMLElement>('.delete-inquiry-btn').forEach(btn => {
+      btn.onclick = async (e) => {
+        e.stopPropagation();
+        const id = btn.getAttribute('data-id');
+        if (!id) return;
+
+        if (!confirm('Are you sure you want to delete this enquiry?')) return;
+
+        try {
+          const res = await fetch(`/api/inquiries/${id}`, { method: 'DELETE' });
+          if (res.ok) {
+            knownInquiryIds.delete(id);
+            const row = btn.closest('tr');
+            row?.remove();
+            filterAndPaginateEnquiries();
+            showToast('Enquiry deleted successfully');
+          } else {
+            showToast('Failed to delete enquiry', true);
+          }
+        } catch (err: any) {
+          showToast(err.message || 'Error deleting enquiry', true);
+        }
+      };
+    });
+
+    // Recent items click on dashboard
+    document.querySelectorAll<HTMLElement>('.enquiry-item-row').forEach(row => {
+      row.onclick = () => {
+        const dataStr = row.getAttribute('data-json');
+        if (dataStr) {
+          try {
+            openInquiryModal(JSON.parse(dataStr));
+          } catch {}
+        }
+      };
+    });
+  }
+
+  let isFetchingInquiries = false;
+
+  async function checkAndUpdateInquiries(isManual: boolean = false) {
+    if (isFetchingInquiries) return;
+    isFetchingInquiries = true;
+
+    const refreshBtn = document.getElementById('manualRefreshBtn');
+    if (isManual && refreshBtn) {
+      refreshBtn.classList.add('refreshing');
+    }
+
+    try {
+      const res = await fetch('/api/inquiries', { credentials: 'same-origin' });
+      if (!res.ok) {
+        if (res.status === 401) {
+          console.warn('[Real-Time Sync] Admin session unauthorized');
+        }
+        return;
+      }
+
+      const data = await res.json();
+      if (!data.success || !Array.isArray(data.inquiries)) return;
+
+      const freshInquiries: any[] = data.inquiries;
+      
+      // Detect brand-new inquiries
+      const newItems = freshInquiries.filter(i => !knownInquiryIds.has(i.id));
+      const hasNewItems = newItems.length > 0;
+      const countChanged = freshInquiries.length !== knownInquiryIds.size;
+
+      if (hasNewItems || countChanged || isManual) {
+        const hadPrevious = knownInquiryIds.size > 0;
+        const prevSet = new Set(knownInquiryIds);
+
+        // Update known IDs
+        knownInquiryIds.clear();
+        freshInquiries.forEach(i => knownInquiryIds.add(i.id));
+
+        // Re-render full enquiries table
+        const tbody = document.getElementById('enquiriesTableBody');
+        if (tbody) {
+          tbody.innerHTML = freshInquiries.map(inq => {
+            const isFresh = hadPrevious && !prevSet.has(inq.id);
+            return renderEnquiryRow(inq, isFresh);
+          }).join('');
+        }
+
+        // Re-render dashboard recent list
+        const recentList = document.getElementById('recentEnquiriesList');
+        if (recentList) {
+          recentList.innerHTML = freshInquiries.slice(0, 5).map(inq => renderRecentEnquiryRow(inq)).join('');
+        }
+
+        // Update Dashboard Metric Counters
+        const totalCount = freshInquiries.length;
+        const pendingCount = freshInquiries.filter(i => {
+          const s = (i.status || '').toUpperCase();
+          return s === 'PENDING' || s === 'NEW';
+        }).length;
+
+        const totalEl = document.getElementById('dashboardTotalEnquiries');
+        if (totalEl) totalEl.textContent = String(totalCount);
+
+        const pendingEl = document.getElementById('dashboardPendingEnquiries');
+        if (pendingEl) pendingEl.textContent = String(pendingCount);
+
+        // Update Sidebar Badge
+        const sidebarBadge = document.getElementById('sidebarEnquiriesBadge');
+        if (sidebarBadge) {
+          sidebarBadge.textContent = String(pendingCount);
+          sidebarBadge.style.display = pendingCount > 0 ? 'inline-flex' : 'none';
+        }
+
+        // Re-attach event handlers & pagination
+        attachEnquiryRowEvents();
+        filterAndPaginateEnquiries();
+
+        if (hasNewItems && hadPrevious) {
+          playNotificationSound();
+          const latest = newItems[0];
+          const clientName = latest.company_name || latest.name || 'New Client';
+          const prodTitle = latest.product_name || 'Absorbent Pads';
+          showToast(`🔔 New Quote Request from "${clientName}" (${prodTitle})!`, false);
+
+          const originalTitle = document.title;
+          document.title = `(${newItems.length} New) ${originalTitle}`;
+          setTimeout(() => { document.title = originalTitle; }, 7000);
+        } else if (isManual) {
+          showToast('Enquiries list refreshed successfully');
+        }
+      }
+    } catch (err: any) {
+      console.error('[Real-Time Sync Error]:', err);
+      if (isManual) showToast('Failed to refresh enquiries', true);
+    } finally {
+      isFetchingInquiries = false;
+      if (refreshBtn) {
+        refreshBtn.classList.remove('refreshing');
+      }
+    }
+  }
+
+  // Initial event bindings
+  attachEnquiryRowEvents();
+  const initSidebarBadge = document.getElementById('sidebarEnquiriesBadge');
+  if (initSidebarBadge) {
+    const initRows = document.querySelectorAll('#enquiriesTableBody tr.enquiry-row-item');
+    if (initRows.length === 0) {
+      initSidebarBadge.style.display = 'none';
+      initSidebarBadge.textContent = '0';
+    }
+  }
+
+  // Manual refresh button
+  document.getElementById('manualRefreshBtn')?.addEventListener('click', () => {
+    checkAndUpdateInquiries(true);
+  });
+
+  // Background Auto-Polling every 3.5 seconds
+  const POLL_INTERVAL_MS = 3500;
+  setInterval(() => {
+    if (document.visibilityState === 'visible') {
+      checkAndUpdateInquiries(false);
+    }
+  }, POLL_INTERVAL_MS);
+
+  // Sync on tab focus / visibility return
+  window.addEventListener('focus', () => checkAndUpdateInquiries(false));
+  document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'visible') {
+      checkAndUpdateInquiries(false);
+    }
+  });
+
+  // Delete All enquiries button
+  btnDeleteAll?.addEventListener('click', async () => {
+    if (!confirm('Are you sure you want to delete all enquiries? This cannot be undone.')) return;
+
+    try {
+      const res = await fetch('/api/inquiries', { method: 'DELETE' });
+      if (res.ok) {
+        knownInquiryIds.clear();
+        const tbody = document.getElementById('enquiriesTableBody');
+        if (tbody) tbody.innerHTML = '';
+        const recentList = document.getElementById('recentEnquiriesList');
+        if (recentList) recentList.innerHTML = '<p style="padding: 16px; color: #94A3B8; font-size: 13px;">No enquiries yet.</p>';
+        const totalEl = document.getElementById('dashboardTotalEnquiries');
+        if (totalEl) totalEl.textContent = '0';
+        const pendingEl = document.getElementById('dashboardPendingEnquiries');
+        if (pendingEl) pendingEl.textContent = '0';
+        const sidebarBadge = document.getElementById('sidebarEnquiriesBadge');
+        if (sidebarBadge) sidebarBadge.style.display = 'none';
+
+        filterAndPaginateEnquiries();
+        showToast('All enquiries deleted');
+      } else {
+        showToast('Failed to delete all enquiries', true);
+      }
+    } catch (err: any) {
+      showToast(err.message || 'Error deleting enquiries', true);
+    }
+  });
+
+  // Export CSV button
+  btnExportCsv?.addEventListener('click', () => {
+    const rows = getEnquiryRows();
+    if (rows.length === 0) {
+      showToast('No enquiries to export', true);
+      return;
+    }
+
+    const headers = ['Date', 'Priority', 'Contact Name', 'Phone', 'Email', 'Product', 'Variant/Fabric', 'Quantity', 'Status', 'Message'];
+    const csvLines = [headers.join(',')];
+
+    rows.forEach(r => {
+      const dataStr = r.getAttribute('data-inquiry');
+      if (dataStr) {
+        try {
+          const inq = JSON.parse(dataStr);
+          const date = inq.created_at ? new Date(inq.created_at).toLocaleDateString() : '';
+          const priority = inq.priority || 'Medium';
+          const name = `"${(inq.company_name || inq.name || '').replace(/"/g, '""')}"`;
+          const phone = `"${(inq.phone || '').replace(/"/g, '""')}"`;
+          const email = `"${(inq.email || '').replace(/"/g, '""')}"`;
+          const product = `"${(inq.product_name || '').replace(/"/g, '""')}"`;
+          const variant = `"${(inq.fabric_choice || inq.customization_type || '').replace(/"/g, '""')}"`;
+          const qty = inq.quantity || 100;
+          const status = inq.status || 'Pending';
+          const msg = `"${(inq.message || '').replace(/"/g, '""')}"`;
+
+          csvLines.push([date, priority, name, phone, email, product, variant, qty, status, msg].join(','));
+        } catch {}
+      }
+    });
+
+    const csvContent = 'data:text/csv;charset=utf-8,' + encodeURIComponent(csvLines.join('\n'));
+    const link = document.createElement('a');
+    link.setAttribute('href', csvContent);
+    link.setAttribute('download', `enquiries_export_${new Date().toISOString().slice(0, 10)}.csv`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    showToast('Enquiries exported to CSV');
+  });
+
+  // Initial pagination run
+  filterAndPaginateEnquiries();
+
+  // ==========================================
+  // CUSTOMER REVIEWS VIEW LOGIC (MATCHES SCREENSHOT)
+  // ==========================================
+  const reviewStatusFilter = document.getElementById('reviewStatusFilter') as HTMLSelectElement;
+  const reviewsPageSizeSelect = document.getElementById('reviewsPageSizeSelect') as HTMLSelectElement;
+  const reviewsShowingText = document.getElementById('reviewsShowingText');
+  const reviewsPageLabel = document.getElementById('reviewsPageLabel');
+  const reviewsFirstBtn = document.getElementById('reviewsFirstBtn') as HTMLButtonElement;
+  const reviewsPrevBtn = document.getElementById('reviewsPrevBtn') as HTMLButtonElement;
+  const reviewsNextBtn = document.getElementById('reviewsNextBtn') as HTMLButtonElement;
+  const reviewsLastBtn = document.getElementById('reviewsLastBtn') as HTMLButtonElement;
+
+  let currentRevPage = 1;
+  let revPageSize = 10;
+
+  function getReviewRows(): HTMLTableRowElement[] {
+    return Array.from(document.querySelectorAll<HTMLTableRowElement>('#reviewsTableBody tr.review-row-item'));
+  }
+
+  function filterAndPaginateReviews() {
+    const filterVal = (reviewStatusFilter?.value || '').trim().toLowerCase();
+    const allRows = getReviewRows();
+    const matchedRows: HTMLTableRowElement[] = [];
+
+    allRows.forEach(row => {
+      const status = (row.getAttribute('data-status') || '').toLowerCase();
+      const visibility = (row.getAttribute('data-visibility') || '').toLowerCase();
+
+      let matches = false;
+      if (!filterVal || filterVal === 'all reviews') {
+        matches = true;
+      } else if (filterVal === 'approved' && status === 'approved') {
+        matches = true;
+      } else if (filterVal === 'pending' && status === 'pending') {
+        matches = true;
+      } else if (filterVal === 'hidden' && visibility === 'hidden') {
+        matches = true;
+      } else if (filterVal === 'visible' && visibility === 'visible') {
+        matches = true;
+      }
+
+      if (matches) {
+        matchedRows.push(row);
+      } else {
+        row.style.display = 'none';
+      }
+    });
+
+    const totalMatched = matchedRows.length;
+    revPageSize = parseInt(reviewsPageSizeSelect?.value || '10', 10);
+    const totalPages = Math.max(1, Math.ceil(totalMatched / revPageSize));
+
+    if (currentRevPage > totalPages) currentRevPage = totalPages;
+    if (currentRevPage < 1) currentRevPage = 1;
+
+    const startIndex = (currentRevPage - 1) * revPageSize;
+    const endIndex = startIndex + revPageSize;
+
+    matchedRows.forEach((row, idx) => {
+      if (idx >= startIndex && idx < endIndex) {
+        row.style.display = '';
+      } else {
+        row.style.display = 'none';
+      }
+    });
+
+    const displayStart = totalMatched === 0 ? 0 : startIndex + 1;
+    const displayEnd = Math.min(endIndex, totalMatched);
+
+    if (reviewsShowingText) {
+      reviewsShowingText.textContent = `Showing ${displayStart} to ${displayEnd} of ${totalMatched} reviews`;
+    }
+
+    if (reviewsPageLabel) {
+      reviewsPageLabel.textContent = `Page ${currentRevPage} of ${totalPages}`;
+    }
+
+    if (reviewsFirstBtn) reviewsFirstBtn.disabled = currentRevPage <= 1;
+    if (reviewsPrevBtn) reviewsPrevBtn.disabled = currentRevPage <= 1;
+    if (reviewsNextBtn) reviewsNextBtn.disabled = currentRevPage >= totalPages;
+    if (reviewsLastBtn) reviewsLastBtn.disabled = currentRevPage >= totalPages;
+  }
+
+  reviewStatusFilter?.addEventListener('change', () => {
+    currentRevPage = 1;
+    filterAndPaginateReviews();
+  });
+
+  reviewsPageSizeSelect?.addEventListener('change', () => {
+    currentRevPage = 1;
+    filterAndPaginateReviews();
+  });
+
+  reviewsFirstBtn?.addEventListener('click', () => {
+    currentRevPage = 1;
+    filterAndPaginateReviews();
+  });
+
+  reviewsPrevBtn?.addEventListener('click', () => {
+    if (currentRevPage > 1) {
+      currentRevPage--;
+      filterAndPaginateReviews();
+    }
+  });
+
+  reviewsNextBtn?.addEventListener('click', () => {
+    currentRevPage++;
+    filterAndPaginateReviews();
+  });
+
+  reviewsLastBtn?.addEventListener('click', () => {
+    const allRows = getReviewRows();
+    const totalPages = Math.max(1, Math.ceil(allRows.length / revPageSize));
+    currentRevPage = totalPages;
+    filterAndPaginateReviews();
+  });
+
+  // Action dots toggle dropdown
+  document.querySelectorAll<HTMLElement>('.action-dots-btn').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const id = btn.getAttribute('data-id');
+      const menu = document.getElementById(`review-menu-${id}`);
+      
+      // Close all other menus
+      document.querySelectorAll<HTMLElement>('.review-action-dropdown').forEach(m => {
+        if (m !== menu) m.style.display = 'none';
+      });
+
+      if (menu) {
+        menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
+      }
+    });
+  });
+
+  // Close menus on document click
+  document.addEventListener('click', () => {
+    document.querySelectorAll<HTMLElement>('.review-action-dropdown').forEach(m => {
+      m.style.display = 'none';
+    });
+  });
+
+  // Toggle Visibility action
+  document.querySelectorAll<HTMLElement>('.toggle-visibility-btn').forEach(btn => {
+    btn.addEventListener('click', async (e) => {
+      e.stopPropagation();
+      const id = btn.getAttribute('data-id');
+      const row = btn.closest('tr');
+      if (!id || !row) return;
+
+      const currentVis = (row.getAttribute('data-visibility') || 'hidden').toLowerCase();
+      const newVis = currentVis === 'hidden' ? 'Visible' : 'Hidden';
+
+      try {
+        const res = await fetch(`/api/reviews/${id}`, {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ visibility: newVis })
+        });
+        if (res.ok) {
+          row.setAttribute('data-visibility', newVis.toLowerCase());
+          const visPill = row.querySelector('.review-visibility-pill');
+          if (visPill) {
+            visPill.className = `review-visibility-pill ${newVis.toLowerCase()}`;
+            visPill.textContent = newVis;
+          }
+          btn.textContent = newVis === 'Hidden' ? '👁 Show on Site' : '🚫 Hide from Site';
+          const menu = btn.closest<HTMLElement>('.review-action-dropdown');
+          if (menu) menu.style.display = 'none';
+          showToast(`Visibility set to ${newVis}`);
+        } else {
+          showToast('Failed to update visibility', true);
+        }
+      } catch (err: any) {
+        showToast(err.message || 'Error updating visibility', true);
+      }
+    });
+  });
+
+  // Toggle Status action
+  document.querySelectorAll<HTMLElement>('.toggle-status-btn').forEach(btn => {
+    btn.addEventListener('click', async (e) => {
+      e.stopPropagation();
+      const id = btn.getAttribute('data-id');
+      const row = btn.closest('tr');
+      if (!id || !row) return;
+
+      const currentStatus = (row.getAttribute('data-status') || 'approved').toLowerCase();
+      const newStatus = currentStatus === 'approved' ? 'Pending' : 'Approved';
+
+      try {
+        const res = await fetch(`/api/reviews/${id}`, {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ status: newStatus })
+        });
+        if (res.ok) {
+          row.setAttribute('data-status', newStatus.toLowerCase());
+          const statPill = row.querySelector('.review-status-pill');
+          if (statPill) {
+            statPill.className = `review-status-pill ${newStatus.toLowerCase()}`;
+            statPill.textContent = newStatus;
+          }
+          btn.textContent = newStatus === 'Approved' ? '⏳ Set Pending' : '✓ Approve Review';
+          const menu = btn.closest<HTMLElement>('.review-action-dropdown');
+          if (menu) menu.style.display = 'none';
+          showToast(`Status updated to ${newStatus}`);
+        } else {
+          showToast('Failed to update status', true);
+        }
+      } catch (err: any) {
+        showToast(err.message || 'Error updating status', true);
+      }
+    });
+  });
+
+  // Delete Review action
+  document.querySelectorAll<HTMLElement>('.delete-review-btn').forEach(btn => {
+    btn.addEventListener('click', async (e) => {
+      e.stopPropagation();
+      const id = btn.getAttribute('data-id');
+      const row = btn.closest('tr');
+      if (!id || !row) return;
+
+      if (!confirm('Are you sure you want to delete this review?')) return;
+
+      try {
+        const res = await fetch(`/api/reviews/${id}`, { method: 'DELETE' });
+        if (res.ok) {
+          row.remove();
+          filterAndPaginateReviews();
+          showToast('Review deleted successfully');
+        } else {
+          showToast('Failed to delete review', true);
+        }
+      } catch (err: any) {
+        showToast(err.message || 'Error deleting review', true);
+      }
+    });
+  });
+
+  // Initial call on load
+  filterAndPaginateReviews();
+
+  // ==========================================
+  // OFFERS & PROMOTIONS LOGIC (MATCHES SCREENSHOT)
+  // ==========================================
+  const offerActiveSwitch = document.getElementById('offerActiveSwitch') as HTMLInputElement;
+  const offerStatusNotice = document.getElementById('offerStatusNotice');
+  const offerStatusNoticeText = document.getElementById('offerStatusNoticeText');
+  const offerTitleInput = document.getElementById('offerTitleInput') as HTMLInputElement;
+  const offerDescInput = document.getElementById('offerDescInput') as HTMLInputElement;
+  const offerLinkInput = document.getElementById('offerLinkInput') as HTMLInputElement;
+  const offerButtonTextInput = document.getElementById('offerButtonTextInput') as HTMLInputElement;
+  const offerConfigForm = document.getElementById('offerConfigForm') as HTMLFormElement;
+  const previewHeadline = document.getElementById('previewHeadline');
+  const previewSubtext = document.getElementById('previewSubtext');
+  const saveOfferBtn = document.getElementById('saveOfferBtn') as HTMLButtonElement;
+
+  function updateOfferStatusBanner() {
+    const isActive = offerActiveSwitch?.checked;
+    if (offerStatusNotice && offerStatusNoticeText) {
+      if (isActive) {
+        offerStatusNotice.classList.add('active');
+        offerStatusNoticeText.textContent = '• Offer is currently active';
+      } else {
+        offerStatusNotice.classList.remove('active');
+        offerStatusNoticeText.textContent = '• Offer is currently disabled';
+      }
+    }
+  }
+
+  offerActiveSwitch?.addEventListener('change', () => {
+    updateOfferStatusBanner();
+  });
+
+  offerTitleInput?.addEventListener('input', () => {
+    if (previewHeadline) {
+      previewHeadline.textContent = offerTitleInput.value || '10% off on tshirt bulk order';
+    }
+  });
+
+  offerDescInput?.addEventListener('input', () => {
+    if (previewSubtext) {
+      previewSubtext.textContent = offerDescInput.value || '10% off on tshirt bulk order above 5000 quant';
+    }
+  });
+
+  offerConfigForm?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    if (saveOfferBtn) {
+      saveOfferBtn.disabled = true;
+      saveOfferBtn.style.opacity = '0.7';
+    }
+
+    const payload = {
+      active: !!offerActiveSwitch?.checked,
+      title: offerTitleInput?.value.trim() || '',
+      description: offerDescInput?.value.trim() || '',
+      linkUrl: offerLinkInput?.value.trim() || '',
+      buttonText: offerButtonTextInput?.value.trim() || 'Claim offer'
+    };
+
+    try {
+      const res = await fetch('/api/offer', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+
+      if (res.ok) {
+        showToast('Offer saved successfully!');
+      } else {
+        showToast('Failed to save offer', true);
+      }
+    } catch (err: any) {
+      showToast(err.message || 'Error saving offer', true);
+    } finally {
+      if (saveOfferBtn) {
+        saveOfferBtn.disabled = false;
+        saveOfferBtn.style.opacity = '1';
+      }
+    }
+  });
+
+  // Save Settings handler
+  const saveSettingsBtn = document.getElementById('saveSettingsBtn');
+  const settingWhatsApp = document.getElementById('settingWhatsApp') as HTMLInputElement | null;
+  const settingEmail = document.getElementById('settingEmail') as HTMLInputElement | null;
+  const settingAdminPin = document.getElementById('settingAdminPin') as HTMLInputElement | null;
+
+  saveSettingsBtn?.addEventListener('click', async () => {
+    if (saveSettingsBtn) {
+      saveSettingsBtn.innerText = 'Saving...';
+      (saveSettingsBtn as HTMLButtonElement).disabled = true;
+    }
+    try {
+      const res = await fetch('/api/settings', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          company_whatsapp: settingWhatsApp?.value.trim() || '',
+          notification_email: settingEmail?.value.trim() || '',
+          admin_pin: settingAdminPin?.value.trim() || ''
+        })
+      });
+      const data = await res.json();
+      if (res.ok && data.ok) {
+        showToast('Settings saved successfully!');
+      } else {
+        showToast(data.error || 'Failed saving settings', true);
+      }
+    } catch (err: any) {
+      showToast(err.message || 'Error saving settings', true);
+    } finally {
+      if (saveSettingsBtn) {
+        saveSettingsBtn.innerText = 'Save Settings';
+        (saveSettingsBtn as HTMLButtonElement).disabled = false;
+      }
+    }
+  });
+
+  // Test & Sync D1 Tables handler
+  const syncD1Btn = document.getElementById('syncD1Btn');
+  const d1SyncResult = document.getElementById('d1SyncResult');
+
+  syncD1Btn?.addEventListener('click', async () => {
+    if (syncD1Btn) {
+      (syncD1Btn as HTMLButtonElement).innerText = 'Connecting to Cloudflare...';
+      (syncD1Btn as HTMLButtonElement).disabled = true;
+    }
+    if (d1SyncResult) d1SyncResult.style.display = 'none';
+
+    try {
+      const res = await fetch('/api/admin/init-d1', { method: 'POST' });
+      const data = await res.json();
+      if (d1SyncResult) {
+        d1SyncResult.style.display = 'block';
+        if (res.ok && data.ok) {
+          d1SyncResult.style.background = '#ECFDF5';
+          d1SyncResult.style.border = '1px solid #A7F3D0';
+          d1SyncResult.style.color = '#065F46';
+          d1SyncResult.innerText = '✓ ' + data.message + ' (Tables: ' + (data.tables || []).join(', ') + ')';
+          showToast('D1 database synced successfully!');
+        } else {
+          d1SyncResult.style.background = '#FEF2F2';
+          d1SyncResult.style.border = '1px solid #FECACA';
+          d1SyncResult.style.color = '#991B1B';
+          d1SyncResult.innerText = '✗ ' + (data.error || 'Connection failed.');
+          showToast('D1 sync: ' + (data.error || 'Failed'), true);
+        }
+      }
+    } catch (err: any) {
+      if (d1SyncResult) {
+        d1SyncResult.style.display = 'block';
+        d1SyncResult.style.background = '#FEF2F2';
+        d1SyncResult.style.border = '1px solid #FECACA';
+        d1SyncResult.style.color = '#991B1B';
+        d1SyncResult.innerText = '✗ ' + (err.message || 'Failed connecting to D1');
+      }
+    } finally {
+      if (syncD1Btn) {
+        (syncD1Btn as HTMLButtonElement).disabled = false;
+        (syncD1Btn as HTMLButtonElement).innerHTML = '<span>⚡</span><span>Test & Sync D1 Tables</span>';
+      }
+    }
+  });
+
+  // Close modals on backdrop click
+  window.addEventListener('click', (e) => {
+    if (e.target === productModal) productModal.style.display = 'none';
+    if (e.target === categoryModal) categoryModal.style.display = 'none';
+    if (e.target === inquiryModal) inquiryModal.style.display = 'none';
+  });
+</script>

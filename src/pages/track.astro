@@ -1,0 +1,841 @@
+---
+// Page: /track
+// Dedicated Quotation Tracking portal for B2B Clients
+import Layout from '../layouts/Layout.astro';
+
+const whatsappNumber = import.meta.env.COMPANY_WHATSAPP || '917623906747';
+---
+
+<Layout
+  title="Track Quotation (RFQ Status) — Food Pad Manufacturing Tracking"
+  description="Track real-time B2B quotation status, engineering specifications review, sample trial box dispatch, and bulk production milestones using your INQ reference code."
+  currentPath="/track"
+>
+  <section class="track-page-section">
+    <div class="track-page-container">
+      <div class="track-header-box">
+        <span class="track-pill-tag">B2B QUOTATION & RFQ TRACKING</span>
+        <h1 class="track-main-title">Track Manufacturing Quotation</h1>
+        <p class="track-main-desc">
+          Enter your unique Quotation Reference Number (e.g., <strong>INQ-2026-2236</strong>) generated upon RFQ submission to inspect engineering review status, wholesale pricing availability, and test trial sample box dispatch.
+        </p>
+      </div>
+
+      <!-- In-Page Tracking Card -->
+      <div class="track-standalone-card">
+        <form id="pageTrackForm" class="page-track-form" onsubmit="return false;">
+          <label for="pageTrackInput" class="page-input-label">Enter Tracking ID / Inquiry Reference</label>
+          <div class="page-input-row">
+            <div class="page-input-wrap">
+              <svg class="page-search-icon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="11" cy="11" r="8"></circle>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+              </svg>
+              <input 
+                type="text" 
+                id="pageTrackInput" 
+                class="page-input-field" 
+                placeholder="e.g. INQ-2026-2236" 
+                autocomplete="off"
+                required
+              />
+            </div>
+            <button type="submit" id="btnPageTrackSubmit" class="btn-page-track">
+              Track Status &rarr;
+            </button>
+          </div>
+
+        </form>
+
+        <!-- Dynamic Results Area -->
+        <div id="pageTrackLoading" class="page-track-state" style="display: none;">
+          <div class="page-track-spinner"></div>
+          <p>Querying manufacturing database...</p>
+        </div>
+
+        <div id="pageTrackError" class="page-track-error-box" style="display: none;">
+          <div class="page-error-icon">⚠️</div>
+          <h4 class="page-error-title">Quotation Reference Not Found</h4>
+          <p id="pageTrackErrorText" class="page-error-msg">We could not locate any active inquiry matching this code.</p>
+          <div class="page-error-actions">
+            <button type="button" id="btnPageTrackRetry" class="btn-err-action" style="cursor: pointer; border: none;">Try Searching Again</button>
+            <a href="/enquiry" class="btn-err-action">Submit New Quote Request</a>
+            <a href={`https://wa.me/${whatsappNumber}?text=Hi!%20Need%20help%20tracking%20my%20quotation.`} target="_blank" class="btn-err-wa">Chat Support on WhatsApp</a>
+          </div>
+        </div>
+
+        <!-- Populated Tracking View -->
+        <div id="pageTrackResult" style="display: none; flex-direction: column; gap: 14px; margin-top: 24px;">
+          <!-- 1. Order Status Header Card -->
+          <div style="background: #F9FAFB; border: 1px solid #E5E7EB; border-radius: 8px; padding: 14px 18px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+            <div>
+              <div style="font-size: 11px; font-weight: 700; color: #6B7280; text-transform: uppercase;">Quotation ID</div>
+              <div style="font-size: 16px; font-weight: 800; color: #111827; font-family: monospace; margin-top: 1px;" id="pResInqNo">INQ-XXXX</div>
+              <div style="font-size: 12px; color: #6B7280; margin-top: 2px;">Date: <span id="pResDate" style="color: #374151; font-weight: 500;">Oct 13, 2026</span></div>
+            </div>
+            <div style="text-align: right;">
+              <div style="font-size: 11px; font-weight: 700; color: #6B7280; text-transform: uppercase;">Current Status</div>
+              <span id="pResStatusTag" style="display: inline-block; font-size: 12px; font-weight: 700; padding: 4px 12px; border-radius: 20px; background: #DCFCE7; color: #15803D; margin-top: 3px;">Quotation Ready</span>
+            </div>
+          </div>
+
+          <!-- 2. Product Summary Card (E-Commerce Item Style) -->
+          <div style="background: #FFFFFF; border: 1px solid #E5E7EB; border-radius: 8px; padding: 14px 16px; display: flex; gap: 14px; align-items: center; justify-content: space-between;">
+            <div style="flex: 1; min-width: 0;">
+              <div style="font-size: 14px; font-weight: 700; color: #111827; line-height: 1.35;" id="pResProduct">Meat & Poultry Packaging</div>
+              <div style="font-size: 12px; color: #4B5563; margin-top: 3px; display: flex; flex-wrap: wrap; gap: 8px;">
+                <span>Qty: <strong id="pResQuantity" style="color: #111827;">5,000 units</strong></span>
+                <span style="color: #D1D5DB;">&bull;</span>
+                <span>Spec: <span id="pResFabric" style="color: #111827;">Custom Spec</span></span>
+                <span style="color: #D1D5DB;">&bull;</span>
+                <span>Client: <span id="pResCompany" style="color: #111827;">Company</span></span>
+              </div>
+            </div>
+            <div style="width: 58px; height: 58px; border-radius: 8px; overflow: hidden; border: 1px solid #E5E7EB; background: #F8FAFC; flex-shrink: 0; margin-left: 10px;">
+              <img id="pResProductImg" src="/images/products/quilted-meat-tray-pad.jpg" alt="Ordered Product" style="width: 100%; height: 100%; object-fit: cover; display: block;" />
+            </div>
+          </div>
+
+          <!-- 3. E-Commerce Vertical Stepper (Milestones Timeline) -->
+          <div style="background: #FFFFFF; padding: 14px 4px;">
+            <div style="font-size: 11px; font-weight: 800; color: #374151; text-transform: uppercase; letter-spacing: 0.6px; margin-bottom: 16px;">TRACKING TIMELINE</div>
+            <div id="pResStepsList" style="display: flex; flex-direction: column;">
+              <!-- Rendered cleanly with inline styles via JS -->
+            </div>
+          </div>
+
+          <!-- 4. Quotation Admin Note Box (if note present) -->
+          <div id="pResNotesBox" style="display: none; background: #FFF8F8; border: 1.5px solid #FCA5A5; border-radius: 8px; padding: 12px 16px;">
+            <p style="margin: 0; line-height: 1.45; display: flex; align-items: baseline; flex-wrap: wrap; gap: 4px;">
+              <span style="color: #000000; font-weight: 800; font-size: 15.5px; letter-spacing: 0.2px;">Note :- </span>
+              <span id="pResNotesText" style="color: #8B0000; font-size: 13px; font-weight: 600;"></span>
+            </p>
+          </div>
+
+          <!-- 5. Actions Footer -->
+          <div style="margin-top: 4px; display: flex; gap: 10px; flex-wrap: wrap;">
+            <a id="pResWaLink" href="#" target="_blank" style="flex: 1; min-width: 200px; background: #25D366; color: #FFFFFF; text-decoration: none; font-size: 14px; font-weight: 600; padding: 12px 16px; border-radius: 6px; text-align: center;">
+              💬 Chat on WhatsApp Regarding This Quotation
+            </a>
+            <button type="button" id="btnPageTrackAnother" style="background: #F3F4F6; color: #374151; border: 1px solid #D1D5DB; padding: 12px 18px; border-radius: 6px; font-size: 14px; font-weight: 600; cursor: pointer;">
+              Track Another
+            </button>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Information Help Cards Grid -->
+      <div class="track-info-grid">
+        <div class="info-card">
+          <div class="info-card-num">01</div>
+          <h4 class="info-card-title">Where do I get my Tracking ID?</h4>
+          <p class="info-card-text">
+            When you submit a quotation request on our website, a unique reference code starting with <code>INQ-2026-XXXX</code> is generated and displayed on screen, and also shared via your registered WhatsApp/Email.
+          </p>
+        </div>
+
+        <div class="info-card">
+          <div class="info-card-num">02</div>
+          <h4 class="info-card-title">How fast are quotes processed?</h4>
+          <p class="info-card-text">
+            Standard food pad specifications are reviewed within 2 to 4 business hours. Custom die-cut shapes and non-standard fluid capacities take up to 24 business hours for engineering review.
+          </p>
+        </div>
+
+        <div class="info-card">
+          <div class="info-card-num">03</div>
+          <h4 class="info-card-title">Can I request trial samples?</h4>
+          <p class="info-card-text">
+            Yes! Once your quote is in the "Quotation Ready" or "Sample" stage, sample trial boxes can be expedited via courier directly from our cleanroom facility.
+          </p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+
+</Layout>
+
+<style>
+  .track-page-section {
+    padding: 60px 0 90px;
+    background: #FAF8F5;
+    min-height: 80vh;
+  }
+
+  .track-page-container {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 0 20px;
+  }
+
+  .track-header-box {
+    text-align: center;
+    margin-bottom: 36px;
+  }
+
+  .track-pill-tag {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1.2px;
+    color: #92400E;
+    background: #FEF3C7;
+    padding: 4px 12px;
+    border-radius: 20px;
+    margin-bottom: 12px;
+  }
+
+  .track-main-title {
+    font-size: 32px;
+    font-weight: 800;
+    color: #0F172A;
+    margin: 0 0 12px 0;
+  }
+
+  .track-main-desc {
+    font-size: 15px;
+    color: #64748B;
+    max-width: 680px;
+    margin: 0 auto;
+    line-height: 1.6;
+  }
+
+  .track-standalone-card {
+    background: #FFFFFF;
+    border-radius: 16px;
+    border: 1px solid #E2E8F0;
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05);
+    padding: 28px 32px;
+    margin-bottom: 40px;
+  }
+
+  .page-input-label {
+    display: block;
+    font-size: 12px;
+    font-weight: 700;
+    color: #475569;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    margin-bottom: 10px;
+  }
+
+  .page-input-row {
+    display: flex;
+    gap: 12px;
+  }
+
+  .page-input-wrap {
+    flex: 1;
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+
+  .page-search-icon {
+    position: absolute;
+    left: 14px;
+    color: #94A3B8;
+  }
+
+  .page-input-field {
+    width: 100%;
+    padding: 13px 14px 13px 44px;
+    border: 2px solid #CBD5E1;
+    border-radius: 10px;
+    font-size: 16px;
+    font-weight: 700;
+    color: #0F172A;
+    font-family: ui-monospace, SFMono-Regular, monospace;
+    outline: none;
+    transition: all 0.15s ease;
+  }
+
+  .page-input-field:focus {
+    border-color: #8B0000;
+    box-shadow: 0 0 0 3px rgba(139, 0, 0, 0.12);
+  }
+
+  .btn-page-track {
+    background: #8B0000;
+    color: #FFFFFF;
+    border: none;
+    padding: 13px 28px;
+    border-radius: 10px;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background 0.15s ease;
+  }
+
+  .btn-page-track:hover {
+    background: #700000;
+  }
+
+  .page-tags-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 14px;
+    font-size: 12.5px;
+  }
+
+  .page-tags-title {
+    color: #64748B;
+  }
+
+  .btn-quick-inq-code {
+    background: #F1F5F9;
+    border: 1px solid #CBD5E1;
+    padding: 3px 10px;
+    border-radius: 6px;
+    font-family: monospace;
+    font-size: 12px;
+    font-weight: 600;
+    color: #1E293B;
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+
+  .btn-quick-inq-code:hover {
+    background: #E2E8F0;
+    color: #8B0000;
+  }
+
+  /* States */
+  .page-track-state {
+    text-align: center;
+    padding: 40px 20px;
+    color: #64748B;
+  }
+
+  .page-track-spinner {
+    width: 38px;
+    height: 38px;
+    border: 3px solid #E2E8F0;
+    border-top-color: #8B0000;
+    border-radius: 50%;
+    margin: 0 auto 12px auto;
+    animation: spin 0.8s linear infinite;
+  }
+
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
+
+  .page-track-error-box {
+    background: #FEF2F2;
+    border: 1px solid #FECACA;
+    border-radius: 12px;
+    padding: 24px;
+    text-align: center;
+    margin-top: 24px;
+  }
+
+  .page-error-icon {
+    font-size: 32px;
+    margin-bottom: 6px;
+  }
+
+  .page-error-title {
+    color: #991B1B;
+    font-size: 16px;
+    font-weight: 700;
+    margin: 0 0 6px 0;
+  }
+
+  .page-error-msg {
+    color: #B91C1C;
+    font-size: 13.5px;
+    margin: 0 0 16px 0;
+  }
+
+  .page-error-actions {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  .btn-err-action {
+    background: #8B0000;
+    color: #FFFFFF;
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 600;
+    padding: 8px 16px;
+    border-radius: 6px;
+  }
+
+  .btn-err-wa {
+    background: #FFFFFF;
+    color: #1E293B;
+    border: 1px solid #CBD5E1;
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 600;
+    padding: 8px 16px;
+    border-radius: 6px;
+  }
+
+  /* Result */
+  .page-result-container {
+    margin-top: 28px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    animation: fadeIn 0.25s ease-out;
+  }
+
+  .result-hero-box {
+    background: linear-gradient(135deg, #1E1B4B 0%, #0F172A 100%);
+    border-radius: 12px;
+    padding: 22px 26px;
+    color: #FFFFFF;
+  }
+
+  .result-hero-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+  }
+
+  .result-inq-badge {
+    font-family: monospace;
+    font-size: 15px;
+    font-weight: 700;
+    background: rgba(255, 255, 255, 0.15);
+    color: #FEF08A;
+    padding: 4px 10px;
+    border-radius: 6px;
+  }
+
+  .result-date {
+    font-size: 12px;
+    color: #94A3B8;
+  }
+
+  .result-status-tag-row {
+    margin-bottom: 10px;
+  }
+
+  .result-status-badge {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    background: #FEF3C7;
+    color: #92400E;
+    padding: 4px 12px;
+    border-radius: 20px;
+    letter-spacing: 0.8px;
+  }
+
+  .result-status-heading {
+    font-size: 18px;
+    font-weight: 700;
+    margin: 0 0 6px 0;
+  }
+
+  .result-status-desc {
+    font-size: 13.5px;
+    color: #CBD5E1;
+    margin: 0;
+    line-height: 1.45;
+  }
+
+  .result-timeline-box {
+    background: #F8FAFC;
+    border: 1px solid #E2E8F0;
+    border-radius: 12px;
+    padding: 20px 24px;
+  }
+
+  .timeline-title {
+    font-size: 12px;
+    font-weight: 700;
+    color: #475569;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    margin: 0 0 16px 0;
+  }
+
+  .timeline-steps-list {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .page-step-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    position: relative;
+  }
+
+  .page-step-item:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    left: 15px;
+    top: 32px;
+    bottom: -14px;
+    width: 2px;
+    background: #E2E8F0;
+    z-index: 1;
+  }
+
+  .page-step-item.is-completed:not(:last-child)::after {
+    background: #10B981;
+  }
+
+  .p-step-circle {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    font-weight: 700;
+    background: #E2E8F0;
+    color: #64748B;
+    flex-shrink: 0;
+    z-index: 2;
+  }
+
+  .page-step-item.is-completed .p-step-circle {
+    background: #10B981;
+    color: #FFFFFF;
+  }
+
+  .page-step-item.is-active .p-step-circle {
+    background: #8B0000;
+    color: #FFFFFF;
+    box-shadow: 0 0 0 4px rgba(139, 0, 0, 0.2);
+  }
+
+  .p-step-content {
+    flex: 1;
+  }
+
+  .p-step-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .p-step-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: #0F172A;
+  }
+
+  .p-step-date {
+    font-size: 11.5px;
+    color: #94A3B8;
+  }
+
+  .p-step-desc {
+    font-size: 12.5px;
+    color: #64748B;
+    margin-top: 2px;
+  }
+
+  .result-specs-card {
+    background: #FFFFFF;
+    border: 1px solid #E2E8F0;
+    border-radius: 12px;
+    padding: 18px 22px;
+  }
+
+  .specs-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px 24px;
+  }
+
+  .spec-cell {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+  }
+
+  .spec-header {
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    color: #64748B;
+    letter-spacing: 0.5px;
+  }
+
+  .spec-value {
+    font-size: 14px;
+    font-weight: 600;
+    color: #0F172A;
+  }
+
+  .result-admin-notes {
+    background: #FFFBEB;
+    border: 1px solid #FDE68A;
+    border-radius: 10px;
+    padding: 16px 20px;
+  }
+
+  .notes-title {
+    font-size: 12px;
+    font-weight: 700;
+    color: #92400E;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+
+  .notes-content {
+    font-size: 13.5px;
+    color: #78350F;
+    margin: 0;
+    line-height: 1.5;
+  }
+
+  .result-connect-row {
+    margin-top: 6px;
+  }
+
+  .btn-result-wa {
+    display: block;
+    background: #25D366;
+    color: #FFFFFF;
+    text-align: center;
+    padding: 14px;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: 700;
+    text-decoration: none;
+    transition: background 0.15s ease;
+  }
+
+  .btn-result-wa:hover {
+    background: #1EBE5D;
+  }
+
+  /* Info Grid */
+  .track-info-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 20px;
+  }
+
+  .info-card {
+    background: #FFFFFF;
+    border: 1px solid #E2E8F0;
+    border-radius: 12px;
+    padding: 24px;
+  }
+
+  .info-card-num {
+    font-size: 20px;
+    font-weight: 800;
+    color: #8B0000;
+    margin-bottom: 8px;
+  }
+
+  .info-card-title {
+    font-size: 15px;
+    font-weight: 700;
+    color: #0F172A;
+    margin: 0 0 8px 0;
+  }
+
+  .info-card-text {
+    font-size: 13px;
+    color: #64748B;
+    margin: 0;
+    line-height: 1.55;
+  }
+
+  @media (max-width: 640px) {
+    .page-input-row {
+      flex-direction: column;
+    }
+    .specs-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const form = document.getElementById('pageTrackForm') as HTMLFormElement;
+    const input = document.getElementById('pageTrackInput') as HTMLInputElement;
+    const btnSubmit = document.getElementById('btnPageTrackSubmit') as HTMLButtonElement;
+    
+    const loading = document.getElementById('pageTrackLoading');
+    const errBox = document.getElementById('pageTrackError');
+    const errMsg = document.getElementById('pageTrackErrorText');
+    const resultBox = document.getElementById('pageTrackResult');
+    const btnPageTrackAnother = document.getElementById('btnPageTrackAnother');
+    const btnPageTrackRetry = document.getElementById('btnPageTrackRetry');
+
+    function showPageSearchForm() {
+      if (form) form.style.display = 'block';
+      if (loading) loading.style.display = 'none';
+      if (errBox) errBox.style.display = 'none';
+      if (resultBox) resultBox.style.display = 'none';
+      if (btnSubmit) btnSubmit.disabled = false;
+      if (input) {
+        input.value = '';
+        input.focus();
+      }
+    }
+
+    btnPageTrackAnother?.addEventListener('click', showPageSearchForm);
+    btnPageTrackRetry?.addEventListener('click', showPageSearchForm);
+
+    async function executeTrack(code: string) {
+      if (!code) return;
+
+      if (form) form.style.display = 'none';
+      if (loading) loading.style.display = 'block';
+      if (errBox) errBox.style.display = 'none';
+      if (resultBox) resultBox.style.display = 'none';
+      if (btnSubmit) btnSubmit.disabled = true;
+
+      try {
+        const res = await fetch(`/api/inquiries/track?inquiry_no=${encodeURIComponent(code)}`);
+        const data = await res.json();
+
+        if (loading) loading.style.display = 'none';
+        if (btnSubmit) btnSubmit.disabled = false;
+
+        if (!res.ok || !data.success || !data.found) {
+          if (errBox) {
+            errBox.style.display = 'block';
+            if (errMsg) errMsg.textContent = data.error || `No quotation found matching "${code}".`;
+          }
+          return;
+        }
+
+        populatePageResult(data);
+      } catch (err: any) {
+        if (loading) loading.style.display = 'none';
+        if (btnSubmit) btnSubmit.disabled = false;
+        if (errBox) {
+          errBox.style.display = 'block';
+          if (errMsg) errMsg.textContent = err.message || 'Error communicating with server.';
+        }
+      }
+    }
+
+    function populatePageResult(data: any) {
+      const inq = data.inquiry;
+      const badge = data.statusBadge;
+      const steps = data.steps || [];
+
+      const pResInqNo = document.getElementById('pResInqNo');
+      const pResDate = document.getElementById('pResDate');
+      const pResStatusTag = document.getElementById('pResStatusTag');
+      const pResHeadline = document.getElementById('pResHeadline');
+      const pResDesc = document.getElementById('pResDesc');
+
+      if (pResInqNo) pResInqNo.textContent = inq.inquiry_no || inq.id;
+      if (pResDate) {
+        const d = new Date(inq.created_at);
+        pResDate.textContent = d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+      }
+      if (pResStatusTag) {
+        pResStatusTag.textContent = badge.label || inq.status;
+        pResStatusTag.style.color = badge.color || '#92400E';
+        pResStatusTag.style.background = badge.bg || '#FEF3C7';
+      }
+      if (pResHeadline) pResHeadline.textContent = badge.headline;
+      if (pResDesc) pResDesc.textContent = badge.description;
+
+      const pResStepsList = document.getElementById('pResStepsList');
+      if (pResStepsList) {
+        pResStepsList.innerHTML = steps.map((s: any, idx: number) => {
+          const isCompleted = !!s.isCompleted;
+          const isActive = !!s.isActive;
+          const isLast = idx === steps.length - 1;
+
+          const circleBg = isCompleted ? '#16A34A' : (isActive ? '#2563EB' : '#FFFFFF');
+          const circleBorder = isCompleted ? '#16A34A' : (isActive ? '#2563EB' : '#D1D5DB');
+          const circleColor = (isCompleted || isActive) ? '#FFFFFF' : '#9CA3AF';
+          const circleContent = isCompleted ? '✓' : String(idx + 1);
+          const lineBg = isCompleted ? '#16A34A' : '#E5E7EB';
+          const titleColor = isCompleted ? '#111827' : (isActive ? '#1D4ED8' : '#9CA3AF');
+          const titleWeight = (isCompleted || isActive) ? '700' : '500';
+
+          return `
+            <div style="display: flex; position: relative; padding-bottom: ${isLast ? '0' : '22px'};">
+              <!-- Left: Step Circle and Connecting Line -->
+              <div style="display: flex; flex-direction: column; align-items: center; width: 28px; flex-shrink: 0; margin-right: 14px;">
+                <div style="width: 24px; height: 24px; border-radius: 50%; background: ${circleBg}; border: 2px solid ${circleBorder}; color: ${circleColor}; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; z-index: 2; ${isActive ? 'box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);' : ''}">
+                  ${circleContent}
+                </div>
+                ${!isLast ? `<div style="width: 2px; flex: 1; background: ${lineBg}; margin-top: 4px; margin-bottom: -4px; z-index: 1;"></div>` : ''}
+              </div>
+
+              <!-- Right: Content -->
+              <div style="flex: 1; padding-top: 3px;">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                  <span style="font-size: 13.5px; font-weight: ${titleWeight}; color: ${titleColor};">${s.title}</span>
+                  <span style="font-size: 11.5px; color: #6B7280; font-weight: 500;">${s.date}</span>
+                </div>
+              </div>
+            </div>
+          `;
+        }).join('');
+      }
+
+      const pResProduct = document.getElementById('pResProduct');
+      const pResQuantity = document.getElementById('pResQuantity');
+      const pResCompany = document.getElementById('pResCompany');
+      const pResFabric = document.getElementById('pResFabric');
+      const pResProductImg = document.getElementById('pResProductImg') as HTMLImageElement;
+
+      if (pResProduct) pResProduct.textContent = inq.product_name || 'Absorbent Pads';
+      if (pResQuantity) pResQuantity.textContent = `${Number(inq.quantity || 100).toLocaleString()} units`;
+      if (pResCompany) pResCompany.textContent = inq.company_name || inq.name || 'Valued Buyer';
+      if (pResFabric) pResFabric.textContent = inq.fabric_choice || inq.customization_type || 'Custom Specs';
+      if (pResProductImg) {
+        pResProductImg.src = inq.product_image || '/images/products/quilted-meat-tray-pad.jpg';
+        pResProductImg.alt = inq.product_name || 'Ordered Product';
+      }
+
+      const pResNotesBox = document.getElementById('pResNotesBox');
+      const pResNotesText = document.getElementById('pResNotesText');
+      if (inq.admin_notes && inq.admin_notes.trim()) {
+        if (pResNotesBox) pResNotesBox.style.display = 'block';
+        if (pResNotesText) pResNotesText.textContent = inq.admin_notes;
+      } else {
+        if (pResNotesBox) pResNotesBox.style.display = 'none';
+      }
+
+      const pResWaLink = document.getElementById('pResWaLink') as HTMLAnchorElement;
+      if (pResWaLink) {
+        const phone = '917623906747';
+        const msg = `Hi! Following up on quotation #${inq.inquiry_no || inq.id} for ${inq.product_name} (${inq.quantity} units). Status is "${badge.label}".`;
+        pResWaLink.href = `https://wa.me/${phone}?text=${encodeURIComponent(msg)}`;
+      }
+
+      if (resultBox) resultBox.style.display = 'flex';
+    }
+
+    form?.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const code = input?.value?.trim();
+      if (code) executeTrack(code);
+    });
+
+    // Check URL search param (e.g. /track?no=INQ-2026-2236)
+    const urlParams = new URLSearchParams(window.location.search);
+    const param = urlParams.get('no') || urlParams.get('track') || urlParams.get('inquiry_no');
+    if (param && input) {
+      input.value = param;
+      executeTrack(param);
+    }
+  });
+</script>

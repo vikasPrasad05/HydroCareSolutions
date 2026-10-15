@@ -1,0 +1,210 @@
+---
+// Safety Highlights & Engineered Product Advantages
+const features = [
+  {
+    num: "01",
+    title: "Super Absorbent Polymer (SAP) Crystals",
+    desc: "Together with absorbent backing quickly absorbs and locks any excess purge."
+  },
+  {
+    num: "02",
+    title: "100% Retains Absorbed Moisture",
+    desc: "Will not release fluid even under substantial compressive pressure during stacking."
+  },
+  {
+    num: "03",
+    title: "Does Not Dry Out the Product",
+    desc: "Only absorbs free exuded moisture, preserving natural succulent food texture."
+  },
+  {
+    num: "04",
+    title: "High Capacity (40g to 600g)",
+    desc: "Engineered capacities matching small 125g fruit punnets to 5kg bulk meat cartons."
+  },
+  {
+    num: "05",
+    title: "Rapid Absorption Rate",
+    desc: "Instant fluid wicking stops bacterial pooling and discoloration on bottom contact surface."
+  },
+  {
+    num: "06",
+    title: "Available in Any Colour",
+    desc: "Clean Food White, Jet Black, Honeycomb Peach, Yellow, and Red to suit your tray brand."
+  },
+  {
+    num: "07",
+    title: "Unique Anti-Delamination Build",
+    desc: "4 and 6 Ply construction ensures layers never separate when wet or chilled."
+  },
+  {
+    num: "08",
+    title: "100% Certified Food Contact Safe",
+    desc: "Complies with FDA 21 CFR and FSSAI standards. Zero harmful chemicals or glue migration."
+  }
+];
+---
+
+<section class="section-advantages" id="safety-highlights">
+  <div class="container-apparel">
+    <!-- Header with Gold Kicker matching Featured Product Lines from the left -->
+    <div class="advantages-header">
+      <span class="section-kicker">SAFETY HIGHLIGHTS</span>
+      <h2 class="advantages-title">Engineered Product Advantages & Food Safety</h2>
+      <p class="advantages-subtext">
+        Direct cleanroom manufacturing complying with FDA 21 CFR and FSSAI food contact standards. High absorbency, anti-delamination integrity, and certified zero chemical migration.
+      </p>
+    </div>
+
+    <!-- 8 Advantage Cards Grid -->
+    <div class="advantages-grid">
+      {features.map((f) => (
+        <div class="advantage-card">
+          <span class="advantage-num font-mono">{f.num}</span>
+          <h3 class="advantage-heading">{f.title}</h3>
+          <p class="advantage-desc">{f.desc}</p>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .section-advantages {
+    padding: 88px 0 96px;
+    background-color: #FFFFFF;
+    border-bottom: 1px solid #F1F5F9;
+  }
+
+  .container-apparel {
+    max-width: 1320px;
+    width: 100%;
+    margin: 0 auto;
+    padding: 0 24px;
+    box-sizing: border-box;
+  }
+
+  /* Left-aligned Header Block matching Featured Product Lines */
+  .advantages-header {
+    text-align: left;
+    margin-bottom: 42px;
+  }
+
+  /* Small Yellow/Gold Kicker Text */
+  .section-kicker {
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    color: #D97706;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    display: inline-block;
+    text-align: left;
+    margin-bottom: 6px;
+  }
+
+  /* Main Section Title (left-aligned serif headline) */
+  .advantages-title {
+    font-family: var(--font-serif, 'Outfit', 'Plus Jakarta Sans', sans-serif);
+    font-size: 30px;
+    font-weight: 800;
+    color: #111827;
+    line-height: 1.25;
+    letter-spacing: -0.02em;
+    margin: 0 0 8px;
+    text-align: left;
+  }
+
+  /* Subtitle Text (left-aligned clean gray) */
+  .advantages-subtext {
+    font-family: var(--font-sans, 'Inter', system-ui, sans-serif);
+    font-size: 14.5px;
+    color: #64748B;
+    line-height: 1.55;
+    max-width: 620px;
+    margin: 0;
+    text-align: left;
+  }
+
+  .advantages-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+  }
+
+  .advantage-card {
+    background: #FFFFFF;
+    border: 1px solid #E2E8F0;
+    border-radius: 8px;
+    padding: 24px 22px;
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+  }
+
+  .advantage-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(15, 23, 42, 0.06);
+    border-color: #CBD5E1;
+  }
+
+  .advantage-num {
+    font-size: 13px;
+    font-weight: 700;
+    color: #B4833E;
+    margin-bottom: 10px;
+  }
+
+  .advantage-heading {
+    font-family: var(--font-sans, 'Inter', system-ui, sans-serif);
+    font-size: 15px;
+    font-weight: 700;
+    color: #0F172A;
+    line-height: 1.35;
+    margin-bottom: 8px;
+    text-align: left;
+  }
+
+  .advantage-desc {
+    font-family: var(--font-sans, 'Inter', system-ui, sans-serif);
+    font-size: 13px;
+    line-height: 1.55;
+    color: #64748B;
+    margin: 0;
+    text-align: left;
+  }
+
+  @media (max-width: 1024px) {
+    .advantages-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (max-width: 768px) {
+    .advantages-header {
+      text-align: center;
+    }
+    .section-kicker {
+      text-align: center;
+      display: block;
+    }
+    .advantages-title {
+      text-align: center;
+      font-size: 24px;
+    }
+    .advantages-subtext {
+      text-align: center;
+      margin-left: auto;
+      margin-right: auto;
+    }
+  }
+
+  @media (max-width: 600px) {
+    .section-advantages {
+      padding: 44px 0 52px;
+    }
+    .advantages-grid {
+      grid-template-columns: 1fr;
+      gap: 16px;
+    }
+  }
+</style>
