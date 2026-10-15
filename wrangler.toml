@@ -1,0 +1,9 @@
+name = "hydrocare-solutions"
+pages_build_output_dir = "dist"
+compatibility_date = "2024-09-23"
+compatibility_flags = ["nodejs_compat"]
+
+[[d1_databases]]
+binding = "DB"
+database_name = "hydrocare_db"
+database_id = "5c0fb0e6-7ae7-4fc0-af41-14992f9b78f4"
