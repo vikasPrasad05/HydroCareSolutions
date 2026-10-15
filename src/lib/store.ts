@@ -371,49 +371,74 @@ export async function updateInquiryStatus(
     try {
       await executeD1Query(
         'UPDATE inquiries SET status = ?, admin_notes = COALESCE(?, admin_notes), priority = COALESCE(?, priority), updated_at = ? WHERE id = ?',
-        [status, admin_notes ?? null, priority ?? null, updatedAt, id]
+        [status, admin_notes !== undefined ? admin_notes : null, priority !== undefined && priority ? priority : null, updatedAt, id]
       );
+      const rows = await executeD1Query<Inquiry>('SELECT * FROM inquiries WHERE id = ? LIMIT 1', [id]);
+      if (Array.isArray(rows) && rows.length > 0) {
+        try {
+          const locals = readLocalInquiries();
+          const idx = locals.findIndex(i => i.id === id);
+          if (idx !== -1) {
+            locals[idx] = { ...locals[idx], ...rows[0] };
+            if (deadline !== undefined) locals[idx].deadline = deadline;
+            writeLocalInquiries(locals);
+          }
+        } catch { }
+        return {
+          ...rows[0],
+          quantity: Number(rows[0].quantity || 0)
+        };
+      }
     } catch (err: any) {
       console.warn('[D1 Store] D1 update failed, updating local store:', err.message);
     }
   }
 
-  const locals = readLocalInquiries();
-  const idx = locals.findIndex(i => i.id === id);
-  if (idx !== -1) {
-    locals[idx].status = status;
-    locals[idx].updated_at = updatedAt;
-    if (admin_notes !== undefined) {
-      locals[idx].admin_notes = admin_notes;
+  try {
+    const locals = readLocalInquiries();
+    const idx = locals.findIndex(i => i.id === id);
+    if (idx !== -1) {
+      locals[idx].status = status;
+      locals[idx].updated_at = updatedAt;
+      if (admin_notes !== undefined) {
+        locals[idx].admin_notes = admin_notes;
+      }
+      if (priority !== undefined && priority) {
+        locals[idx].priority = priority;
+      }
+      if (deadline !== undefined) {
+        locals[idx].deadline = deadline;
+      }
+      writeLocalInquiries(locals);
+      return locals[idx];
     }
-    if (priority !== undefined && priority) {
-      locals[idx].priority = priority;
-    }
-    if (deadline !== undefined) {
-      locals[idx].deadline = deadline;
-    }
-    writeLocalInquiries(locals);
-    return locals[idx];
+  } catch (localErr) {
+    console.error('Error updating local inquiry:', localErr);
   }
   return null;
 }
 
 export async function deleteInquiry(id: string): Promise<boolean> {
+  let d1Deleted = false;
   if (isD1Configured()) {
     try {
       await executeD1Query('DELETE FROM inquiries WHERE id = ?', [id]);
+      d1Deleted = true;
     } catch (err: any) {
       console.warn('[D1 Store] D1 delete failed, deleting from local store:', err.message);
     }
   }
 
-  const locals = readLocalInquiries();
-  const filtered = locals.filter(i => i.id !== id);
-  if (filtered.length !== locals.length) {
-    writeLocalInquiries(filtered);
-    return true;
-  }
-  return false;
+  try {
+    const locals = readLocalInquiries();
+    const filtered = locals.filter(i => i.id !== id);
+    if (filtered.length !== locals.length) {
+      writeLocalInquiries(filtered);
+      return true;
+    }
+  } catch { }
+
+  return d1Deleted;
 }
 
 export async function deleteAllInquiries(): Promise<boolean> {

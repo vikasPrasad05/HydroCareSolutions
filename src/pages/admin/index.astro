@@ -3949,7 +3949,8 @@ const defaultOffers = [
 
           showToast(`Record updated! Tracking ID #${inqData.inquiry_no || inqData.id} now shows "${newStatus}".`);
         } else {
-          showToast('Failed to update record. Please check server logs.', true);
+          const resData = await res.json().catch(() => null);
+          showToast(resData?.error || 'Failed to update record. Please check server logs.', true);
         }
       } catch (err: any) {
         showToast(err.message || 'Error updating record', true);
