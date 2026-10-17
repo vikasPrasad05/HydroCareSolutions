@@ -1,0 +1,47 @@
+[
+  {
+    "id": "blog-1",
+    "title": "How Modern Food Packaging Absorbent Pads Maximize Meat Freshness & Shelf Life",
+    "slug": "how-modern-food-packaging-absorbent-pads-maximize-meat-freshness",
+    "category": "Meat & Poultry Packaging",
+    "date": "Oct 04, 2026",
+    "readTime": "4 min read",
+    "excerpt": "Explore advanced SAP fluid-lock technology, purge retention, and sealed-edge design that prevent microbial pooling in retail meat cuts.",
+    "content": "Retail meat presentation relies directly on effective exudate management. When fresh cut beef, pork, or poultry rests in pooled purge inside a packaging tray, bacterial growth rates accelerate exponentially. Super Absorbent Polymer (SAP) and sealed-edge food pads trap moisture irreversibly under package stacking pressures of up to 5 kPa, preserving color, aroma, and supermarket shelf-life.",
+    "image": "/images/products/meat-pads.jpg",
+    "is_published": true,
+    "visibility": "Visible",
+    "author": "Technical Engineering Team",
+    "created_at": "2026-10-04T10:00:00.000Z"
+  },
+  {
+    "id": "blog-2",
+    "title": "Complete Guide to Marine Seafood & Fish Drip Pad Selection",
+    "slug": "complete-guide-to-marine-seafood-fish-drip-pad-selection",
+    "category": "Seafood Cold Chain",
+    "date": "Sep 28, 2026",
+    "readTime": "6 min read",
+    "excerpt": "Optimizing saline-stable absorbency and odor control to protect delicate salmon fillets, prawns, and chilled export seafood.",
+    "content": "Marine export air freight demands specialized salinity-resistant absorption cores. Standard wood pulp can collapse when subjected to saltwater weepage. Our marine-grade seafood pads utilize cross-linked sodium polyacrylate matrices that remain structurally firm and lock away fish liquid without dehydrating delicate skin or fillet muscle tissue.",
+    "image": "/images/products/seafood-pads.jpg",
+    "is_published": true,
+    "visibility": "Visible",
+    "author": "Quality Assurance Dept",
+    "created_at": "2026-09-28T10:00:00.000Z"
+  },
+  {
+    "id": "blog-3",
+    "title": "Moisture & Condensation Control in Fresh Fruit and Berry Packaging",
+    "slug": "moisture-condensation-control-in-fresh-fruit-berry-packaging",
+    "category": "Produce Packaging",
+    "date": "Sep 15, 2026",
+    "readTime": "5 min read",
+    "excerpt": "Why micro-perforated food-contact pads prevent bottom rot, mold growth, and weight loss in high-value berry punnets.",
+    "content": "Berries such as strawberries, blueberries, and raspberries generate continuous respiration condensation during cold-chain transfer. Without proper bottom cushioning and condensation capture, mold and Botrytis cinerea ruin entire punnets. Micro-perforated produce pads absorb humidity without pulling natural moisture from the fruit flesh.",
+    "image": "/images/products/fruit-pads.jpg",
+    "is_published": true,
+    "visibility": "Visible",
+    "author": "Agro Solutions Specialist",
+    "created_at": "2026-09-15T10:00:00.000Z"
+  }
+]

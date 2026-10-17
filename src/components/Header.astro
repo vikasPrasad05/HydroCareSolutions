@@ -15,153 +15,89 @@ const navLinks = [
   { label: 'Contact', href: '/contact', isActive: currentPath === '/contact' },
 ];
 
-// Mega menu category and product definitions for Absorbent Pads
-const categories = [
-  {
-    id: 'meat-pads',
-    name: 'Meat Absorbent Pads',
-    slug: 'meat',
-    link: '/catalogue?category=meat',
-    products: [
+import { getAllCategories, getAllProducts } from '../lib/store';
+
+const dbCategories = await getAllCategories();
+const dbProducts = await getAllProducts();
+
+// Fallback presets for known core categories
+const staticPresetMap: Record<string, any[]> = {
+  'meat': [
+    { name: 'Fresh Meat Drip Pads', slug: 'fresh-meat-drip-pads', desc: 'Food-grade certified drip soaker pads for raw beef & chicken trays', image: '/images/hero/meat-pads.jpg', link: '/products/fresh-meat-drip-pads' },
+    { name: 'Black Gourmet Beef Pads', slug: 'black-beef-steak-absorbent-pads', desc: 'Jet black food pads for gourmet steak & supermarket display', image: '/images/products/meat-pads.jpg', link: '/products/black-beef-steak-absorbent-pads' },
+    { name: 'Ultrasonic Sealed Pads', slug: 'ultrasonic-sealed-pads', desc: '4-side sealed hermetic edges preventing powder leakage', image: '/images/products/white-black-pads.jpg', link: '/products/ultrasonic-sealed-pads' },
+    { name: 'Poultry Purge Absorbers', slug: 'poultry-purge-absorbers', desc: 'High absorption 40ml–120ml retention for fresh chicken & turkey', image: '/images/products/poultry-purge-absorbers.jpg', link: '/products/poultry-purge-absorbers' }
+  ],
+  'seafood': [
+    { name: 'Marine Seafood Drip Pads', slug: 'marine-seafood-absorbent-pads', desc: 'Saline-stable high fluid locking pads for salmon & fish fillets', image: '/images/hero/seafood-pads.jpg', link: '/products/marine-seafood-absorbent-pads' },
+    { name: 'Prawn & Shrimp Soakers', slug: 'prawn-shrimp-soaker-sheets', desc: 'Non-stick micro-embossed film prevents delicate seafood skin tears', image: '/images/products/prawn-shrimp-soakers.jpg', link: '/products/prawn-shrimp-soaker-sheets' },
+    { name: 'Antimicrobial Odor Liners', slug: 'antimicrobial-odor-liners', desc: 'Food-grade odor blockers for cold chain fishery air freight', image: '/images/products/seafood-pads.jpg', link: '/products/antimicrobial-odor-liners' },
+    { name: 'Salmon Box Export Sheets', slug: 'salmon-box-export-sheets', desc: '200x300mm large-format pads designed for commercial air cargo', image: '/images/products/salmon-export-sheets.jpg', link: '/products/salmon-box-export-sheets' }
+  ],
+  'produce': [
+    { name: 'Fresh Berry Cushioning Pads', slug: 'fruit-and-berry-absorbent-pads', desc: 'Air-cushioned bubble embossed pads protecting soft strawberries', image: '/images/hero/fruit-pads.jpg', link: '/products/fruit-and-berry-absorbent-pads' },
+    { name: 'Grape & Tomato Soakers', slug: 'grape-tomato-soakers', desc: 'Humidity regulation layers preventing mold & juice accumulation', image: '/images/products/grape-tomato-soakers.jpg', link: '/products/grape-tomato-soakers' },
+    { name: 'Clamshell Punnet Liners', slug: 'clamshell-punnet-berry-liners', desc: 'Die-cut rounded corner liners for 125g, 250g & 500g punnet boxes', image: '/images/products/fruit-punnet-colored-pads.jpg', link: '/products/clamshell-punnet-berry-liners' },
+    { name: 'Breathable Produce Pads', slug: 'breathable-produce-pads', desc: 'Food-grade cellulose layers extending produce shelf-life 3-5 days', image: '/images/products/fruit-pads.jpg', link: '/products/breathable-produce-pads' }
+  ],
+  'fruit': [
+    { name: 'Fresh Berry Cushioning Pads', slug: 'fruit-and-berry-absorbent-pads', desc: 'Air-cushioned bubble embossed pads protecting soft strawberries', image: '/images/hero/fruit-pads.jpg', link: '/products/fruit-and-berry-absorbent-pads' },
+    { name: 'Grape & Tomato Soakers', slug: 'grape-tomato-soakers', desc: 'Humidity regulation layers preventing mold & juice accumulation', image: '/images/products/grape-tomato-soakers.jpg', link: '/products/grape-tomato-soakers' },
+    { name: 'Clamshell Punnet Liners', slug: 'clamshell-punnet-berry-liners', desc: 'Die-cut rounded corner liners for 125g, 250g & 500g punnet boxes', image: '/images/products/fruit-punnet-colored-pads.jpg', link: '/products/clamshell-punnet-berry-liners' },
+    { name: 'Breathable Produce Pads', slug: 'breathable-produce-pads', desc: 'Food-grade cellulose layers extending produce shelf-life 3-5 days', image: '/images/products/fruit-pads.jpg', link: '/products/breathable-produce-pads' }
+  ],
+  'industrial': [
+    { name: 'Frozen Thermal Gel Ice Pads', slug: 'cold-chain-ice-absorbent-pads', desc: 'Refrigerant gel cooling packs for insulated shipper transit boxes', image: '/images/hero/cold-chain-pads.jpg', link: '/products/cold-chain-ice-absorbent-pads' },
+    { name: 'Heavy-Duty Prep Soakers', slug: 'industrial-commercial-soaker-pads', desc: 'High-capacity sheets holding up to 1500ml liquid per sheet', image: '/images/products/industrial-soaker-pads.jpg', link: '/products/industrial-commercial-soaker-pads' },
+    { name: 'Continuous Perforated Rolls', slug: 'continuous-perforated-rolls', desc: 'Automated dispensing rolls for industrial food processing lines', image: '/images/products/continuous-perforated-rolls.jpg', link: '/products/continuous-perforated-rolls' },
+    { name: 'Slaughterhouse Carcass Liners', slug: 'slaughterhouse-carcass-liners', desc: 'Puncture-resistant backing protecting against bone shards', image: '/images/products/carcass-soaker-liners.jpg', link: '/products/slaughterhouse-carcass-liners' }
+  ]
+};
+
+// Build dynamic categories list for the dropdown
+const categories = (dbCategories && dbCategories.length > 0 ? dbCategories : [
+  { id: 'meat', name: 'Meat Absorbent Pads', slug: 'meat', image: '/images/hero/meat-pads.jpg', status: 'Active' },
+  { id: 'seafood', name: 'Seafood Absorbent Pads', slug: 'seafood', image: '/images/hero/seafood-pads.jpg', status: 'Active' },
+  { id: 'produce', name: 'Fruit & Vegetable Pads', slug: 'produce', image: '/images/hero/fruit-pads.jpg', status: 'Active' },
+  { id: 'industrial', name: 'Cold Chain Pad - Ice Pads', slug: 'industrial', image: '/images/hero/cold-chain-pads.jpg', status: 'Active' }
+])
+  .filter(c => c.status !== 'Inactive')
+  .map(c => {
+    const slugKey = (c.slug || '').toLowerCase();
+    const matchingProducts = dbProducts.filter(p =>
+      p.is_active !== 0 && (
+        p.category_id === c.id ||
+        (p.category && p.category.toLowerCase() === c.name.toLowerCase()) ||
+        (p.category_slug && p.category_slug.toLowerCase() === slugKey)
+      )
+    ).map(p => ({
+      name: p.title || p.name,
+      slug: p.slug,
+      desc: p.description || p.short_description || c.description,
+      image: p.image || c.image || '/images/hero/meat-pads.jpg',
+      link: `/products/${p.slug}`
+    }));
+
+    const preset = staticPresetMap[slugKey] || [];
+    const prods = matchingProducts.length > 0 ? matchingProducts : (preset.length > 0 ? preset : [
       {
-        name: 'Fresh Meat Drip Pads',
-        slug: 'fresh-meat-drip-pads',
-        desc: 'Food-grade certified drip soaker pads for raw beef & chicken trays',
-        image: '/images/hero/meat-pads.jpg',
-        link: '/products/fresh-meat-drip-pads',
-      },
-      {
-        name: 'Black Gourmet Beef Pads',
-        slug: 'black-beef-steak-absorbent-pads',
-        desc: 'Jet black food pads for gourmet steak & supermarket display',
-        image: '/images/products/meat-pads.jpg',
-        link: '/products/black-beef-steak-absorbent-pads',
-      },
-      {
-        name: 'Ultrasonic Sealed Pads',
-        slug: 'ultrasonic-sealed-pads',
-        desc: '4-side sealed hermetic edges preventing powder leakage',
-        image: '/images/products/white-black-pads.jpg',
-        link: '/products/ultrasonic-sealed-pads',
-      },
-      {
-        name: 'Poultry Purge Absorbers',
-        slug: 'poultry-purge-absorbers',
-        desc: 'High absorption 40ml–120ml retention for fresh chicken & turkey',
-        image: '/images/products/poultry-purge-absorbers.jpg',
-        link: '/products/poultry-purge-absorbers',
+        name: `${c.name} Specifications`,
+        slug: c.slug || c.id,
+        desc: c.description || `Browse specifications & standard manufacturing options for ${c.name}.`,
+        image: c.image || '/images/hero/meat-pads.jpg',
+        link: `/catalogue?category=${c.slug || c.id}`
       }
-    ]
-  },
-  {
-    id: 'seafood-pads',
-    name: 'Seafood Absorbent Pads',
-    slug: 'seafood',
-    link: '/catalogue?category=seafood',
-    products: [
-      {
-        name: 'Marine Seafood Drip Pads',
-        slug: 'marine-seafood-absorbent-pads',
-        desc: 'Saline-stable high fluid locking pads for salmon & fish fillets',
-        image: '/images/hero/seafood-pads.jpg',
-        link: '/products/marine-seafood-absorbent-pads',
-      },
-      {
-        name: 'Prawn & Shrimp Soakers',
-        slug: 'prawn-shrimp-soaker-sheets',
-        desc: 'Non-stick micro-embossed film prevents delicate seafood skin tears',
-        image: '/images/products/prawn-shrimp-soakers.jpg',
-        link: '/products/prawn-shrimp-soaker-sheets',
-      },
-      {
-        name: 'Antimicrobial Odor Liners',
-        slug: 'antimicrobial-odor-liners',
-        desc: 'Food-grade odor blockers for cold chain fishery air freight',
-        image: '/images/products/seafood-pads.jpg',
-        link: '/products/antimicrobial-odor-liners',
-      },
-      {
-        name: 'Salmon Box Export Sheets',
-        slug: 'salmon-box-export-sheets',
-        desc: '200x300mm large-format pads designed for commercial air cargo',
-        image: '/images/products/salmon-export-sheets.jpg',
-        link: '/products/salmon-box-export-sheets',
-      }
-    ]
-  },
-  {
-    id: 'fruit-pads',
-    name: 'Fruit & Vegetable Pads',
-    slug: 'fruit',
-    link: '/catalogue?category=fruit',
-    products: [
-      {
-        name: 'Fresh Berry Cushioning Pads',
-        slug: 'fruit-and-berry-absorbent-pads',
-        desc: 'Air-cushioned bubble embossed pads protecting soft strawberries',
-        image: '/images/hero/fruit-pads.jpg',
-        link: '/products/fruit-and-berry-absorbent-pads',
-      },
-      {
-        name: 'Grape & Tomato Soakers',
-        slug: 'grape-tomato-soakers',
-        desc: 'Humidity regulation layers preventing mold & juice accumulation',
-        image: '/images/products/grape-tomato-soakers.jpg',
-        link: '/products/grape-tomato-soakers',
-      },
-      {
-        name: 'Clamshell Punnet Liners',
-        slug: 'clamshell-punnet-berry-liners',
-        desc: 'Die-cut rounded corner liners for 125g, 250g & 500g punnet boxes',
-        image: '/images/products/fruit-punnet-colored-pads.jpg',
-        link: '/products/clamshell-punnet-berry-liners',
-      },
-      {
-        name: 'Breathable Produce Pads',
-        slug: 'breathable-produce-pads',
-        desc: 'Food-grade cellulose layers extending produce shelf-life 3-5 days',
-        image: '/images/products/fruit-pads.jpg',
-        link: '/products/breathable-produce-pads',
-      }
-    ]
-  },
-  {
-    id: 'cold-chain-pads',
-    name: 'Cold Chain Pad - Ice Pads',
-    slug: 'industrial',
-    link: '/catalogue?category=industrial',
-    products: [
-      {
-        name: 'Frozen Thermal Gel Ice Pads',
-        slug: 'cold-chain-ice-absorbent-pads',
-        desc: 'Refrigerant gel cooling packs for insulated shipper transit boxes',
-        image: '/images/hero/cold-chain-pads.jpg',
-        link: '/products/cold-chain-ice-absorbent-pads',
-      },
-      {
-        name: 'Heavy-Duty Prep Soakers',
-        slug: 'industrial-commercial-soaker-pads',
-        desc: 'High-capacity sheets holding up to 1500ml liquid per sheet',
-        image: '/images/products/industrial-soaker-pads.jpg',
-        link: '/products/industrial-commercial-soaker-pads',
-      },
-      {
-        name: 'Continuous Perforated Rolls',
-        slug: 'continuous-perforated-rolls',
-        desc: 'Automated dispensing rolls for industrial food processing lines',
-        image: '/images/products/continuous-perforated-rolls.jpg',
-        link: '/products/continuous-perforated-rolls',
-      },
-      {
-        name: 'Slaughterhouse Carcass Liners',
-        slug: 'slaughterhouse-carcass-liners',
-        desc: 'Puncture-resistant backing protecting against bone shards',
-        image: '/images/products/carcass-soaker-liners.jpg',
-        link: '/products/slaughterhouse-carcass-liners',
-      }
-    ]
-  }
-];
+    ]);
+
+    return {
+      id: c.id,
+      name: c.name,
+      slug: c.slug || c.id,
+      image: c.image || '/images/hero/meat-pads.jpg',
+      link: `/catalogue?category=${c.slug || c.id}`,
+      products: prods
+    };
+  });
 ---
 
 <header class="site-header">
@@ -243,7 +179,7 @@ const categories = [
               <div class="dropdown-right-col">
                 <!-- Top Header for current active category -->
                 <div class="panel-header">
-                  <span class="panel-category-title" id="panelCategoryTitle">{categories[0].name}</span>
+                  <span class="panel-category-title" id="panelCategoryTitle">{categories[0]?.name || 'Products'}</span>
                 </div>
 
                 <!-- Category Content Panels -->

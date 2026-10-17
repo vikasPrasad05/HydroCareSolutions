@@ -1,32 +1,9 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import { getAllBlogs } from '../lib/store';
 
-const blogPosts = [
-  {
-    title: 'How Modern Food Packaging Absorbent Pads Maximize Meat Freshness & Shelf Life',
-    category: 'Meat & Poultry Packaging',
-    date: 'Oct 04, 2026',
-    readTime: '4 min read',
-    excerpt: 'Explore advanced SAP fluid-lock technology, purge retention, and sealed-edge design that prevent microbial pooling in retail meat cuts.',
-    image: '/images/products/meat-pads.jpg',
-  },
-  {
-    title: 'Complete Guide to Marine Seafood & Fish Drip Pad Selection',
-    category: 'Seafood Cold Chain',
-    date: 'Sep 28, 2026',
-    readTime: '6 min read',
-    excerpt: 'Optimizing saline-stable absorbency and odor control to protect delicate salmon fillets, prawns, and chilled export seafood.',
-    image: '/images/products/seafood-pads.jpg',
-  },
-  {
-    title: 'Moisture & Condensation Control in Fresh Fruit and Berry Packaging',
-    category: 'Produce Packaging',
-    date: 'Sep 15, 2026',
-    readTime: '5 min read',
-    excerpt: 'Why micro-perforated food-contact pads prevent bottom rot, mold growth, and weight loss in high-value berry punnets.',
-    image: '/images/products/fruit-pads.jpg',
-  }
-];
+const allBlogs = await getAllBlogs();
+const blogPosts = allBlogs.filter(p => p.is_published !== false && (p.visibility || 'Visible').toLowerCase() !== 'hidden');
 ---
 
 <Layout 

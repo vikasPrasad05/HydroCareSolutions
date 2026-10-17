@@ -1,6 +1,6 @@
 import fs from 'node:fs';
 import path from 'node:path';
-import type { Product, Inquiry, InquiryStatus, Category, Review, SiteSettings } from './types';
+import type { Product, Inquiry, InquiryStatus, Category, Review, SiteSettings, BlogPost } from './types';
 import { initialProducts } from './initialData';
 import { isD1Configured, executeD1Query } from './d1';
 
@@ -11,6 +11,7 @@ const CATEGORIES_FILE = path.join(DATA_DIR, 'categories.json');
 const REVIEWS_FILE = path.join(DATA_DIR, 'reviews.json');
 const OFFER_FILE = path.join(DATA_DIR, 'offer.json');
 const SETTINGS_FILE = path.join(DATA_DIR, 'settings.json');
+const BLOGS_FILE = path.join(DATA_DIR, 'blogs.json');
 
 // Ensure data folder exists
 function ensureDataDir() {
@@ -889,3 +890,136 @@ export async function saveSiteSettings(updates: Partial<SiteSettings>): Promise<
   writeLocalSettings(merged);
   return merged;
 }
+
+// ==========================================
+// 8. BLOGS STORE API
+// ==========================================
+const defaultBlogs: BlogPost[] = [
+  {
+    id: "blog-1",
+    title: "How Modern Food Packaging Absorbent Pads Maximize Meat Freshness & Shelf Life",
+    slug: "how-modern-food-packaging-absorbent-pads-maximize-meat-freshness",
+    category: "Meat & Poultry Packaging",
+    date: "Oct 04, 2026",
+    readTime: "4 min read",
+    excerpt: "Explore advanced SAP fluid-lock technology, purge retention, and sealed-edge design that prevent microbial pooling in retail meat cuts.",
+    content: "Retail meat presentation relies directly on effective exudate management. When fresh cut beef, pork, or poultry rests in pooled purge inside a packaging tray, bacterial growth rates accelerate exponentially. Super Absorbent Polymer (SAP) and sealed-edge food pads trap moisture irreversibly under package stacking pressures of up to 5 kPa, preserving color, aroma, and supermarket shelf-life.",
+    image: "/images/products/meat-pads.jpg",
+    is_published: true,
+    author: "Technical Engineering Team",
+    created_at: "2026-10-04T10:00:00.000Z"
+  },
+  {
+    id: "blog-2",
+    title: "Complete Guide to Marine Seafood & Fish Drip Pad Selection",
+    slug: "complete-guide-to-marine-seafood-fish-drip-pad-selection",
+    category: "Seafood Cold Chain",
+    date: "Sep 28, 2026",
+    readTime: "6 min read",
+    excerpt: "Optimizing saline-stable absorbency and odor control to protect delicate salmon fillets, prawns, and chilled export seafood.",
+    content: "Marine export air freight demands specialized salinity-resistant absorption cores. Standard wood pulp can collapse when subjected to saltwater weepage. Our marine-grade seafood pads utilize cross-linked sodium polyacrylate matrices that remain structurally firm and lock away fish liquid without dehydrating delicate skin or fillet muscle tissue.",
+    image: "/images/products/seafood-pads.jpg",
+    is_published: true,
+    author: "Quality Assurance Dept",
+    created_at: "2026-09-28T10:00:00.000Z"
+  },
+  {
+    id: "blog-3",
+    title: "Moisture & Condensation Control in Fresh Fruit and Berry Packaging",
+    slug: "moisture-condensation-control-in-fresh-fruit-berry-packaging",
+    category: "Produce Packaging",
+    date: "Sep 15, 2026",
+    readTime: "5 min read",
+    excerpt: "Why micro-perforated food-contact pads prevent bottom rot, mold growth, and weight loss in high-value berry punnets.",
+    content: "Berries such as strawberries, blueberries, and raspberries generate continuous respiration condensation during cold-chain transfer. Without proper bottom cushioning and condensation capture, mold and Botrytis cinerea ruin entire punnets. Micro-perforated produce pads absorb humidity without pulling natural moisture from the fruit flesh.",
+    image: "/images/products/fruit-pads.jpg",
+    is_published: true,
+    author: "Agro Solutions Specialist",
+    created_at: "2026-09-15T10:00:00.000Z"
+  }
+];
+
+function readLocalBlogs(): BlogPost[] {
+  ensureDataDir();
+  try {
+    if (!fs.existsSync(BLOGS_FILE)) {
+      fs.writeFileSync(BLOGS_FILE, JSON.stringify(defaultBlogs, null, 2), 'utf-8');
+      return defaultBlogs;
+    }
+    const raw = fs.readFileSync(BLOGS_FILE, 'utf-8');
+    const parsed = JSON.parse(raw);
+    if (Array.isArray(parsed) && parsed.length > 0) {
+      return parsed;
+    }
+    return defaultBlogs;
+  } catch (err) {
+    console.error('Error reading blogs.json:', err);
+    return defaultBlogs;
+  }
+}
+
+function writeLocalBlogs(blogs: BlogPost[]): void {
+  ensureDataDir();
+  try {
+    fs.writeFileSync(BLOGS_FILE, JSON.stringify(blogs, null, 2), 'utf-8');
+  } catch (err) {
+    console.error('Failed writing blogs.json:', err);
+  }
+}
+
+export async function getAllBlogs(): Promise<BlogPost[]> {
+  return readLocalBlogs();
+}
+
+export async function getBlogById(id: string): Promise<BlogPost | null> {
+  const blogs = readLocalBlogs();
+  return blogs.find(b => b.id === id) || null;
+}
+
+export async function getBlogBySlug(slug: string): Promise<BlogPost | null> {
+  const blogs = readLocalBlogs();
+  return blogs.find(b => b.slug === slug) || null;
+}
+
+export async function createBlog(data: Omit<BlogPost, 'id'>): Promise<BlogPost> {
+  const list = readLocalBlogs();
+  const newBlog: BlogPost = {
+    ...data,
+    id: 'blog-' + Date.now(),
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString()
+  };
+
+  list.unshift(newBlog);
+  writeLocalBlogs(list);
+  return newBlog;
+}
+
+export async function updateBlog(id: string, updates: Partial<BlogPost>): Promise<BlogPost | null> {
+  const list = readLocalBlogs();
+  const idx = list.findIndex(b => b.id === id);
+  if (idx === -1) return null;
+
+  list[idx] = {
+    ...list[idx],
+    ...updates,
+    updated_at: new Date().toISOString()
+  };
+
+  writeLocalBlogs(list);
+  return list[idx];
+}
+
+export async function deleteBlog(id: string): Promise<boolean> {
+  const list = readLocalBlogs();
+  const next = list.filter(b => b.id !== id);
+  if (next.length === list.length) return false;
+  writeLocalBlogs(next);
+  return true;
+}
+
+export async function saveAllBlogs(blogs: BlogPost[]): Promise<BlogPost[]> {
+  writeLocalBlogs(blogs);
+  return blogs;
+}
+

@@ -79,3 +79,20 @@ export interface SiteSettings {
   company_location: string;
   admin_pin: string;
 }
+
+export interface BlogPost {
+  id: string;
+  title: string;
+  slug: string;
+  category: string;
+  date: string;
+  readTime: string;
+  excerpt: string;
+  content?: string;
+  image: string;
+  is_published: boolean;
+  visibility?: 'Visible' | 'Hidden' | string;
+  author?: string;
+  created_at?: string;
+  updated_at?: string;
+}

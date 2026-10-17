@@ -1,8 +1,9 @@
 ---
 import AdminLayout from '../../layouts/AdminLayout.astro';
 import { isAdminAuthenticated } from '../../lib/auth';
-import { getAllProducts, getAllInquiries, getAllCategories, getAllReviews, getOffer, getSiteSettings } from '../../lib/store';
+import { getAllProducts, getAllInquiries, getAllCategories, getAllReviews, getOffer, getSiteSettings, getAllBlogs } from '../../lib/store';
 import { isD1Configured, getD1Config } from '../../lib/d1';
+import TableWithDialog from '../../components/ui/table-with-dialog';
 
 export const prerender = false;
 
@@ -15,6 +16,7 @@ const products = await getAllProducts();
 const inquiries = await getAllInquiries();
 const categories = await getAllCategories();
 const reviews = await getAllReviews();
+const blogs = await getAllBlogs();
 const currentOffer = await getOffer();
 const siteSettings = await getSiteSettings();
 const d1Config = getD1Config();
@@ -40,13 +42,6 @@ const defaultReviews = [
   { id: 'rev-1', client: 'Arjun Singhania', company: 'FreshCatch Seafood Exporters Ltd', rating: 5, comment: 'Prawns shipment reached Frankfurt in pristine condition. Zero drip pooling in export master cartons.', approved: true, date: '07/10/2026' },
   { id: 'rev-2', client: 'Pooja Deshmukh', company: 'BerryFields Agro Packhouse', rating: 5, comment: 'Strawberry clamshell shelf-life increased by 4 days. Micro-perforated bubble layer protects delicate fruits.', approved: true, date: '05/10/2026' },
   { id: 'rev-3', client: 'Sunil Mathur', company: 'Royal Prime Meats Pvt Ltd', rating: 5, comment: 'Black gourmet steak pads gave our supermarket meat cases an ultra-premium visual aesthetic.', approved: true, date: '02/10/2026' }
-];
-
-// Offers data
-const defaultOffers = [
-  { id: 'off-1', title: 'Free 500-Pad Sample Evaluation Kit', discount: '100% Free Samples', code: 'EVAL-KIT', desc: 'Complimentary testing sample pack dispatched to verified food packhouses & meat processors.', active: true },
-  { id: 'off-2', title: 'Volume Tier: 100,000+ Units Discount', discount: 'Flat ₹0.42 / Pad', code: 'BULK-100K', desc: 'Direct factory pricing for automated tray packaging operations with custom branding.', active: true },
-  { id: 'off-3', title: 'Early Season Berry Harvest Booking', discount: '8% Advance Booking Rebate', code: 'BERRY-2026', desc: 'Reserve production slots for 250g and 500g strawberry & blueberry fruit pads.', active: true }
 ];
 ---
 
@@ -76,7 +71,7 @@ const defaultOffers = [
       <!-- Navigation Links List -->
       <nav class="sidebar-nav">
         <!-- 1. Dashboard -->
-        <button type="button" class="nav-item" data-tab="view-dashboard">
+        <button type="button" class="nav-item active" data-tab="view-dashboard">
           <span class="nav-icon">
             <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <rect x="3" y="3" width="7" height="7"></rect>
@@ -89,7 +84,7 @@ const defaultOffers = [
         </button>
 
         <!-- 2. Catagories (Matches Screenshot) -->
-        <button type="button" class="nav-item active" data-tab="view-catagories">
+        <button type="button" class="nav-item" data-tab="view-catagories">
           <span class="nav-icon">
             <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
               <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
@@ -121,6 +116,17 @@ const defaultOffers = [
             </svg>
           </span>
           <span class="nav-label">Reviews</span>
+        </button>
+
+        <!-- Blogs -->
+        <button type="button" class="nav-item" data-tab="view-blogs">
+          <span class="nav-icon">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+              <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+            </svg>
+          </span>
+          <span class="nav-label">Blogs</span>
         </button>
 
         <!-- 8. Offers -->
@@ -181,11 +187,11 @@ const defaultOffers = [
       <!-- ========================================================
            VIEW 1: DASHBOARD (EXACT REPLICA OF USER SCREENSHOT)
            ======================================================== -->
-      <section class="admin-view" id="view-dashboard" style="display: none;">
+      <section class="admin-view active" id="view-dashboard">
         <!-- Dashboard Header -->
-        <div class="view-header">
-          <h1 class="view-title-serif">Dashboard</h1>
-          <p class="view-subtitle">Overview of your manufacturing website</p>
+        <div class="view-header mb-6">
+          <h1 style="font-size: 24px; font-weight: 800; color: #0F172A; letter-spacing: -0.02em;">Dashboard</h1>
+          <p style="font-size: 13.5px; color: #64748B; margin-top: 4px;">Overview of your manufacturing website</p>
         </div>
 
         <!-- Metric Stat Cards (4 Cards Grid) -->
@@ -256,21 +262,21 @@ const defaultOffers = [
             <div class="panel-header">
               <h2 class="panel-title">Recent Enquiries</h2>
               <div class="panel-header-actions">
-                <button type="button" class="arrow-jump-btn" id="jumpToAllEnquiriesBtn" title="View all enquiries">
-                  →
-                </button>
+                <button type="button" class="arrow-jump-btn" id="jumpToAllEnquiriesBtn" title="View all enquiries">→</button>
               </div>
             </div>
 
-            <!-- Enquiries List Container -->
             <div class="enquiries-list" id="recentEnquiriesList">
               {inquiries.slice(0, 5).map((inq) => {
-                const dateObj = new Date(inq.created_at);
+                const dateObj = inq.created_at ? new Date(inq.created_at) : new Date();
                 const day = String(dateObj.getDate()).padStart(2, '0');
                 const month = String(dateObj.getMonth() + 1).padStart(2, '0');
                 const year = dateObj.getFullYear();
                 const formattedDate = `${day}/${month}/${year}`;
-                const statusLower = (inq.status || 'pending').toLowerCase();
+                const statusVal = inq.status || 'Pending';
+                const statusLower = statusVal.toLowerCase();
+                const rawProd = (inq.product_name || 'Meat & Poultry Packaging - 75 × 120 MM (HYDSAP75120 - 40g Absorbency)').replace(/(\d+)\s*[xX]\s*(\d+)/g, '$1 × $2');
+                const subText = `${rawProd} · ${Number(inq.quantity || 0).toLocaleString()} units`;
 
                 return (
                   <div 
@@ -279,14 +285,11 @@ const defaultOffers = [
                     data-json={JSON.stringify(inq)}
                   >
                     <div class="enquiry-item-left">
-                      <h4 class="company-name">{inq.company_name || 'Unknown Company'}</h4>
-                      <p class="company-sub">{inq.product_name} · {Number(inq.quantity || 0).toLocaleString()} units</p>
+                      <h4 class="company-name">{(inq.company_name || inq.name || 'Unknown Company').toUpperCase()}</h4>
+                      <p class="company-sub">{subText}</p>
                     </div>
-
                     <div class="enquiry-item-right">
-                      <span class={`status-badge-pill ${statusLower}`}>
-                        {statusLower}
-                      </span>
+                      <span class={`status-badge-pill ${statusLower}`}>{statusVal}</span>
                       <span class="enquiry-date">{formattedDate}</span>
                     </div>
                   </div>
@@ -356,7 +359,7 @@ const defaultOffers = [
       <!-- ========================================================
            VIEW 2: CATEGORY MANAGEMENT (EXACT REPLICA OF USER SCREENSHOT)
            ======================================================== -->
-      <section class="admin-view active" id="view-catagories">
+      <section class="admin-view" id="view-catagories" style="display: none;">
         <!-- Header -->
         <div class="view-header flex-between">
           <div>
@@ -369,18 +372,16 @@ const defaultOffers = [
           </button>
         </div>
 
-        <!-- Main Categories Card (Same to Same as Screenshot) -->
-        <div class="panel-card categories-table-panel">
-          <h2 class="panel-card-heading">Categories</h2>
-
+        <!-- Main Categories Card (Matches Screenshot Design) -->
+        <div class="modern-table-card categories-table-panel">
           <div class="table-responsive">
-            <table class="categories-data-table">
+            <table class="modern-table categories-data-table">
               <thead>
                 <tr>
                   <th class="col-img">Image</th>
-                  <th class="col-name">Name</th>
+                  <th class="col-name">Category Name</th>
                   <th class="col-status">Status</th>
-                  <th class="col-actions">Actions</th>
+                  <th class="col-actions" style="text-align: right;">Actions</th>
                 </tr>
               </thead>
               <tbody id="categoriesTableBody">
@@ -395,59 +396,50 @@ const defaultOffers = [
 
                     <!-- Name -->
                     <td class="col-name">
-                      <span class="cat-name-text">{cat.name}</span>
+                      <span class="cat-name-text" style="font-weight: 600; color: #0F172A;">{cat.name}</span>
                     </td>
 
                     <!-- Status -->
                     <td class="col-status">
-                      <span class="status-badge-pill active">
+                      <span class="status-pill active">
                         {cat.status || 'Active'}
                       </span>
                     </td>
 
                     <!-- Actions -->
-                    <td class="col-actions">
-                      <div class="cat-action-icons">
+                    <td class="col-actions" style="text-align: right;">
+                      <div style="display: flex; gap: 8px; justify-content: flex-end; align-items: center;">
                         <!-- View Products in Category -->
                         <button 
                           type="button" 
-                          class="cat-icon-btn btn-view-cat-products" 
+                          class="btn-table-action btn-view-cat-products" 
                           data-slug={cat.slug}
                           data-name={cat.name}
                           title="View Products in this Category"
                         >
-                          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8">
-                            <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
-                            <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
-                            <line x1="12" y1="22.08" x2="12" y2="12"></line>
-                          </svg>
+                          View Products
                         </button>
 
                         <!-- Edit Category -->
                         <button 
                           type="button" 
-                          class="cat-icon-btn btn-edit-category" 
+                          class="btn-table-action btn-edit-category" 
                           data-category={JSON.stringify(cat)}
                           title="Edit Category"
                         >
-                          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8">
-                            <path d="M12 20h9"></path>
-                            <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
-                          </svg>
+                          Edit
                         </button>
 
                         <!-- Delete Category -->
                         <button 
                           type="button" 
-                          class="cat-icon-btn btn-delete-category" 
+                          class="btn-table-action btn-delete-category" 
                           data-id={cat.id}
                           data-name={cat.name}
+                          style="color: #EF4444; border-color: #FECACA;"
                           title="Delete Category"
                         >
-                          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="#EF4444" stroke-width="1.8">
-                            <polyline points="3 6 5 6 21 6"></polyline>
-                            <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
-                          </svg>
+                          Delete
                         </button>
                       </div>
                     </td>
@@ -455,6 +447,11 @@ const defaultOffers = [
                 ))}
               </tbody>
             </table>
+          </div>
+
+          <div class="modern-table-footer">
+            <span class="modern-footer-total">Total Categories: {categories.length}</span>
+            <span class="modern-footer-amount">{products.length} Products Linked</span>
           </div>
         </div>
       </section>
@@ -496,7 +493,7 @@ const defaultOffers = [
         </div>
 
         <!-- Main Card Container matching screenshot -->
-        <div class="enquiries-screenshot-card">
+        <div class="modern-table-card enquiries-screenshot-card">
           <!-- Filters row -->
           <div class="enquiries-filters-row">
             <div class="search-input-box">
@@ -524,43 +521,31 @@ const defaultOffers = [
                 <option value="Cancelled">Cancelled</option>
               </select>
             </div>
-
-            <div class="custom-select-wrap">
-              <select id="enquiryPriorityFilter" class="screenshot-select">
-                <option value="">All Priorities</option>
-                <option value="Low">Low</option>
-                <option value="Medium">Medium</option>
-                <option value="High">High</option>
-                <option value="Urgent">Urgent</option>
-              </select>
-            </div>
           </div>
 
           <!-- Table Container -->
-          <div class="enquiries-table-outer">
-            <table class="enquiries-clean-table" id="fullEnquiriesTable">
+          <div style="overflow-x: auto;">
+            <table class="modern-table enquiries-clean-table" id="fullEnquiriesTable">
               <thead>
                 <tr>
-                  <th style="width: 14%;">Date</th>
-                  <th style="width: 12%;">Priority</th>
+                  <th style="width: 15%;">Date</th>
                   <th style="width: 25%;">Contact</th>
-                  <th style="width: 23%;">Product</th>
+                  <th style="width: 28%;">Product Line</th>
                   <th style="width: 12%;">Quantity</th>
                   <th style="width: 10%;">Status</th>
-                  <th style="width: 14%; text-align: right;">Actions</th>
+                  <th style="width: 10%; text-align: right;">Actions</th>
                 </tr>
               </thead>
               <tbody id="enquiriesTableBody">
-                {inquiries.map(inq => {
-                  const dateObj = new Date(inq.created_at);
+                {inquiries.map((inq, idx) => {
+                  const dateObj = inq.created_at ? new Date(inq.created_at) : new Date();
                   const formattedDate = dateObj.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
-                  const priority = inq.priority || 'Medium';
                   const statusVal = inq.status || 'Pending';
                   const statusDisplay = statusVal.charAt(0).toUpperCase() + statusVal.slice(1).toLowerCase();
-                  const contactName = inq.company_name || inq.name || 'RAJVARDHAN SINGH CHOUHAN';
-                  const phoneDisplay = inq.phone || '6232475799';
-                  const prodName = inq.product_name || 'MEN';
-                  const prodSub = inq.fabric_choice || inq.customization_type || 'Bit Coin Jacquard';
+                  const contactName = (inq.company_name || inq.name || '').toUpperCase();
+                  const phoneDisplay = inq.phone || '';
+                  const prodName = inq.product_name || 'Absorbent Pad';
+                  const prodSub = inq.fabric_choice || inq.customization_type || (inq.message ? (inq.message.slice(0, 30) + '...') : '');
                   const qtyDisplay = `${inq.quantity || 100} units`;
 
                   return (
@@ -568,60 +553,50 @@ const defaultOffers = [
                       class="enquiry-row-item" 
                       data-id={inq.id}
                       data-status={statusVal.toLowerCase()}
-                      data-priority={priority.toLowerCase()}
                       data-inquiry={JSON.stringify(inq)}
+                      style={idx >= 6 ? "display: none;" : undefined}
                     >
                       <td>
                         <span class="enquiry-date-text">{formattedDate}</span>
                       </td>
                       <td>
-                        <span class={`priority-pill ${priority.toLowerCase()}`}>
-                          {priority}
-                        </span>
-                      </td>
-                      <td>
                         <div class="contact-stack">
-                          <span class="contact-main-name">{contactName}</span>
-                          <span class="contact-sub-phone">{phoneDisplay}</span>
+                          <span class="contact-main-name" style="font-weight: 600; color: #0F172A; text-transform: uppercase;">{contactName}</span>
+                          <span class="contact-sub-phone" style="font-size: 12.5px; color: #64748B;">{phoneDisplay}</span>
                         </div>
                       </td>
                       <td>
                         <div class="product-stack">
-                          <span class="product-main-name">{prodName}</span>
-                          <span class="product-sub-desc">{prodSub}</span>
+                          <span class="product-main-name" style="font-weight: 500; color: #1E293B;">{prodName}</span>
+                          <span class="product-sub-desc" style="font-size: 12px; color: #64748B;">{prodSub}</span>
                         </div>
                       </td>
                       <td>
-                        <span class="quantity-text">{qtyDisplay}</span>
+                        <span class="quantity-text" style="font-weight: 500;">{qtyDisplay}</span>
                       </td>
                       <td>
-                        <span class={`status-dark-pill ${statusVal.toLowerCase()}`}>
+                        <span class={`status-pill ${statusVal.toLowerCase()}`}>
                           {statusDisplay}
                         </span>
                       </td>
-                      <td>
-                        <div class="actions-icon-row">
+                      <td style="text-align: right;">
+                        <div style="display: flex; gap: 8px; justify-content: flex-end; align-items: center;">
                           <button 
                             type="button" 
-                            class="action-btn-icon view-inquiry-btn" 
+                            class="btn-table-action view-inquiry-btn" 
                             title="View Enquiry Details"
                             data-inquiry={JSON.stringify(inq)}
                           >
-                            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                              <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
-                              <circle cx="12" cy="12" r="3"></circle>
-                            </svg>
+                            View Details
                           </button>
                           <button 
                             type="button" 
-                            class="action-btn-icon delete-inquiry-btn" 
+                            class="btn-table-action delete-inquiry-btn" 
                             title="Delete Enquiry"
                             data-id={inq.id}
+                            style="color: #EF4444; border-color: #FECACA; padding: 6px 10px;"
                           >
-                            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#DC2626" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                              <polyline points="3 6 5 6 21 6"></polyline>
-                              <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
-                            </svg>
+                            🗑
                           </button>
                         </div>
                       </td>
@@ -633,13 +608,27 @@ const defaultOffers = [
           </div>
 
           <!-- Pagination Footer -->
-          <div class="enquiries-pagination-bar">
-            <span class="pagination-count-label" id="paginationCountLabel">Page 1 of 1</span>
+          <div class="modern-table-footer enquiries-pagination-bar">
+            <span class="modern-footer-total">Total Enquiries: {inquiries.length}</span>
+            <div class="enquiries-per-page-wrap">
+              <label for="enquiriesPageSizeSelect" class="per-page-label">Show per page:</label>
+              <select id="enquiriesPageSizeSelect" class="enquiries-pagesize-dropdown" aria-label="Enquiries per page">
+                <option value="6" selected>6</option>
+                <option value="10">10</option>
+                <option value="25">25</option>
+                <option value="50">50</option>
+                <option value="all">All</option>
+              </select>
+              <span class="enquiries-showing-text" id="enquiriesShowingText">
+                {`Showing 1–${Math.min(6, inquiries.length)} of ${inquiries.length}`}
+              </span>
+            </div>
             <div class="pagination-btn-group">
-              <button type="button" class="page-arrow-btn" id="paginationFirst" title="First Page">«</button>
-              <button type="button" class="page-arrow-btn" id="paginationPrev" title="Previous Page">‹</button>
-              <button type="button" class="page-arrow-btn" id="paginationNext" title="Next Page">›</button>
-              <button type="button" class="page-arrow-btn" id="paginationLast" title="Last Page">»</button>
+              <button type="button" class="page-arrow-btn" id="paginationFirst" title="First Page" disabled>«</button>
+              <button type="button" class="page-arrow-btn" id="paginationPrev" title="Previous Page" disabled>‹</button>
+              <span class="pagination-page-indicator" id="paginationPageIndicator">{`Page 1 of ${Math.max(1, Math.ceil(inquiries.length / 6))}`}</span>
+              <button type="button" class="page-arrow-btn" id="paginationNext" title="Next Page" disabled={inquiries.length <= 6}>›</button>
+              <button type="button" class="page-arrow-btn" id="paginationLast" title="Last Page" disabled={inquiries.length <= 6}>»</button>
             </div>
           </div>
         </div>
@@ -672,88 +661,83 @@ const defaultOffers = [
         </div>
 
         <!-- Table Container Card -->
-        <div class="reviews-table-container-card">
-          <table class="reviews-screenshot-table" id="reviewsTable">
-            <thead>
-              <tr>
-                <th style="width: 15%;">Date</th>
-                <th style="width: 20%;">Reviewer</th>
-                <th style="width: 10%;">Rating</th>
-                <th style="width: 28%;">Message</th>
-                <th style="width: 12%;">Status</th>
-                <th style="width: 10%;">Visibility</th>
-                <th style="width: 5%; text-align: right;">Actions</th>
-              </tr>
-            </thead>
-            <tbody id="reviewsTableBody">
-              {reviews.map(rev => (
-                <tr 
-                  class="review-row-item" 
-                  data-id={rev.id} 
-                  data-status={rev.status.toLowerCase()} 
-                  data-visibility={rev.visibility.toLowerCase()}
-                  data-review={JSON.stringify(rev)}
-                >
-                  <td>
-                    <span class="review-date-text">{rev.date}</span>
-                  </td>
-                  <td>
-                    <div class="reviewer-stack">
-                      <span class="reviewer-name">{rev.reviewer}</span>
-                      <span class="reviewer-company">{rev.company}</span>
-                    </div>
-                  </td>
-                  <td>
-                    <div class="rating-star-badge">
-                      <span class="star-icon">★</span>
-                      <span class="star-number">{rev.rating}</span>
-                    </div>
-                  </td>
-                  <td>
-                    <span class="review-message-text">{rev.message}</span>
-                  </td>
-                  <td>
-                    <span class={`review-status-pill ${rev.status.toLowerCase()}`}>
-                      {rev.status}
-                    </span>
-                  </td>
-                  <td>
-                    <span class={`review-visibility-pill ${rev.visibility.toLowerCase()}`}>
-                      {rev.visibility}
-                    </span>
-                  </td>
-                  <td style="text-align: right; position: relative;">
-                    <button type="button" class="action-dots-btn" data-id={rev.id} title="Actions">
-                      <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
-                        <circle cx="5" cy="12" r="2"></circle>
-                        <circle cx="12" cy="12" r="2"></circle>
-                        <circle cx="19" cy="12" r="2"></circle>
-                      </svg>
-                    </button>
-                    <div class="review-action-dropdown" id={`review-menu-${rev.id}`} style="display: none;">
-                      <button type="button" class="review-menu-item toggle-visibility-btn" data-id={rev.id}>
-                        {rev.visibility === 'Hidden' ? '👁 Show on Site' : '🚫 Hide from Site'}
-                      </button>
-                      <button type="button" class="review-menu-item toggle-status-btn" data-id={rev.id}>
-                        {rev.status === 'Approved' ? '⏳ Set Pending' : '✓ Approve Review'}
-                      </button>
-                      <button type="button" class="review-menu-item delete-review-btn danger-text" data-id={rev.id}>
-                        🗑 Delete Review
-                      </button>
-                    </div>
-                  </td>
+        <div class="modern-table-card reviews-table-container-card">
+          <div style="overflow-x: auto;">
+            <table class="modern-table reviews-screenshot-table" id="reviewsTable">
+              <thead>
+                <tr>
+                  <th style="width: 14%;">Date</th>
+                  <th style="width: 20%;">Reviewer</th>
+                  <th style="width: 10%;">Rating</th>
+                  <th style="width: 26%;">Message</th>
+                  <th style="width: 10%;">Status</th>
+                  <th style="width: 10%;">Visibility</th>
+                  <th style="width: 10%; text-align: right;">Actions</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+              </thead>
+              <tbody id="reviewsTableBody">
+                {reviews.map(rev => (
+                  <tr 
+                    class="review-row-item" 
+                    data-id={rev.id} 
+                    data-status={rev.status.toLowerCase()} 
+                    data-visibility={rev.visibility.toLowerCase()}
+                    data-review={JSON.stringify(rev)}
+                  >
+                    <td>
+                      <span class="review-date-text">{rev.date}</span>
+                    </td>
+                    <td>
+                      <div class="reviewer-stack">
+                        <span class="reviewer-name" style="font-weight: 600; color: #0F172A;">{rev.reviewer}</span>
+                        <span class="reviewer-company" style="font-size: 12.5px; color: #64748B;">{rev.company}</span>
+                      </div>
+                    </td>
+                    <td>
+                      <div class="rating-star-badge" style="font-weight: 600; color: #0F172A;">
+                        <span class="star-icon" style="color: #F59E0B;">★</span>
+                        <span class="star-number">{rev.rating}</span>
+                      </div>
+                    </td>
+                    <td>
+                      <span class="review-message-text" style="color: #475569; font-size: 13px;">{rev.message}</span>
+                    </td>
+                    <td>
+                      <span class={`status-pill ${rev.status.toLowerCase()}`}>
+                        {rev.status}
+                      </span>
+                    </td>
+                    <td>
+                      <span class={`status-pill ${rev.visibility.toLowerCase()}`}>
+                        {rev.visibility}
+                      </span>
+                    </td>
+                    <td style="text-align: right; position: relative;">
+                      <button type="button" class="btn-table-action action-dots-btn" data-id={rev.id} title="Actions">
+                        <span>Actions</span>
+                        <span style="font-size: 10px; margin-left: 2px;">▾</span>
+                      </button>
+                      <div class="review-action-dropdown" id={`review-menu-${rev.id}`} style="display: none;">
+                        <button type="button" class="review-menu-item toggle-visibility-btn" data-id={rev.id}>
+                          {rev.visibility === 'Hidden' ? '👁 Show on Site' : '🚫 Hide from Site'}
+                        </button>
+                        <button type="button" class="review-menu-item toggle-status-btn" data-id={rev.id}>
+                          {rev.status === 'Approved' ? '⏳ Set Pending' : '✓ Approve Review'}
+                        </button>
+                        <button type="button" class="review-menu-item delete-review-btn danger-text" data-id={rev.id}>
+                          🗑 Delete Review
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
 
-        <!-- Bottom Pagination Controls (Exact from Screenshot) -->
-        <div class="reviews-bottom-bar">
-          <div class="reviews-showing-count-box">
-            <span class="reviews-showing-text" id="reviewsShowingText">
-              Showing 1 to {reviews.length} of {reviews.length} reviews
-            </span>
+          <!-- Bottom Pagination Controls -->
+          <div class="modern-table-footer reviews-bottom-bar">
+            <span class="modern-footer-total">Total Reviews: {reviews.length}</span>
             <div class="page-size-wrap">
               <select id="reviewsPageSizeSelect" class="reviews-pagesize-dropdown">
                 <option value="10">10</option>
@@ -769,6 +753,176 @@ const defaultOffers = [
             <span class="reviews-page-label" id="reviewsPageLabel">Page 1 of 1</span>
             <button type="button" class="page-arrow-btn" id="reviewsNextBtn" title="Next Page">›</button>
             <button type="button" class="page-arrow-btn" id="reviewsLastBtn" title="Last Page">»</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ========================================================
+           VIEW: BLOGS & ARTICLES (MATCHES CUSTOMER REVIEWS EXACTLY)
+           ======================================================== -->
+      <section class="admin-view" id="view-blogs" style="display: none;">
+        <!-- Header -->
+        <div class="view-header flex-between reviews-header-bar">
+          <div>
+            <h1 class="view-title-serif">Blogs & Articles</h1>
+            <p class="view-subtitle">Manage, publish, and moderate packaging articles and guides.</p>
+          </div>
+          <div class="reviews-header-filters" style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+            <!-- Filter Dropdown with Funnel (Exact from Image 1) -->
+            <div class="reviews-filter-select-wrap">
+              <svg class="filter-funnel-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon>
+              </svg>
+              <select id="blogFilterSelect" class="reviews-filter-dropdown" aria-label="Filter Blogs">
+                <option value="">All Blogs</option>
+                <option value="published">Published</option>
+                <option value="draft">Draft</option>
+                <option value="visible">Visible</option>
+                <option value="hidden">Hidden</option>
+                <option value="meat">Meat & Poultry</option>
+                <option value="seafood">Seafood</option>
+                <option value="produce">Produce</option>
+              </select>
+            </div>
+
+            <!-- Apply Changes Button (Direct live update to site) -->
+            <button type="button" class="btn-apply-changes" id="applyBlogChangesBtn" title="Apply all changes to live website">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="20 6 9 17 4 12"></polyline>
+              </svg>
+              <span id="applyBlogChangesText">Apply Changes</span>
+              <span class="pending-changes-badge" id="pendingBlogBadge" style="display: none;">0</span>
+            </button>
+
+            <!-- Add New Blog Button -->
+            <button type="button" class="btn-gold-action" id="addNewBlogBtn">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="12" y1="5" x2="12" y2="19"></line>
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+              </svg>
+              <span>Add New Blog</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Table Container Card (Matches Screenshot Design) -->
+        <div class="modern-table-card reviews-table-container-card">
+          <div style="overflow-x: auto;">
+            <table class="modern-table reviews-screenshot-table" id="blogsTable">
+              <thead>
+                <tr>
+                  <th style="width: 13%;">Date</th>
+                  <th style="width: 32%;">Article</th>
+                  <th style="width: 17%;">Category</th>
+                  <th style="width: 10%;">Read Time</th>
+                  <th style="width: 9%;">Status</th>
+                  <th style="width: 9%;">Visibility</th>
+                  <th style="width: 10%; text-align: right;">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="blogsTableBody">
+                {blogs.map(b => {
+                  const isPub = b.is_published !== false;
+                  const vis = (b.visibility || 'Visible');
+                  const isVis = vis.toLowerCase() === 'visible';
+
+                  return (
+                    <tr 
+                      class="blog-row-item" 
+                      data-id={b.id} 
+                      data-category={(b.category || '').toLowerCase()}
+                      data-status={isPub ? 'published' : 'draft'}
+                      data-visibility={vis.toLowerCase()}
+                      data-json={JSON.stringify(b)}
+                    >
+                      <td>
+                        <span class="review-date-text">{b.date}</span>
+                      </td>
+                      <td>
+                        <div class="reviewer-stack">
+                          <span class="reviewer-name" style="font-weight: 600; color: #0F172A;">{b.title}</span>
+                          <span class="reviewer-company" style="font-size: 12.5px; color: #64748B;">{b.excerpt ? (b.excerpt.slice(0, 95) + '...') : ''}</span>
+                        </div>
+                      </td>
+                      <td>
+                        <span class="blog-category-badge-pill" style="font-size: 12px; font-weight: 500; background: #F1F5F9; color: #334155; padding: 3px 10px; border-radius: 6px;">{b.category}</span>
+                      </td>
+                      <td>
+                        <span class="review-date-text" style="color: #64748B; font-size: 13px;">{b.readTime || '4 min read'}</span>
+                      </td>
+                      <td>
+                        <span 
+                          class={`status-pill ${isPub ? 'active' : 'pending'} blog-status-toggle-pill`}
+                          data-id={b.id}
+                          data-status={isPub ? 'published' : 'draft'}
+                          style="cursor: pointer;"
+                          title="Click to toggle Status"
+                        >
+                          {isPub ? 'Published' : 'Draft'}
+                        </span>
+                      </td>
+                      <td>
+                        <span 
+                          class={`status-pill ${isVis ? 'active' : 'pending'} blog-vis-toggle-pill`}
+                          data-id={b.id}
+                          data-vis={isVis ? 'visible' : 'hidden'}
+                          style="cursor: pointer;"
+                          title="Click to toggle Visibility"
+                        >
+                          {vis}
+                        </span>
+                      </td>
+                      <td style="text-align: right; position: relative;">
+                        <button type="button" class="btn-table-action blog-action-dots-btn" data-id={b.id} title="Actions">
+                          <span>Actions</span>
+                          <span style="font-size: 10px; margin-left: 2px;">▾</span>
+                        </button>
+                        <div class="review-action-dropdown blog-action-menu" id={`blog-menu-${b.id}`} style="display: none;">
+                          <button type="button" class="review-menu-item edit-blog-btn" data-id={b.id}>
+                            ✏️ Edit Article
+                          </button>
+                          <button type="button" class="review-menu-item toggle-blog-vis-item" data-id={b.id}>
+                            {isVis ? '🚫 Hide from Site' : '👁 Show on Site'}
+                          </button>
+                          <button type="button" class="review-menu-item toggle-blog-status-item" data-id={b.id}>
+                            {isPub ? '⏳ Set to Draft' : '✓ Publish Article'}
+                          </button>
+                          <a href="/blogs" target="_blank" class="review-menu-item" style="text-decoration: none; color: inherit; display: block;">
+                            ↗ View on Site
+                          </a>
+                          <button type="button" class="review-menu-item delete-blog-btn danger-text" data-id={b.id} data-title={b.title}>
+                            🗑 Delete Article
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+          <div id="noBlogsFoundMessage" class="empty-table-state" style="display: none; padding: 40px; text-align: center; color: #64748B;">
+            <p>No blog articles match your filter.</p>
+          </div>
+
+          <!-- Bottom Pagination Controls -->
+          <div class="modern-table-footer reviews-bottom-bar">
+            <span class="modern-footer-total">Total Articles: {blogs.length}</span>
+            <div class="page-size-wrap">
+              <select id="blogsPageSizeSelect" class="reviews-pagesize-dropdown">
+                <option value="10">10</option>
+                <option value="25">25</option>
+                <option value="50">50</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="reviews-pagination-group">
+            <button type="button" class="page-arrow-btn" id="blogsFirstBtn" title="First Page">«</button>
+            <button type="button" class="page-arrow-btn" id="blogsPrevBtn" title="Previous Page">‹</button>
+            <span class="reviews-page-label" id="blogsPageLabel">Page 1 of 1</span>
+            <button type="button" class="page-arrow-btn" id="blogsNextBtn" title="Next Page">›</button>
+            <button type="button" class="page-arrow-btn" id="blogsLastBtn" title="Last Page">»</button>
           </div>
         </div>
       </section>
@@ -1005,8 +1159,33 @@ const defaultOffers = [
         </div>
 
         <div class="form-group">
-          <label class="form-label">Image Path / URL *</label>
-          <select id="catImagePreset" class="input-field mb-2">
+          <label class="form-label">Category Image *</label>
+          
+          <!-- System File Picker (Choose File from Computer) -->
+          <div style="background: #F8FAFC; border: 1px dashed #CBD5E1; border-radius: 10px; padding: 14px; margin-bottom: 10px;">
+            <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap;">
+              <div>
+                <label for="catImageFileInput" class="btn-table-action" style="cursor: pointer; background: #0F172A; color: #FFFFFF; border-color: #0F172A; font-weight: 600; padding: 7px 14px; border-radius: 8px; display: inline-flex; align-items: center; gap: 6px; font-size: 13px;">
+                  📁 Choose File from Computer
+                </label>
+                <input type="file" id="catImageFileInput" accept="image/*" style="display: none;" />
+              </div>
+              <span id="catImageFileName" style="font-size: 12.5px; color: #64748B; word-break: break-all;">No file chosen</span>
+            </div>
+
+            <!-- Image Preview Box -->
+            <div id="catImagePreviewRow" style="display: flex; align-items: center; gap: 12px; margin-top: 10px;">
+              <img id="catImagePreview" src="/images/products/meat-pads.jpg" alt="Preview" style="width: 52px; height: 52px; object-fit: cover; border-radius: 8px; border: 1px solid #E2E8F0; background: #FFFFFF;" />
+              <div style="font-size: 12px; color: #475569;">
+                <span style="font-weight: 600; color: #0F172A; display: block;" id="catPreviewLabel">Image Preview</span>
+                <span style="color: #64748B;">JPG, PNG, WEBP, SVG supported</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Presets and Direct URL option -->
+          <div style="font-size: 11.5px; font-weight: 600; color: #64748B; margin-bottom: 4px;">Or choose from preset images / custom URL:</div>
+          <select id="catImagePreset" class="input-field mb-2" style="font-size: 12.5px;">
             <option value="/images/products/meat-pads.jpg">Meat Pads Image (/images/products/meat-pads.jpg)</option>
             <option value="/images/products/seafood-pads.jpg">Seafood Pads Image (/images/products/seafood-pads.jpg)</option>
             <option value="/images/products/fruit-pads.jpg">Fruit Pads Image (/images/products/fruit-pads.jpg)</option>
@@ -1014,7 +1193,7 @@ const defaultOffers = [
             <option value="/images/products/white-black-pads.jpg">Black Gourmet Image (/images/products/white-black-pads.jpg)</option>
             <option value="custom">Custom URL...</option>
           </select>
-          <input type="text" id="catImageInput" class="input-field" value="/images/products/meat-pads.jpg" placeholder="Enter image URL" />
+          <input type="text" id="catImageInput" class="input-field" value="/images/products/meat-pads.jpg" placeholder="Enter image URL or select file above" />
         </div>
 
         <div class="form-group">
@@ -1126,11 +1305,98 @@ const defaultOffers = [
     </div>
   </div>
 
+  <!-- ========================================================
+       MODAL: ADD / EDIT BLOG POST
+       ======================================================== -->
+  <div class="modal-backdrop" id="blogModal" style="display: none;">
+    <div class="modal-card modal-card-wide">
+      <div class="modal-header">
+        <h3 id="blogModalTitle">Add New Blog Article</h3>
+        <button type="button" class="close-modal-btn" id="closeBlogModalBtn">&times;</button>
+      </div>
+
+      <form id="blogForm" class="modal-form">
+        <input type="hidden" id="editBlogId" />
+
+        <div class="form-group">
+          <label class="form-label">Article Title *</label>
+          <input type="text" id="blogTitleInput" required class="input-field" placeholder="e.g. How Modern Food Absorbent Pads Maximize Meat Freshness" />
+        </div>
+
+        <div class="form-grid-2">
+          <div class="form-group">
+            <label class="form-label">URL Slug *</label>
+            <input type="text" id="blogSlugInput" required class="input-field" placeholder="e.g. how-modern-food-absorbent-pads-maximize-freshness" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Category *</label>
+            <input type="text" id="blogCategoryInput" required class="input-field" list="blogCategoryList" placeholder="e.g. Meat & Poultry Packaging" />
+            <datalist id="blogCategoryList">
+              <option value="Meat & Poultry Packaging" />
+              <option value="Seafood Cold Chain" />
+              <option value="Produce Packaging" />
+              <option value="General Insights" />
+              <option value="Cleanroom Manufacturing" />
+            </datalist>
+          </div>
+        </div>
+
+        <div class="form-grid-3">
+          <div class="form-group">
+            <label class="form-label">Publication Date</label>
+            <input type="text" id="blogDateInput" class="input-field" placeholder="e.g. Oct 17, 2026" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Estimated Read Time</label>
+            <input type="text" id="blogReadTimeInput" class="input-field" placeholder="e.g. 5 min read" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Status</label>
+            <select id="blogStatusInput" class="input-field">
+              <option value="published">Published (Live)</option>
+              <option value="draft">Draft (Hidden)</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Featured Image URL</label>
+          <div class="image-preset-picker">
+            <select id="blogImagePreset" class="input-field mb-2">
+              <option value="/images/products/meat-pads.jpg">Meat & Poultry Pads (/images/products/meat-pads.jpg)</option>
+              <option value="/images/products/seafood-pads.jpg">Seafood Cold Chain (/images/products/seafood-pads.jpg)</option>
+              <option value="/images/products/fruit-pads.jpg">Produce & Berries (/images/products/fruit-pads.jpg)</option>
+              <option value="/images/about/soaker-absorbent-pads-structure.jpg">Multi-layer Core (/images/about/soaker-absorbent-pads-structure.jpg)</option>
+              <option value="/images/products/white-black-pads.jpg">Black & White Pads (/images/products/white-black-pads.jpg)</option>
+              <option value="custom">Custom Image URL...</option>
+            </select>
+          </div>
+          <input type="text" id="blogImageInput" class="input-field" value="/images/products/meat-pads.jpg" placeholder="Enter image URL" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Short Summary / Excerpt *</label>
+          <textarea id="blogExcerptInput" required class="input-field text-area" rows="2" placeholder="Brief summary displayed on the blog card and social shares..."></textarea>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Full Article Content</label>
+          <textarea id="blogContentInput" class="input-field text-area" rows="6" placeholder="Write the full body of the article here..."></textarea>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn-cancel" id="cancelBlogBtn">Cancel</button>
+          <button type="submit" class="btn-gold-action" id="saveBlogBtn">Save Blog Article</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
   <!-- Toast Element -->
   <div class="admin-toast" id="adminToast"></div>
 </AdminLayout>
 
-<style>
+<style is:global>
   /* ==========================================================
      GLOBAL ADMIN LAYOUT STYLES
      ========================================================== */
@@ -1264,33 +1530,33 @@ const defaultOffers = [
     align-items: center;
     gap: 16px;
     width: 100%;
-    padding: 13.5px 20px;
+    padding: 12px 18px;
     border: none;
     background: transparent;
-    border-radius: 10px;
+    border-radius: 8px;
     color: #4B5563;
-    font-size: 16.5px;
+    font-size: 15px;
     font-weight: 500;
     cursor: pointer;
     text-align: left;
-    letter-spacing: 0.2px;
+    letter-spacing: 0.1px;
     transition: background-color 0.15s ease, color 0.15s ease;
   }
 
   .nav-item:hover {
-    background-color: #FDF2F2;
-    color: #6E2219;
+    background-color: #F1F5F9;
+    color: #0F172A;
   }
 
   .nav-item.active {
-    background-color: #6E2219; /* Maroon theme matching Request Quote */
+    background-color: #0F172A;
     color: #FFFFFF;
     font-weight: 600;
-    box-shadow: 0 4px 14px rgba(110, 34, 25, 0.28);
+    box-shadow: 0 4px 12px rgba(15, 23, 42, 0.12);
   }
 
   .nav-item.active:hover {
-    background-color: #842A1F;
+    background-color: #1E293B;
     color: #FFFFFF;
   }
 
@@ -1317,7 +1583,7 @@ const defaultOffers = [
   }
 
   .sidebar-link-view {
-    font-size: 15px;
+    font-size: 14px;
     color: #64748B;
     font-weight: 500;
     text-decoration: none;
@@ -1333,13 +1599,13 @@ const defaultOffers = [
     display: flex;
     align-items: center;
     gap: 10px;
-    padding: 13px 20px;
+    padding: 11px 16px;
     border: 1px solid #E2E8F0;
-    border-radius: 10px;
+    border-radius: 8px;
     background: #FFFFFF;
     color: #1E293B;
-    font-size: 15.5px;
-    font-weight: 600;
+    font-size: 14px;
+    font-weight: 500;
     cursor: pointer;
     width: 100%;
     transition: all 0.15s;
@@ -1371,7 +1637,7 @@ const defaultOffers = [
 
   /* View Header */
   .view-header {
-    margin-bottom: 28px;
+    margin-bottom: 24px;
   }
 
   .view-header.flex-between {
@@ -1384,7 +1650,7 @@ const defaultOffers = [
     font-family: 'Outfit', 'Plus Jakarta Sans', sans-serif;
     font-size: 24px;
     font-weight: 800;
-    color: #1E293B;
+    color: #0F172A;
     letter-spacing: -0.02em;
     line-height: 1.25;
   }
@@ -1396,38 +1662,37 @@ const defaultOffers = [
     font-weight: 400;
   }
 
-  /* Button: Add Category (Maroon theme matching Request Quote) */
-  .btn-dark-add {
-    background-color: #6E2219;
+  /* Buttons: Primary Dark Button */
+  .btn-dark-add, .btn-gold-action, .btn-apply-changes {
+    background-color: #0F172A;
     color: #FFFFFF;
     font-size: 13px;
-    font-weight: 600;
-    padding: 9px 18px;
+    font-weight: 500;
+    padding: 8px 16px;
     border-radius: 8px;
     border: none;
     cursor: pointer;
     display: inline-flex;
     align-items: center;
     gap: 8px;
-    transition: background-color 0.2s, transform 0.1s, box-shadow 0.2s;
-    box-shadow: 0 2px 6px rgba(110, 34, 25, 0.2);
+    transition: all 0.15s ease;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
   }
 
-  .btn-dark-add:hover {
-    background-color: #842A1F;
+  .btn-dark-add:hover, .btn-gold-action:hover, .btn-apply-changes:hover {
+    background-color: #1E293B;
     transform: translateY(-1px);
-    box-shadow: 0 4px 14px rgba(110, 34, 25, 0.3);
+    box-shadow: 0 4px 12px rgba(15, 23, 42, 0.12);
   }
 
   /* ==========================================================
-     CATEGORY MANAGEMENT TABLE CARD (EXACT REPLICA OF IMAGE 1)
+     CATEGORY MANAGEMENT TABLE CARD
      ========================================================== */
   .categories-table-panel {
     background: #FFFFFF;
     border: 1px solid #E2E8F0;
-    border-radius: 16px;
-    padding: 24px 28px;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
+    border-radius: 12px;
+    box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.04), 0 2px 4px -1px rgba(0, 0, 0, 0.02);
     min-height: max(580px, calc(100vh - 240px));
   }
 
@@ -1441,27 +1706,28 @@ const defaultOffers = [
   .categories-data-table {
     width: 100%;
     border-collapse: collapse;
-    font-size: 13px;
+    font-size: 13.5px;
   }
 
   .categories-data-table th {
-    padding: 14px 18px;
-    font-weight: 600;
-    color: #0F172A;
-    border-bottom: 1px solid #EDF2F7;
-    font-size: 13px;
-    letter-spacing: 0.2px;
+    padding: 16px 20px;
+    font-weight: 500;
+    color: #64748B;
+    border-bottom: 1px solid #E2E8F0;
+    font-size: 13.5px;
+    background: #FFFFFF;
   }
 
   .categories-data-table td {
-    padding: 14px 18px;
+    padding: 16px 20px;
     border-bottom: 1px solid #F1F5F9;
     vertical-align: middle;
-    font-size: 13px;
+    font-size: 13.5px;
+    background: #FFFFFF;
   }
 
   .category-table-row:hover td {
-    background-color: #FAFCFE;
+    background-color: #F8FAFC;
   }
 
   .categories-data-table .col-img {
@@ -1470,12 +1736,11 @@ const defaultOffers = [
   }
 
   .categories-data-table .col-name {
-    width: 320px;
     text-align: left;
   }
 
   .categories-data-table .col-status {
-    width: 200px;
+    width: 180px;
     text-align: left;
   }
 
@@ -1720,40 +1985,44 @@ const defaultOffers = [
     border-color: #CBD5E1;
   }
 
-  /* Enquiry Row List */
-  .enquiries-list, .designs-list {
+  /* Enquiry Row List (Exact Match to User Screenshot) */
+  .enquiries-list {
     display: flex;
     flex-direction: column;
-    gap: 12px;
   }
 
   .enquiry-item-row {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 14px 16px;
-    border-radius: 10px;
-    border: 1px solid #F1F5F9;
-    background: #FAFCFE;
-    transition: all 0.15s;
+    padding: 16px 6px;
+    border-bottom: 1px solid #F1F5F9;
+    background: transparent;
+    transition: background-color 0.15s ease, padding 0.15s ease;
     cursor: pointer;
   }
 
+  .enquiry-item-row:last-child {
+    border-bottom: none;
+  }
+
   .enquiry-item-row:hover {
-    background-color: #FFFFFF;
-    border-color: #CBD5E1;
-    transform: translateY(-1px);
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
+    background-color: #F8FAFC;
+    border-radius: 8px;
+    padding-left: 10px;
+    padding-right: 10px;
   }
 
   .enquiry-item-left .company-name {
     font-size: 13.5px;
-    font-weight: 600;
+    font-weight: 700;
     color: #0F172A;
+    text-transform: uppercase !important;
+    letter-spacing: 0.02em;
   }
 
   .enquiry-item-left .company-sub {
-    font-size: 12.5px;
+    font-size: 12px;
     color: #64748B;
     margin-top: 3px;
   }
@@ -1762,38 +2031,33 @@ const defaultOffers = [
     display: flex;
     flex-direction: column;
     align-items: flex-end;
-    gap: 5px;
+    gap: 4px;
   }
 
   .status-badge-pill {
     display: inline-block;
     padding: 3px 12px;
     border-radius: 9999px;
-    font-size: 12px;
+    font-size: 11px;
     font-weight: 700;
     text-transform: capitalize;
-    background-color: #B45309;
-    color: #FFFFFF;
-  }
-
-  .status-badge-pill.closed, .status-badge-pill.approved {
-    background-color: #15803D;
+    background-color: #0F172A;
     color: #FFFFFF;
   }
 
   .status-badge-pill.cancelled, .status-badge-pill.canceled, .status-badge-pill.rejected {
-    background-color: #DC2626;
-    color: #FFFFFF;
+    background-color: #DC2626 !important;
+    color: #FFFFFF !important;
   }
 
-  .status-badge-pill.pending, .status-badge-pill.new, .status-badge-pill.in-review, .status-badge-pill.contacted, .status-badge-pill.quoted, .status-badge-pill.sampling {
-    background-color: #B45309;
-    color: #FFFFFF;
+  .status-badge-pill.closed, .status-badge-pill.approved, .status-badge-pill.pending, .status-badge-pill.new, .status-badge-pill.in-review, .status-badge-pill.contacted, .status-badge-pill.quoted, .status-badge-pill.sampling, .status-badge-pill.active {
+    background-color: #0F172A !important;
+    color: #FFFFFF !important;
   }
 
   .enquiry-date {
-    font-size: 12px;
-    color: #94A3B8;
+    font-size: 11px;
+    color: #64748B;
   }
 
   /* ==========================================================
@@ -2047,8 +2311,8 @@ const defaultOffers = [
 
   .screenshot-search-input:focus {
     outline: none;
-    border-color: #6E2219;
-    box-shadow: 0 0 0 3px rgba(110, 34, 25, 0.12);
+    border-color: #0F172A;
+    box-shadow: 0 0 0 3px rgba(15, 23, 42, 0.08);
   }
 
   .custom-select-wrap {
@@ -2072,8 +2336,8 @@ const defaultOffers = [
 
   .screenshot-select:focus {
     outline: none;
-    border-color: #6E2219;
-    box-shadow: 0 0 0 3px rgba(110, 34, 25, 0.12);
+    border-color: #0F172A;
+    box-shadow: 0 0 0 3px rgba(15, 23, 42, 0.08);
   }
 
   .enquiries-table-outer {
@@ -2085,25 +2349,26 @@ const defaultOffers = [
   .enquiries-clean-table {
     width: 100%;
     border-collapse: collapse;
-    font-size: 13px;
+    font-size: 13.5px;
   }
 
   .enquiries-clean-table th {
     background: #FFFFFF;
-    color: #0F172A;
-    font-size: 13px;
-    font-weight: 600;
-    padding: 14px 18px;
+    color: #64748B;
+    font-size: 13.5px;
+    font-weight: 500;
+    padding: 16px 20px;
     text-align: left;
     border-bottom: 1px solid #E2E8F0;
     white-space: nowrap;
   }
 
   .enquiries-clean-table td {
-    padding: 16px 18px;
+    padding: 16px 20px;
     border-bottom: 1px solid #F1F5F9;
     vertical-align: middle;
     background: #FFFFFF;
+    font-size: 13.5px;
   }
 
   .enquiries-clean-table tbody tr:last-child td {
@@ -2159,6 +2424,8 @@ const defaultOffers = [
     font-weight: 700;
     color: #0F172A;
     line-height: 1.3;
+    text-transform: uppercase !important;
+    letter-spacing: 0.02em;
   }
 
   .contact-sub-phone {
@@ -2192,10 +2459,10 @@ const defaultOffers = [
     white-space: nowrap;
   }
 
-  /* Status Dark Pill Colors (Closed: Green, Cancelled: Red, Baki Steps: Dark Yellow) */
+  /* Status Dark Pill Colors: Cancelled is Red, All others are Black */
   .status-dark-pill {
     display: inline-block;
-    background: #B45309; /* Dark Yellow default for pending, new, contacted, etc. */
+    background: #0F172A;
     color: #FFFFFF;
     font-size: 12px;
     font-weight: 700;
@@ -2206,29 +2473,27 @@ const defaultOffers = [
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.06);
   }
 
-  /* Closed: Green */
-  .status-dark-pill.closed {
-    background: #15803D;
-    color: #FFFFFF;
-  }
-
   /* Cancelled: Red */
   .status-dark-pill.cancelled,
-  .status-dark-pill.canceled {
-    background: #DC2626;
-    color: #FFFFFF;
+  .status-dark-pill.canceled,
+  .status-dark-pill.rejected {
+    background: #DC2626 !important;
+    color: #FFFFFF !important;
   }
 
-  /* Baki Steps: Dark Yellow */
+  /* All others: Black */
+  .status-dark-pill.closed,
+  .status-dark-pill.approved,
   .status-dark-pill.pending,
   .status-dark-pill.new,
   .status-dark-pill.contacted,
   .status-dark-pill.quoted,
   .status-dark-pill.sampling,
   .status-dark-pill.in-progress,
-  .status-dark-pill.in-review {
-    background: #B45309;
-    color: #FFFFFF;
+  .status-dark-pill.in-review,
+  .status-dark-pill.active {
+    background: #0F172A !important;
+    color: #FFFFFF !important;
   }
 
   /* Action Buttons */
@@ -2266,8 +2531,62 @@ const defaultOffers = [
     display: flex;
     justify-content: space-between;
     align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
     margin-top: 18px;
     padding-top: 6px;
+  }
+
+  .enquiries-per-page-wrap {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .per-page-label {
+    font-size: 13px;
+    color: #64748B;
+    font-weight: 500;
+  }
+
+  .enquiries-pagesize-dropdown {
+    height: 32px;
+    padding: 0 26px 0 10px;
+    border: 1px solid #E2E8F0;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 500;
+    color: #334155;
+    background: #FFFFFF url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 24 24' fill='none' stroke='%2364748B' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E") no-repeat right 8px center;
+    appearance: none;
+    -webkit-appearance: none;
+    cursor: pointer;
+    outline: none;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  }
+
+  .enquiries-pagesize-dropdown:hover {
+    border-color: #CBD5E1;
+  }
+
+  .enquiries-pagesize-dropdown:focus {
+    border-color: #3B82F6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+  }
+
+  .enquiries-showing-text {
+    font-size: 13px;
+    color: #64748B;
+    font-weight: 400;
+    margin-left: 4px;
+  }
+
+  .pagination-page-indicator {
+    font-size: 13px;
+    color: #0F172A;
+    font-weight: 500;
+    margin: 0 6px;
+    white-space: nowrap;
   }
 
   .pagination-count-label {
@@ -2366,31 +2685,32 @@ const defaultOffers = [
     border: 1px solid #E2E8F0;
     border-radius: 12px;
     overflow: visible;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+    box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.04), 0 2px 4px -1px rgba(0, 0, 0, 0.02);
   }
 
   .reviews-screenshot-table {
     width: 100%;
     border-collapse: collapse;
-    font-size: 13px;
+    font-size: 13.5px;
   }
 
   .reviews-screenshot-table th {
     background: #FFFFFF;
-    color: #0F172A;
-    font-size: 13px;
-    font-weight: 600;
-    padding: 14px 18px;
+    color: #64748B;
+    font-size: 13.5px;
+    font-weight: 500;
+    padding: 16px 20px;
     text-align: left;
-    border-bottom: 1px solid #F1F5F9;
+    border-bottom: 1px solid #E2E8F0;
     white-space: nowrap;
   }
 
   .reviews-screenshot-table td {
-    padding: 16px 18px;
+    padding: 16px 20px;
     border-bottom: 1px solid #F1F5F9;
     vertical-align: middle;
     background: #FFFFFF;
+    font-size: 13.5px;
   }
 
   .reviews-screenshot-table tbody tr:last-child td {
@@ -2414,15 +2734,10 @@ const defaultOffers = [
     gap: 2px;
   }
 
-  .reviewer-name {
-    font-size: 13px;
-    font-weight: 600;
-    color: #0F172A;
-  }
-
+  /* Reviewer info */
+  .reviewer-name,
   .reviewer-company {
-    font-size: 12px;
-    color: #64748B;
+    text-transform: uppercase !important;
   }
 
   .rating-star-badge {
@@ -2446,7 +2761,7 @@ const defaultOffers = [
     line-height: 1.4;
   }
 
-  /* Status Pill - Matches Screenshot (Green) */
+  /* Status Pill - Cancelled/Rejected is Red, All others are Black */
   .review-status-pill {
     display: inline-block;
     padding: 3px 12px;
@@ -2456,21 +2771,22 @@ const defaultOffers = [
     line-height: 1.3;
     text-align: center;
     white-space: nowrap;
-  }
-
-  .review-status-pill.approved {
-    background: #10B981;
+    background: #0F172A;
     color: #FFFFFF;
   }
 
-  .review-status-pill.pending {
-    background: #FEF9C3;
-    color: #854D0E;
+  .review-status-pill.rejected,
+  .review-status-pill.cancelled,
+  .review-status-pill.canceled {
+    background: #DC2626 !important;
+    color: #FFFFFF !important;
   }
 
-  .review-status-pill.rejected {
-    background: #FEE2E2;
-    color: #DC2626;
+  .review-status-pill.approved,
+  .review-status-pill.pending,
+  .review-status-pill.active {
+    background: #0F172A !important;
+    color: #FFFFFF !important;
   }
 
   /* Visibility Pill - Matches Screenshot (Grey) */
@@ -2593,6 +2909,97 @@ const defaultOffers = [
     font-weight: 500;
     margin: 0 4px;
     white-space: nowrap;
+  }
+
+  /* ==========================================================
+     BLOGS & ARTICLES VIEW STYLES (MATCHES CUSTOMER REVIEWS)
+     ========================================================== */
+  .btn-apply-changes {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    background: #10B981;
+    color: #FFFFFF;
+    border: 1px solid #059669;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 1px 2px rgba(16, 185, 129, 0.2);
+    transition: all 0.2s ease;
+  }
+
+  .btn-apply-changes:hover {
+    background: #059669;
+    box-shadow: 0 3px 8px rgba(16, 185, 129, 0.35);
+    transform: translateY(-1px);
+  }
+
+  .btn-apply-changes.has-pending {
+    background: #F59E0B;
+    border-color: #D97706;
+    box-shadow: 0 2px 8px rgba(245, 158, 11, 0.4);
+    animation: pulseApply 2s infinite;
+  }
+
+  .btn-apply-changes.has-pending:hover {
+    background: #D97706;
+  }
+
+  @keyframes pulseApply {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.6); }
+    50% { box-shadow: 0 0 0 5px rgba(245, 158, 11, 0); }
+  }
+
+  .pending-changes-badge {
+    background: #FFFFFF;
+    color: #D97706;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 1px 6px;
+    border-radius: 10px;
+    margin-left: 2px;
+  }
+
+  .blog-category-badge-pill {
+    font-size: 13px;
+    color: #4338CA;
+    font-weight: 500;
+    white-space: nowrap;
+  }
+
+  .blog-status-toggle-pill {
+    transition: transform 0.1s ease, opacity 0.15s ease;
+  }
+  .blog-status-toggle-pill:hover {
+    transform: scale(1.05);
+    opacity: 0.9;
+  }
+
+  .blog-vis-toggle-pill {
+    transition: transform 0.1s ease, opacity 0.15s ease;
+  }
+  .blog-vis-toggle-pill:hover {
+    transform: scale(1.05);
+    opacity: 0.9;
+  }
+
+  .modal-card-wide {
+    max-width: 680px;
+    width: 95%;
+  }
+
+  .form-grid-3 {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+  }
+
+  @media (max-width: 640px) {
+    .form-grid-3 {
+      grid-template-columns: 1fr;
+    }
   }
 
   /* ==========================================================
@@ -3333,8 +3740,8 @@ const defaultOffers = [
 
   .input-field:focus {
     outline: none;
-    border-color: #6E2219;
-    box-shadow: 0 0 0 3px rgba(110, 34, 25, 0.12);
+    border-color: #0F172A;
+    box-shadow: 0 0 0 3px rgba(15, 23, 42, 0.08);
   }
 
   .text-area {
@@ -3356,8 +3763,8 @@ const defaultOffers = [
     left: 0;
     right: 0;
     bottom: 0;
-    background: rgba(15, 23, 42, 0.6);
-    backdrop-filter: blur(4px);
+    background: rgba(15, 23, 42, 0.45);
+    backdrop-filter: blur(6px);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -3367,41 +3774,46 @@ const defaultOffers = [
 
   .modal-card {
     background: #FFFFFF;
+    border: 1px solid #E2E8F0;
     border-radius: 12px;
     width: 100%;
     max-width: 580px;
     max-height: 90vh;
     overflow-y: auto;
-    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.15);
   }
 
   .modal-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 16px 20px;
+    padding: 18px 24px;
     border-bottom: 1px solid #E2E8F0;
   }
 
   .modal-header h3 {
-    font-size: 16px;
-    font-weight: 600;
+    font-size: 17px;
+    font-weight: 700;
     color: #0F172A;
   }
 
   .close-modal-btn {
     border: none;
     background: transparent;
-    font-size: 24px;
+    font-size: 22px;
     cursor: pointer;
-    color: #64748B;
+    color: #94A3B8;
+    line-height: 1;
+    transition: color 0.15s ease;
+  }
+
+  .close-modal-btn:hover {
+    color: #0F172A;
   }
 
   .modal-form, .modal-body {
-    padding: 20px;
+    padding: 24px;
   }
-
-
 
   .form-grid-2 {
     display: grid;
@@ -3419,17 +3831,26 @@ const defaultOffers = [
     justify-content: flex-end;
     gap: 10px;
     margin-top: 20px;
-    padding-top: 16px;
-    border-top: 1px solid #F1F5F9;
+    padding-top: 18px;
+    border-top: 1px solid #E2E8F0;
   }
 
   .btn-cancel {
-    border: 1px solid #CBD5E1;
-    background: #FFFFFF;
+    border: 1px solid #DC2626;
+    background: #FEF2F2;
+    color: #DC2626;
     padding: 8px 16px;
     border-radius: 8px;
     font-size: 13px;
+    font-weight: 600;
     cursor: pointer;
+    transition: all 0.15s ease;
+  }
+
+  .btn-cancel:hover {
+    background: #DC2626;
+    border-color: #DC2626;
+    color: #FFFFFF;
   }
 
   /* Utility classes */
@@ -3553,16 +3974,16 @@ const defaultOffers = [
     });
   });
 
-  // Check URL hash on load - default to view-catagories
+  // Check URL hash on load - default to view-dashboard
   if (window.location.hash) {
     const hashTarget = window.location.hash.replace('#', '');
     if (document.getElementById(hashTarget)) {
       switchTab(hashTarget);
     } else {
-      switchTab('view-catagories');
+      switchTab('view-dashboard');
     }
   } else {
-    switchTab('view-catagories');
+    switchTab('view-dashboard');
   }
 
   // Quick Action Jump buttons
@@ -3625,16 +4046,48 @@ const defaultOffers = [
   const cancelCategoryBtn = document.getElementById('cancelCategoryBtn');
   const catImagePreset = document.getElementById('catImagePreset') as HTMLSelectElement;
   const catImageInput = document.getElementById('catImageInput') as HTMLInputElement;
+  const catImageFileInput = document.getElementById('catImageFileInput') as HTMLInputElement;
+  const catImageFileName = document.getElementById('catImageFileName');
+  const catImagePreview = document.getElementById('catImagePreview') as HTMLImageElement;
+  const catPreviewLabel = document.getElementById('catPreviewLabel');
+  let selectedCatFile: File | null = null;
 
+  // Handle preset dropdown change
   catImagePreset?.addEventListener('change', () => {
     if (catImagePreset.value !== 'custom') {
       catImageInput.value = catImagePreset.value;
+      if (catImagePreview) catImagePreview.src = catImagePreset.value;
+      selectedCatFile = null;
+      if (catImageFileName) catImageFileName.textContent = 'Using preset image';
+      if (catPreviewLabel) catPreviewLabel.textContent = 'Preset Preview';
     }
   });
 
+  // Handle system file selection
+  catImageFileInput?.addEventListener('change', () => {
+    if (catImageFileInput.files && catImageFileInput.files[0]) {
+      selectedCatFile = catImageFileInput.files[0];
+      if (catImageFileName) catImageFileName.textContent = selectedCatFile.name;
+      if (catPreviewLabel) catPreviewLabel.textContent = `Selected: ${selectedCatFile.name}`;
+
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        if (catImagePreview && e.target?.result) {
+          catImagePreview.src = e.target.result as string;
+        }
+      };
+      reader.readAsDataURL(selectedCatFile);
+    }
+  });
+
+  // Open Add Category Modal
   openAddCategoryModalBtn?.addEventListener('click', () => {
     if (!categoryModal) return;
     categoryForm.reset();
+    selectedCatFile = null;
+    if (catImageFileName) catImageFileName.textContent = 'No file chosen';
+    if (catPreviewLabel) catPreviewLabel.textContent = 'Default Preview';
+    if (catImagePreview) catImagePreview.src = '/images/products/meat-pads.jpg';
     (document.getElementById('editCategoryId') as HTMLInputElement).value = '';
     (document.getElementById('categoryModalTitle') as HTMLElement).textContent = 'Add New Category';
     catImageInput.value = '/images/products/meat-pads.jpg';
@@ -3657,12 +4110,17 @@ const defaultOffers = [
       if (!raw || !categoryModal) return;
       const cat = JSON.parse(raw);
 
+      selectedCatFile = null;
       (document.getElementById('editCategoryId') as HTMLInputElement).value = cat.id;
       (document.getElementById('catNameInput') as HTMLInputElement).value = cat.name;
-      (document.getElementById('catImageInput') as HTMLInputElement).value = cat.image;
+      (document.getElementById('catImageInput') as HTMLInputElement).value = cat.image || '/images/products/meat-pads.jpg';
       (document.getElementById('catStatusInput') as HTMLSelectElement).value = cat.status || 'Active';
       (document.getElementById('catDescInput') as HTMLTextAreaElement).value = cat.description || '';
       (document.getElementById('categoryModalTitle') as HTMLElement).textContent = `Edit Category: ${cat.name}`;
+
+      if (catImageFileName) catImageFileName.textContent = 'Keep existing image or choose new file';
+      if (catPreviewLabel) catPreviewLabel.textContent = 'Current Category Image';
+      if (catImagePreview) catImagePreview.src = cat.image || '/images/products/meat-pads.jpg';
 
       categoryModal.style.display = 'flex';
     });
@@ -3671,15 +4129,46 @@ const defaultOffers = [
   // Save category submission
   categoryForm?.addEventListener('submit', async (e) => {
     e.preventDefault();
-    const id = (document.getElementById('editCategoryId') as HTMLInputElement).value;
-    const name = (document.getElementById('catNameInput') as HTMLInputElement).value;
-    const image = (document.getElementById('catImageInput') as HTMLInputElement).value;
-    const status = (document.getElementById('catStatusInput') as HTMLSelectElement).value;
-    const description = (document.getElementById('catDescInput') as HTMLTextAreaElement).value;
-
-    const payload = { name, image, status, description };
+    const saveBtn = document.getElementById('saveCategoryBtn') as HTMLButtonElement;
+    if (saveBtn) {
+      saveBtn.disabled = true;
+      saveBtn.textContent = 'Saving...';
+    }
 
     try {
+      const id = (document.getElementById('editCategoryId') as HTMLInputElement).value;
+      const name = (document.getElementById('catNameInput') as HTMLInputElement).value;
+      let image = (document.getElementById('catImageInput') as HTMLInputElement).value;
+      const status = (document.getElementById('catStatusInput') as HTMLSelectElement).value;
+      const description = (document.getElementById('catDescInput') as HTMLTextAreaElement).value;
+
+      // If user selected a file from their system, upload it first!
+      if (selectedCatFile) {
+        try {
+          const formData = new FormData();
+          formData.append('file', selectedCatFile);
+          const upRes = await fetch('/api/upload', {
+            method: 'POST',
+            body: formData
+          });
+
+          if (upRes.ok) {
+            const upData = await upRes.json();
+            if (upData.url) {
+              image = upData.url;
+            }
+          } else if (catImagePreview?.src && catImagePreview.src.startsWith('data:image/')) {
+            image = catImagePreview.src;
+          }
+        } catch (upErr) {
+          console.warn('File upload endpoint failed, falling back to data URL', upErr);
+          if (catImagePreview?.src && catImagePreview.src.startsWith('data:image/')) {
+            image = catImagePreview.src;
+          }
+        }
+      }
+
+      const payload = { name, image, status, description };
       const url = id ? `/api/categories/${id}` : '/api/categories';
       const method = id ? 'PUT' : 'POST';
 
@@ -3694,10 +4183,16 @@ const defaultOffers = [
         if (categoryModal) categoryModal.style.display = 'none';
         setTimeout(() => window.location.reload(), 600);
       } else {
-        showToast('Error saving category', true);
+        const resData = await res.json().catch(() => null);
+        showToast(resData?.error || 'Error saving category', true);
       }
     } catch (err: any) {
       showToast(err.message || 'Network error', true);
+    } finally {
+      if (saveBtn) {
+        saveBtn.disabled = false;
+        saveBtn.textContent = 'Save Category';
+      }
     }
   });
 
@@ -3798,11 +4293,11 @@ const defaultOffers = [
           <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px 18px;">
             <div>
               <div style="font-size: 11px; font-weight: 600; color: #64748B;">Company Name</div>
-              <div style="font-size: 14px; font-weight: 600; color: #0F172A; margin-top: 2px;">${inqData.company_name || '-'}</div>
+              <div style="font-size: 14px; font-weight: 600; color: #0F172A; margin-top: 2px; text-transform: uppercase;">${(inqData.company_name || '-').toUpperCase()}</div>
             </div>
             <div>
               <div style="font-size: 11px; font-weight: 600; color: #64748B;">Contact Person</div>
-              <div style="font-size: 14px; font-weight: 600; color: #0F172A; margin-top: 2px;">${(inqData.name || '-').toUpperCase()}</div>
+              <div style="font-size: 14px; font-weight: 600; color: #0F172A; margin-top: 2px; text-transform: uppercase;">${(inqData.name || '-').toUpperCase()}</div>
             </div>
             <div>
               <div style="font-size: 11px; font-weight: 600; color: #64748B;">Phone Number</div>
@@ -3851,31 +4346,31 @@ const defaultOffers = [
             <div>
               <div style="font-size: 11px; font-weight: 600; color: #64748B; margin-bottom: 4px;">Current Status</div>
               <div style="display: flex; gap: 10px; align-items: center;">
-                <select id="modalInqStatus" style="flex: 1; padding: 9px 12px; border: 2px solid #EAB308; border-radius: 6px; font-size: 14px; font-weight: 600; color: #0F172A; background: #FFFFFF; outline: none; cursor: pointer;">
+                <select id="modalInqStatus" style="flex: 1; padding: 9px 12px; border: 1px solid #E2E8F0; border-radius: 8px; font-size: 13.5px; font-weight: 500; color: #0F172A; background: #FFFFFF; outline: none; cursor: pointer;">
                   ${statusOptions.map(opt => `
                     <option value="${opt}" ${opt.toLowerCase() === currentStatus.toLowerCase() ? 'selected' : ''}>${opt}</option>
                   `).join('')}
                 </select>
-                <button type="button" id="btnUpdateRecord" style="background: #1E1B4B; color: #FFFFFF; border: none; padding: 10px 20px; border-radius: 6px; font-size: 13.5px; font-weight: 600; cursor: pointer; white-space: nowrap; transition: opacity 0.15s ease;">Update Record</button>
+                <button type="button" id="btnUpdateRecord" style="background: #0F172A; color: #FFFFFF; border: none; padding: 9px 18px; border-radius: 8px; font-size: 13px; font-weight: 500; cursor: pointer; white-space: nowrap; transition: background-color 0.15s ease;">Update Record</button>
               </div>
             </div>
 
             <div>
               <div style="font-size: 11px; font-weight: 600; color: #64748B; margin-bottom: 4px;">Deadline (Priority is auto-calculated)</div>
-              <input type="date" id="modalInqDeadline" value="${deadlineVal}" style="width: 100%; box-sizing: border-box; padding: 9px 12px; border: 1px solid #CBD5E1; border-radius: 6px; font-size: 13.5px; color: #0F172A; outline: none; background: #FFFFFF;" />
+              <input type="date" id="modalInqDeadline" value="${deadlineVal}" style="width: 100%; box-sizing: border-box; padding: 9px 12px; border: 1px solid #E2E8F0; border-radius: 8px; font-size: 13.5px; color: #0F172A; outline: none; background: #FFFFFF;" />
             </div>
 
             <div>
               <div style="font-size: 11px; font-weight: 600; color: #64748B; margin-bottom: 4px;">Admin Internal Notes</div>
-              <textarea id="modalInqNotes" placeholder="Add internal notes regarding this enquiry..." style="width: 100%; box-sizing: border-box; min-height: 72px; padding: 10px 12px; border: 1px solid #CBD5E1; border-radius: 6px; font-size: 13px; color: #0F172A; outline: none; resize: vertical; font-family: inherit; background: #FFFFFF;">${inqData.admin_notes || ''}</textarea>
+              <textarea id="modalInqNotes" placeholder="Add internal notes regarding this enquiry..." style="width: 100%; box-sizing: border-box; min-height: 72px; padding: 10px 12px; border: 1px solid #E2E8F0; border-radius: 8px; font-size: 13px; color: #0F172A; outline: none; resize: vertical; font-family: inherit; background: #FFFFFF;">${inqData.admin_notes || ''}</textarea>
             </div>
 
             <!-- Actions: WhatsApp and Copy Tracking Link -->
             <div style="display: flex; gap: 10px; margin-top: 4px;">
-              <a href="https://wa.me/${String(inqData.phone || '').replace(/[^0-9]/g, '')}?text=${encodeURIComponent(`Hi ${inqData.name || ''}, regarding your Absorbent Pads enquiry #${inqData.inquiry_no || inqData.id}...`)}" target="_blank" style="flex: 1; background: #25D366; color: #FFFFFF; text-decoration: none; text-align: center; padding: 10px 14px; border-radius: 6px; font-size: 13px; font-weight: 600; display: inline-flex; align-items: center; justify-content: center; gap: 6px;">
+              <a href="https://wa.me/${String(inqData.phone || '').replace(/[^0-9]/g, '')}?text=${encodeURIComponent(`Hi ${inqData.name || ''}, regarding your Absorbent Pads enquiry #${inqData.inquiry_no || inqData.id}...`)}" target="_blank" style="flex: 1; background: #0F172A; color: #FFFFFF; text-decoration: none; text-align: center; padding: 9px 14px; border-radius: 8px; font-size: 13px; font-weight: 500; display: inline-flex; align-items: center; justify-content: center; gap: 6px;">
                 💬 Chat Client on WhatsApp
               </a>
-              <button type="button" id="btnCopyTrackLink" style="background: #F1F5F9; color: #334155; border: 1px solid #CBD5E1; padding: 10px 16px; border-radius: 6px; font-size: 13px; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 6px;">
+              <button type="button" id="btnCopyTrackLink" style="background: #FFFFFF; color: #1E293B; border: 1px solid #D1D5DB; padding: 9px 16px; border-radius: 8px; font-size: 13px; font-weight: 500; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; box-shadow: 0 1px 2px rgba(0,0,0,0.04);">
                 🔗 Copy Tracking Link
               </button>
             </div>
@@ -3931,10 +4426,10 @@ const defaultOffers = [
             row.setAttribute('data-status', newStatus.toLowerCase());
             row.setAttribute('data-priority', priority.toLowerCase());
 
-            const statusPill = row.querySelector('.status-dark-pill, .status-badge-pill');
+            const statusPill = row.querySelector('.status-dark-pill, .status-badge-pill, .status-pill');
             if (statusPill) {
               statusPill.textContent = newStatus;
-              statusPill.className = `status-dark-pill ${newStatus.toLowerCase()}`;
+              statusPill.className = `status-pill ${newStatus.toLowerCase()}`;
             }
 
             const priorityPill = row.querySelector('.priority-pill');
@@ -3945,6 +4440,13 @@ const defaultOffers = [
 
             const viewBtn = row.querySelector('.view-inquiry-btn');
             if (viewBtn) viewBtn.setAttribute('data-inquiry', JSON.stringify(inqData));
+          }
+
+          // Also update Recent Enquiries widget if present
+          const recentRowPill = document.querySelector(`.enquiry-item-row[data-id="${inqData.id}"] .status-badge-pill`);
+          if (recentRowPill) {
+            recentRowPill.textContent = newStatus;
+            recentRowPill.className = `status-badge-pill ${newStatus.toLowerCase()}`;
           }
 
           showToast(`Record updated! Tracking ID #${inqData.inquiry_no || inqData.id} now shows "${newStatus}".`);
@@ -4104,8 +4606,9 @@ const defaultOffers = [
   // ==========================================
   const enquirySearch = document.getElementById('enquiryFullSearch') as HTMLInputElement;
   const enquiryStatusFilter = document.getElementById('enquiryStatusFilter') as HTMLSelectElement;
-  const enquiryPriorityFilter = document.getElementById('enquiryPriorityFilter') as HTMLSelectElement;
-  const paginationLabel = document.getElementById('paginationCountLabel');
+  const enquiriesPageSizeSelect = document.getElementById('enquiriesPageSizeSelect') as HTMLSelectElement;
+  const paginationPageIndicator = document.getElementById('paginationPageIndicator');
+  const enquiriesShowingText = document.getElementById('enquiriesShowingText');
   const btnPageFirst = document.getElementById('paginationFirst') as HTMLButtonElement;
   const btnPagePrev = document.getElementById('paginationPrev') as HTMLButtonElement;
   const btnPageNext = document.getElementById('paginationNext') as HTMLButtonElement;
@@ -4114,7 +4617,8 @@ const defaultOffers = [
   const btnDeleteAll = document.getElementById('deleteAllEnquiriesBtn');
 
   let currentEnqPage = 1;
-  const enqPageSize = 10;
+  let enqPageSize = 6;
+  let totalEnqPages = 1;
 
   function getEnquiryRows(): HTMLTableRowElement[] {
     return Array.from(document.querySelectorAll<HTMLTableRowElement>('#enquiriesTableBody tr.enquiry-row-item'));
@@ -4123,7 +4627,9 @@ const defaultOffers = [
   function filterAndPaginateEnquiries() {
     const searchTerm = (enquirySearch?.value || '').trim().toLowerCase();
     const statusVal = (enquiryStatusFilter?.value || '').trim().toLowerCase();
-    const priorityVal = (enquiryPriorityFilter?.value || '').trim().toLowerCase();
+
+    const val = enquiriesPageSizeSelect?.value || '6';
+    enqPageSize = val === 'all' ? 999999 : parseInt(val, 10) || 6;
 
     const allRows = getEnquiryRows();
     const matchedRows: HTMLTableRowElement[] = [];
@@ -4131,13 +4637,11 @@ const defaultOffers = [
     allRows.forEach(row => {
       const text = row.innerText.toLowerCase();
       const rowStatus = (row.getAttribute('data-status') || '').toLowerCase();
-      const rowPriority = (row.getAttribute('data-priority') || '').toLowerCase();
 
       const matchesSearch = !searchTerm || text.includes(searchTerm);
       const matchesStatus = !statusVal || rowStatus === statusVal;
-      const matchesPriority = !priorityVal || rowPriority === priorityVal;
 
-      if (matchesSearch && matchesStatus && matchesPriority) {
+      if (matchesSearch && matchesStatus) {
         matchedRows.push(row);
       } else {
         row.style.display = 'none';
@@ -4145,9 +4649,9 @@ const defaultOffers = [
     });
 
     const totalMatched = matchedRows.length;
-    const totalPages = Math.max(1, Math.ceil(totalMatched / enqPageSize));
+    totalEnqPages = Math.max(1, Math.ceil(totalMatched / enqPageSize));
 
-    if (currentEnqPage > totalPages) currentEnqPage = totalPages;
+    if (currentEnqPage > totalEnqPages) currentEnqPage = totalEnqPages;
     if (currentEnqPage < 1) currentEnqPage = 1;
 
     // Display rows for current page
@@ -4162,18 +4666,29 @@ const defaultOffers = [
       }
     });
 
-    // Update pagination controls
-    if (paginationLabel) {
-      paginationLabel.textContent = `Page ${currentEnqPage} of ${totalPages}`;
+    // Update Showing text: e.g. "Showing 1–6 of 7"
+    if (enquiriesShowingText) {
+      if (totalMatched === 0) {
+        enquiriesShowingText.textContent = 'Showing 0 enquiries';
+      } else {
+        const fromNum = startIndex + 1;
+        const toNum = Math.min(endIndex, totalMatched);
+        enquiriesShowingText.textContent = `Showing ${fromNum}–${toNum} of ${totalMatched}`;
+      }
+    }
+
+    // Update page indicator: e.g. "Page 1 of 2"
+    if (paginationPageIndicator) {
+      paginationPageIndicator.textContent = `Page ${currentEnqPage} of ${totalEnqPages}`;
     }
 
     if (btnPageFirst) btnPageFirst.disabled = currentEnqPage <= 1;
     if (btnPagePrev) btnPagePrev.disabled = currentEnqPage <= 1;
-    if (btnPageNext) btnPageNext.disabled = currentEnqPage >= totalPages;
-    if (btnPageLast) btnPageLast.disabled = currentEnqPage >= totalPages;
+    if (btnPageNext) btnPageNext.disabled = currentEnqPage >= totalEnqPages;
+    if (btnPageLast) btnPageLast.disabled = currentEnqPage >= totalEnqPages;
   }
 
-  // Event listeners for filters
+  // Event listeners for filters and page size
   enquirySearch?.addEventListener('input', () => {
     currentEnqPage = 1;
     filterAndPaginateEnquiries();
@@ -4182,15 +4697,18 @@ const defaultOffers = [
     currentEnqPage = 1;
     filterAndPaginateEnquiries();
   });
-  enquiryPriorityFilter?.addEventListener('change', () => {
+  enquiriesPageSizeSelect?.addEventListener('change', () => {
     currentEnqPage = 1;
     filterAndPaginateEnquiries();
   });
 
+
   // Pagination button clicks
   btnPageFirst?.addEventListener('click', () => {
-    currentEnqPage = 1;
-    filterAndPaginateEnquiries();
+    if (currentEnqPage > 1) {
+      currentEnqPage = 1;
+      filterAndPaginateEnquiries();
+    }
   });
   btnPagePrev?.addEventListener('click', () => {
     if (currentEnqPage > 1) {
@@ -4199,14 +4717,16 @@ const defaultOffers = [
     }
   });
   btnPageNext?.addEventListener('click', () => {
-    currentEnqPage++;
-    filterAndPaginateEnquiries();
+    if (currentEnqPage < totalEnqPages) {
+      currentEnqPage++;
+      filterAndPaginateEnquiries();
+    }
   });
   btnPageLast?.addEventListener('click', () => {
-    const allRows = getEnquiryRows();
-    const totalPages = Math.max(1, Math.ceil(allRows.length / enqPageSize));
-    currentEnqPage = totalPages;
-    filterAndPaginateEnquiries();
+    if (currentEnqPage < totalEnqPages) {
+      currentEnqPage = totalEnqPages;
+      filterAndPaginateEnquiries();
+    }
   });
 
   // ==========================================
@@ -4259,14 +4779,13 @@ const defaultOffers = [
   function renderEnquiryRow(inq: any, isNew: boolean = false): string {
     const dateObj = inq.created_at ? new Date(inq.created_at) : new Date();
     const formattedDate = dateObj.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
-    const priority = inq.priority || 'Medium';
     const statusVal = inq.status || 'Pending';
     const statusDisplay = statusVal.charAt(0).toUpperCase() + statusVal.slice(1).toLowerCase();
-    const contactName = inq.company_name || inq.name || 'Anonymous Client';
-    const phoneDisplay = inq.phone || 'N/A';
-    const prodName = inq.product_name || 'General Inquiry';
-    const prodSub = inq.fabric_choice || inq.customization_type || (inq.message ? (inq.message.slice(0, 30) + '...') : 'Standard Specification');
-    const qtyDisplay = `${Number(inq.quantity || 100).toLocaleString()} units`;
+    const contactName = (inq.company_name || inq.name || '').toUpperCase();
+    const phoneDisplay = inq.phone || '';
+    const prodName = inq.product_name || 'Absorbent Pad';
+    const prodSub = inq.fabric_choice || inq.customization_type || (inq.message ? (inq.message.slice(0, 30) + '...') : '');
+    const qtyDisplay = `${inq.quantity || 100} units`;
     const inqJsonEscaped = escapeHtml(JSON.stringify(inq));
 
     return `
@@ -4274,60 +4793,49 @@ const defaultOffers = [
         class="enquiry-row-item ${isNew ? 'row-just-added' : ''}" 
         data-id="${escapeHtml(inq.id)}"
         data-status="${escapeHtml(statusVal.toLowerCase())}"
-        data-priority="${escapeHtml(priority.toLowerCase())}"
         data-inquiry="${inqJsonEscaped}"
       >
         <td>
           <span class="enquiry-date-text">${formattedDate}</span>
         </td>
         <td>
-          <span class="priority-pill ${escapeHtml(priority.toLowerCase())}">
-            ${escapeHtml(priority)}
-          </span>
-        </td>
-        <td>
           <div class="contact-stack">
-            <span class="contact-main-name">${escapeHtml(contactName)}</span>
-            <span class="contact-sub-phone">${escapeHtml(phoneDisplay)}</span>
+            <span class="contact-main-name" style="font-weight: 600; color: #0F172A; text-transform: uppercase;">${escapeHtml(contactName)}</span>
+            <span class="contact-sub-phone" style="font-size: 12.5px; color: #64748B;">${escapeHtml(phoneDisplay)}</span>
           </div>
         </td>
         <td>
           <div class="product-stack">
-            <span class="product-main-name">${escapeHtml(prodName)}</span>
-            <span class="product-sub-desc">${escapeHtml(prodSub)}</span>
+            <span class="product-main-name" style="font-weight: 500; color: #1E293B;">${escapeHtml(prodName)}</span>
+            <span class="product-sub-desc" style="font-size: 12px; color: #64748B;">${escapeHtml(prodSub)}</span>
           </div>
         </td>
         <td>
-          <span class="quantity-text">${escapeHtml(qtyDisplay)}</span>
+          <span class="quantity-text" style="font-weight: 500;">${escapeHtml(qtyDisplay)}</span>
         </td>
         <td>
-          <span class="status-dark-pill ${escapeHtml(statusVal.toLowerCase())}">
+          <span class="status-pill ${escapeHtml(statusVal.toLowerCase())}">
             ${escapeHtml(statusDisplay)}
           </span>
         </td>
-        <td>
-          <div class="actions-icon-row">
+        <td style="text-align: right;">
+          <div style="display: flex; gap: 8px; justify-content: flex-end; align-items: center;">
             <button 
               type="button" 
-              class="action-btn-icon view-inquiry-btn" 
+              class="btn-table-action view-inquiry-btn" 
               title="View Enquiry Details"
               data-inquiry="${inqJsonEscaped}"
             >
-              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8z"></path>
-                <circle cx="12" cy="12" r="3"></circle>
-              </svg>
+              View Details
             </button>
             <button 
               type="button" 
-              class="action-btn-icon delete-inquiry-btn" 
+              class="btn-table-action delete-inquiry-btn" 
               title="Delete Enquiry"
               data-id="${escapeHtml(inq.id)}"
+              style="color: #EF4444; border-color: #FECACA; padding: 6px 10px;"
             >
-              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#DC2626" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                <polyline points="3 6 5 6 21 6"></polyline>
-                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
-              </svg>
+              🗑
             </button>
           </div>
         </td>
@@ -4341,8 +4849,12 @@ const defaultOffers = [
     const month = String(dateObj.getMonth() + 1).padStart(2, '0');
     const year = dateObj.getFullYear();
     const formattedDate = `${day}/${month}/${year}`;
-    const statusLower = (inq.status || 'pending').toLowerCase();
+    const statusVal = inq.status || 'Pending';
+    const statusLower = statusVal.toLowerCase();
     const inqJsonEscaped = escapeHtml(JSON.stringify(inq));
+    const rawProd = escapeHtml((inq.product_name || 'Meat & Poultry Packaging - 75 × 120 MM (HYDSAP75120 - 40g Absorbency)').replace(/(\d+)\s*[xX]\s*(\d+)/g, '$1 × $2'));
+    const subText = `${rawProd} · ${Number(inq.quantity || 0).toLocaleString()} units`;
+    const company = escapeHtml((inq.company_name || inq.name || 'Unknown Company').toUpperCase());
 
     return `
       <div 
@@ -4351,14 +4863,11 @@ const defaultOffers = [
         data-json="${inqJsonEscaped}"
       >
         <div class="enquiry-item-left">
-          <h4 class="company-name">${escapeHtml(inq.company_name || inq.name || 'Unknown Company')}</h4>
-          <p class="company-sub">${escapeHtml(inq.product_name || 'Inquiry')} · ${Number(inq.quantity || 0).toLocaleString()} units</p>
+          <h4 class="company-name">${company}</h4>
+          <p class="company-sub">${subText}</p>
         </div>
-
         <div class="enquiry-item-right">
-          <span class="status-badge-pill ${escapeHtml(statusLower)}">
-            ${escapeHtml(statusLower)}
-          </span>
+          <span class="status-badge-pill ${escapeHtml(statusLower)}">${escapeHtml(statusVal)}</span>
           <span class="enquiry-date">${formattedDate}</span>
         </div>
       </div>
@@ -4505,7 +5014,7 @@ const defaultOffers = [
         if (hasNewItems && hadPrevious) {
           playNotificationSound();
           const latest = newItems[0];
-          const clientName = latest.company_name || latest.name || 'New Client';
+          const clientName = (latest.company_name || latest.name || 'New Client').toUpperCase();
           const prodTitle = latest.product_name || 'Absorbent Pads';
           showToast(`🔔 New Quote Request from "${clientName}" (${prodTitle})!`, false);
 
@@ -5041,10 +5550,523 @@ const defaultOffers = [
     }
   });
 
+  // ==========================================
+  // BLOGS MANAGEMENT VIEW LOGIC (MATCHES REVIEWS EXACTLY)
+  // ==========================================
+  const blogModal = document.getElementById('blogModal');
+  const addNewBlogBtn = document.getElementById('addNewBlogBtn');
+  const closeBlogModalBtn = document.getElementById('closeBlogModalBtn');
+  const cancelBlogBtn = document.getElementById('cancelBlogBtn');
+  const blogForm = document.getElementById('blogForm') as HTMLFormElement;
+  const blogModalTitle = document.getElementById('blogModalTitle');
+
+  const editBlogId = document.getElementById('editBlogId') as HTMLInputElement;
+  const blogTitleInput = document.getElementById('blogTitleInput') as HTMLInputElement;
+  const blogSlugInput = document.getElementById('blogSlugInput') as HTMLInputElement;
+  const blogCategoryInput = document.getElementById('blogCategoryInput') as HTMLInputElement;
+  const blogDateInput = document.getElementById('blogDateInput') as HTMLInputElement;
+  const blogReadTimeInput = document.getElementById('blogReadTimeInput') as HTMLInputElement;
+  const blogStatusInput = document.getElementById('blogStatusInput') as HTMLSelectElement;
+  const blogImagePreset = document.getElementById('blogImagePreset') as HTMLSelectElement;
+  const blogImageInput = document.getElementById('blogImageInput') as HTMLInputElement;
+  const blogExcerptInput = document.getElementById('blogExcerptInput') as HTMLTextAreaElement;
+  const blogContentInput = document.getElementById('blogContentInput') as HTMLTextAreaElement;
+
+  const blogFilterSelect = document.getElementById('blogFilterSelect') as HTMLSelectElement;
+  const applyBlogChangesBtn = document.getElementById('applyBlogChangesBtn');
+  const applyBlogChangesText = document.getElementById('applyBlogChangesText');
+  const pendingBlogBadge = document.getElementById('pendingBlogBadge');
+
+  const blogsShowingText = document.getElementById('blogsShowingText');
+  const blogsPageSizeSelect = document.getElementById('blogsPageSizeSelect') as HTMLSelectElement;
+  const blogsPageLabel = document.getElementById('blogsPageLabel');
+  const blogsFirstBtn = document.getElementById('blogsFirstBtn') as HTMLButtonElement;
+  const blogsPrevBtn = document.getElementById('blogsPrevBtn') as HTMLButtonElement;
+  const blogsNextBtn = document.getElementById('blogsNextBtn') as HTMLButtonElement;
+  const blogsLastBtn = document.getElementById('blogsLastBtn') as HTMLButtonElement;
+
+  let currentBlogPage = 1;
+  let blogPageSize = 10;
+  let pendingBlogChangesCount = 0;
+
+  // Track initial state of all blogs so pending changes count accurately reflects actual modifications
+  const initialBlogsState = new Map<string, { status: string; visibility: string }>();
+
+  function recordInitialBlogsState() {
+    initialBlogsState.clear();
+    document.querySelectorAll<HTMLTableRowElement>('#blogsTableBody tr.blog-row-item').forEach(row => {
+      const id = row.getAttribute('data-id') || '';
+      const status = (row.getAttribute('data-status') || 'published').toLowerCase();
+      const visibility = (row.getAttribute('data-visibility') || 'visible').toLowerCase();
+      initialBlogsState.set(id, { status, visibility });
+    });
+  }
+
+  function updatePendingBlogChanges() {
+    const currentRows = getBlogRows();
+    const currentIds = new Set(currentRows.map(r => r.getAttribute('data-id') || ''));
+
+    let changedItemsCount = 0;
+
+    // Check for deleted articles
+    initialBlogsState.forEach((_, id) => {
+      if (!currentIds.has(id)) {
+        changedItemsCount++;
+      }
+    });
+
+    // Check for modified or newly added articles
+    currentRows.forEach(row => {
+      const id = row.getAttribute('data-id') || '';
+      const status = (row.getAttribute('data-status') || 'published').toLowerCase();
+      const visibility = (row.getAttribute('data-visibility') || 'visible').toLowerCase();
+
+      if (initialBlogsState.has(id)) {
+        const initial = initialBlogsState.get(id)!;
+        if (initial.status !== status || initial.visibility !== visibility) {
+          changedItemsCount++;
+        }
+      } else {
+        changedItemsCount++;
+      }
+    });
+
+    pendingBlogChangesCount = changedItemsCount;
+
+    if (pendingBlogChangesCount > 0) {
+      if (applyBlogChangesBtn) {
+        applyBlogChangesBtn.classList.add('has-pending');
+      }
+      if (pendingBlogBadge) {
+        pendingBlogBadge.style.display = 'inline-block';
+        pendingBlogBadge.textContent = String(pendingBlogChangesCount);
+      }
+      if (applyBlogChangesText) {
+        applyBlogChangesText.textContent = 'Apply Changes';
+      }
+    } else {
+      if (applyBlogChangesBtn) {
+        applyBlogChangesBtn.classList.remove('has-pending');
+      }
+      if (pendingBlogBadge) {
+        pendingBlogBadge.style.display = 'none';
+        pendingBlogBadge.textContent = '0';
+      }
+      if (applyBlogChangesText) {
+        applyBlogChangesText.textContent = 'Apply Changes';
+      }
+    }
+  }
+
+  const markBlogChange = updatePendingBlogChanges;
+
+  function clearBlogChanges() {
+    recordInitialBlogsState();
+    updatePendingBlogChanges();
+  }
+
+  function slugify(text: string): string {
+    return text.toLowerCase()
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/^-+|-+$/g, '');
+  }
+
+  // Auto-generate slug when creating new blog
+  blogTitleInput?.addEventListener('input', () => {
+    if (!editBlogId?.value) {
+      blogSlugInput.value = slugify(blogTitleInput.value);
+    }
+  });
+
+  // Image preset change
+  blogImagePreset?.addEventListener('change', () => {
+    if (blogImagePreset.value !== 'custom') {
+      blogImageInput.value = blogImagePreset.value;
+    }
+  });
+
+  // Open modal for add
+  addNewBlogBtn?.addEventListener('click', () => {
+    if (!blogModal) return;
+    if (blogModalTitle) blogModalTitle.textContent = 'Add New Blog Article';
+    if (blogForm) blogForm.reset();
+    if (editBlogId) editBlogId.value = '';
+    if (blogDateInput) blogDateInput.value = new Date().toLocaleDateString('en-US', { month: 'short', day: '2-digit', year: 'numeric' });
+    if (blogReadTimeInput) blogReadTimeInput.value = '4 min read';
+    if (blogImageInput) blogImageInput.value = '/images/products/meat-pads.jpg';
+    if (blogImagePreset) blogImagePreset.value = '/images/products/meat-pads.jpg';
+    if (blogStatusInput) blogStatusInput.value = 'published';
+    if (blogCategoryInput) blogCategoryInput.value = 'Meat & Poultry Packaging';
+    blogModal.style.display = 'flex';
+  });
+
+  function closeBlogModal() {
+    if (blogModal) blogModal.style.display = 'none';
+  }
+
+  closeBlogModalBtn?.addEventListener('click', closeBlogModal);
+  cancelBlogBtn?.addEventListener('click', closeBlogModal);
+
+  // Close menus on document click
+  document.addEventListener('click', (e) => {
+    if (!(e.target as HTMLElement)?.closest('.blog-action-dots-btn')) {
+      document.querySelectorAll<HTMLElement>('.blog-action-menu').forEach(m => {
+        m.style.display = 'none';
+      });
+    }
+  });
+
+  function getBlogRows(): HTMLTableRowElement[] {
+    return Array.from(document.querySelectorAll<HTMLTableRowElement>('#blogsTableBody tr.blog-row-item'));
+  }
+
+  // Filter & Pagination logic
+  function filterAndPaginateBlogs() {
+    const filterVal = (blogFilterSelect?.value || '').trim().toLowerCase();
+    const rows = getBlogRows();
+    const matched: HTMLTableRowElement[] = [];
+
+    rows.forEach(row => {
+      const status = (row.getAttribute('data-status') || '').toLowerCase();
+      const vis = (row.getAttribute('data-visibility') || '').toLowerCase();
+      const cat = (row.getAttribute('data-category') || '').toLowerCase();
+
+      let isMatch = true;
+      if (filterVal === 'published' && status !== 'published') isMatch = false;
+      else if (filterVal === 'draft' && status !== 'draft') isMatch = false;
+      else if (filterVal === 'visible' && vis !== 'visible') isMatch = false;
+      else if (filterVal === 'hidden' && vis !== 'hidden') isMatch = false;
+      else if (filterVal === 'meat' && !cat.includes('meat')) isMatch = false;
+      else if (filterVal === 'seafood' && !cat.includes('seafood')) isMatch = false;
+      else if (filterVal === 'produce' && !cat.includes('produce')) isMatch = false;
+
+      if (isMatch) {
+        matched.push(row);
+      } else {
+        row.style.display = 'none';
+      }
+    });
+
+    const total = matched.length;
+    const totalPages = Math.max(1, Math.ceil(total / blogPageSize));
+    if (currentBlogPage > totalPages) currentBlogPage = totalPages;
+    if (currentBlogPage < 1) currentBlogPage = 1;
+
+    const start = (currentBlogPage - 1) * blogPageSize;
+    const end = start + blogPageSize;
+
+    matched.forEach((row, idx) => {
+      if (idx >= start && idx < end) {
+        row.style.display = '';
+      } else {
+        row.style.display = 'none';
+      }
+    });
+
+    const noMsg = document.getElementById('noBlogsFoundMessage');
+    if (noMsg) noMsg.style.display = total === 0 ? 'block' : 'none';
+
+    if (blogsShowingText) {
+      const from = total > 0 ? start + 1 : 0;
+      const to = Math.min(end, total);
+      blogsShowingText.textContent = `Showing ${from} to ${to} of ${total} blogs`;
+    }
+
+    if (blogsPageLabel) {
+      blogsPageLabel.textContent = `Page ${currentBlogPage} of ${totalPages}`;
+    }
+
+    if (blogsFirstBtn) blogsFirstBtn.disabled = currentBlogPage <= 1;
+    if (blogsPrevBtn) blogsPrevBtn.disabled = currentBlogPage <= 1;
+    if (blogsNextBtn) blogsNextBtn.disabled = currentBlogPage >= totalPages;
+    if (blogsLastBtn) blogsLastBtn.disabled = currentBlogPage >= totalPages;
+  }
+
+  blogFilterSelect?.addEventListener('change', () => {
+    currentBlogPage = 1;
+    filterAndPaginateBlogs();
+  });
+
+  blogsPageSizeSelect?.addEventListener('change', () => {
+    blogPageSize = parseInt(blogsPageSizeSelect.value, 10) || 10;
+    currentBlogPage = 1;
+    filterAndPaginateBlogs();
+  });
+
+  blogsFirstBtn?.addEventListener('click', () => {
+    currentBlogPage = 1;
+    filterAndPaginateBlogs();
+  });
+  blogsPrevBtn?.addEventListener('click', () => {
+    if (currentBlogPage > 1) {
+      currentBlogPage--;
+      filterAndPaginateBlogs();
+    }
+  });
+  blogsNextBtn?.addEventListener('click', () => {
+    currentBlogPage++;
+    filterAndPaginateBlogs();
+  });
+  blogsLastBtn?.addEventListener('click', () => {
+    const rows = getBlogRows();
+    const totalPages = Math.max(1, Math.ceil(rows.length / blogPageSize));
+    currentBlogPage = totalPages;
+    filterAndPaginateBlogs();
+  });
+
+  // Collect all current blogs data from DOM
+  function collectCurrentBlogs(): any[] {
+    const rows = getBlogRows();
+    return rows.map(r => {
+      const dataStr = r.getAttribute('data-json') || '{}';
+      const b = JSON.parse(dataStr);
+      b.status = r.getAttribute('data-status') || b.status;
+      b.is_published = b.status === 'published';
+      b.visibility = (r.getAttribute('data-visibility') || 'visible') === 'visible' ? 'Visible' : 'Hidden';
+      return b;
+    });
+  }
+
+  // APPLY CHANGES BUTTON HANDLER
+  applyBlogChangesBtn?.addEventListener('click', async () => {
+    if (pendingBlogChangesCount === 0) {
+      showToast('No pending changes to apply.');
+      return;
+    }
+    if (applyBlogChangesText) applyBlogChangesText.textContent = 'Applying...';
+    if (pendingBlogBadge) pendingBlogBadge.style.display = 'none';
+    try {
+      const blogsList = collectCurrentBlogs();
+      const res = await fetch('/api/blogs/apply', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ blogs: blogsList })
+      });
+
+      if (res.ok) {
+        clearBlogChanges();
+        showToast('✓ All changes successfully applied and updated on the website!');
+      } else {
+        showToast('Failed to apply changes', true);
+        updatePendingBlogChanges();
+      }
+    } catch (err: any) {
+      showToast(err.message || 'Error applying changes', true);
+      updatePendingBlogChanges();
+    }
+  });
+
+  // Attach table events
+  function attachBlogRowEvents() {
+    // 3-dots menu button toggle
+    document.querySelectorAll<HTMLElement>('.blog-action-dots-btn').forEach(btn => {
+      btn.onclick = (e) => {
+        e.stopPropagation();
+        const id = btn.getAttribute('data-id');
+        const menu = document.getElementById(`blog-menu-${id}`);
+        const isShown = menu && menu.style.display === 'block';
+
+        document.querySelectorAll<HTMLElement>('.blog-action-menu').forEach(m => m.style.display = 'none');
+        if (menu) menu.style.display = isShown ? 'none' : 'block';
+      };
+    });
+
+    // Inline Status pill click toggle
+    document.querySelectorAll<HTMLElement>('.blog-status-toggle-pill').forEach(pill => {
+      pill.onclick = (e) => {
+        e.stopPropagation();
+        const row = pill.closest<HTMLTableRowElement>('tr.blog-row-item');
+        if (!row) return;
+
+        const currentStatus = (row.getAttribute('data-status') || 'published').toLowerCase();
+        const nextStatus = currentStatus === 'published' ? 'draft' : 'published';
+        const isApproved = nextStatus === 'published';
+
+        row.setAttribute('data-status', nextStatus);
+        pill.className = `review-status-pill ${isApproved ? 'approved' : 'pending'} blog-status-toggle-pill`;
+        pill.textContent = isApproved ? 'Published' : 'Draft';
+
+        const jsonStr = row.getAttribute('data-json');
+        if (jsonStr) {
+          const b = JSON.parse(jsonStr);
+          b.is_published = isApproved;
+          b.status = nextStatus;
+          row.setAttribute('data-json', JSON.stringify(b));
+        }
+
+        const statusMenuItem = row.querySelector<HTMLElement>('.toggle-blog-status-item');
+        if (statusMenuItem) {
+          statusMenuItem.textContent = isApproved ? '⏳ Set to Draft' : '✓ Publish Article';
+        }
+
+        markBlogChange();
+        showToast(`Status set to ${isApproved ? 'Published' : 'Draft'}. Click "Apply Changes" to publish on site.`);
+      };
+    });
+
+    // Inline Visibility pill click toggle
+    document.querySelectorAll<HTMLElement>('.blog-vis-toggle-pill').forEach(pill => {
+      pill.onclick = (e) => {
+        e.stopPropagation();
+        const row = pill.closest<HTMLTableRowElement>('tr.blog-row-item');
+        if (!row) return;
+
+        const currentVis = (row.getAttribute('data-visibility') || 'visible').toLowerCase();
+        const nextVis = currentVis === 'visible' ? 'hidden' : 'visible';
+        const isVis = nextVis === 'visible';
+
+        row.setAttribute('data-visibility', nextVis);
+        pill.className = `review-visibility-pill ${isVis ? 'visible' : 'hidden'} blog-vis-toggle-pill`;
+        pill.textContent = isVis ? 'Visible' : 'Hidden';
+
+        const jsonStr = row.getAttribute('data-json');
+        if (jsonStr) {
+          const b = JSON.parse(jsonStr);
+          b.visibility = isVis ? 'Visible' : 'Hidden';
+          row.setAttribute('data-json', JSON.stringify(b));
+        }
+
+        const visMenuItem = row.querySelector<HTMLElement>('.toggle-blog-vis-item');
+        if (visMenuItem) {
+          visMenuItem.textContent = isVis ? '🚫 Hide from Site' : '👁 Show on Site';
+        }
+
+        markBlogChange();
+        showToast(`Visibility set to ${isVis ? 'Visible' : 'Hidden'}. Click "Apply Changes" to publish on site.`);
+      };
+    });
+
+    // Menu Item: Toggle Visibility
+    document.querySelectorAll<HTMLElement>('.toggle-blog-vis-item').forEach(item => {
+      item.onclick = (e) => {
+        e.stopPropagation();
+        const row = item.closest<HTMLTableRowElement>('tr.blog-row-item');
+        const pill = row?.querySelector<HTMLElement>('.blog-vis-toggle-pill');
+        pill?.click();
+        const menu = item.closest<HTMLElement>('.blog-action-menu');
+        if (menu) menu.style.display = 'none';
+      };
+    });
+
+    // Menu Item: Toggle Status
+    document.querySelectorAll<HTMLElement>('.toggle-blog-status-item').forEach(item => {
+      item.onclick = (e) => {
+        e.stopPropagation();
+        const row = item.closest<HTMLTableRowElement>('tr.blog-row-item');
+        const pill = row?.querySelector<HTMLElement>('.blog-status-toggle-pill');
+        pill?.click();
+        const menu = item.closest<HTMLElement>('.blog-action-menu');
+        if (menu) menu.style.display = 'none';
+      };
+    });
+
+    // Edit blog button click
+    document.querySelectorAll<HTMLElement>('.edit-blog-btn').forEach(btn => {
+      btn.onclick = (e) => {
+        e.stopPropagation();
+        const row = btn.closest('tr.blog-row-item');
+        const dataStr = row?.getAttribute('data-json');
+        const menu = btn.closest<HTMLElement>('.blog-action-menu');
+        if (menu) menu.style.display = 'none';
+        if (!dataStr) return;
+
+        try {
+          const blog = JSON.parse(dataStr);
+          if (blogModalTitle) blogModalTitle.textContent = 'Edit Blog Article';
+          if (editBlogId) editBlogId.value = blog.id || '';
+          if (blogTitleInput) blogTitleInput.value = blog.title || '';
+          if (blogSlugInput) blogSlugInput.value = blog.slug || '';
+          if (blogCategoryInput) blogCategoryInput.value = blog.category || '';
+          if (blogDateInput) blogDateInput.value = blog.date || '';
+          if (blogReadTimeInput) blogReadTimeInput.value = blog.readTime || '4 min read';
+          if (blogImageInput) blogImageInput.value = blog.image || '/images/products/meat-pads.jpg';
+          if (blogExcerptInput) blogExcerptInput.value = blog.excerpt || '';
+          if (blogContentInput) blogContentInput.value = blog.content || '';
+          if (blogStatusInput) blogStatusInput.value = blog.is_published !== false ? 'published' : 'draft';
+
+          if (blogImagePreset) {
+            const hasOption = Array.from(blogImagePreset.options).some(o => o.value === blog.image);
+            blogImagePreset.value = hasOption ? blog.image : 'custom';
+          }
+
+          if (blogModal) blogModal.style.display = 'flex';
+        } catch (err) {
+          console.error('Error parsing blog data:', err);
+        }
+      };
+    });
+
+    // Delete blog button click
+    document.querySelectorAll<HTMLElement>('.delete-blog-btn').forEach(btn => {
+      btn.onclick = async (e) => {
+        e.stopPropagation();
+        const id = btn.getAttribute('data-id');
+        const title = btn.getAttribute('data-title') || 'this blog';
+        const menu = btn.closest<HTMLElement>('.blog-action-menu');
+        if (menu) menu.style.display = 'none';
+        if (!id) return;
+
+        if (!confirm(`Are you sure you want to delete "${title}"?`)) return;
+
+        const row = btn.closest('tr.blog-row-item');
+        row?.remove();
+        markBlogChange();
+        filterAndPaginateBlogs();
+        showToast('Article marked for deletion. Click "Apply Changes" to save on website.');
+      };
+    });
+  }
+
+  // Form submit in Modal
+  blogForm?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const id = editBlogId?.value;
+    const payload = {
+      title: blogTitleInput.value.trim(),
+      slug: blogSlugInput.value.trim() || slugify(blogTitleInput.value),
+      category: blogCategoryInput.value.trim(),
+      date: blogDateInput.value.trim(),
+      readTime: blogReadTimeInput.value.trim(),
+      image: blogImageInput.value.trim(),
+      excerpt: blogExcerptInput.value.trim(),
+      content: blogContentInput.value.trim(),
+      is_published: blogStatusInput.value === 'published',
+      visibility: 'Visible'
+    };
+
+    try {
+      const url = id ? `/api/blogs/${id}` : '/api/blogs';
+      const method = id ? 'PUT' : 'POST';
+
+      const res = await fetch(url, {
+        method,
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+
+      if (res.ok) {
+        showToast(id ? '✓ Article updated and applied to website!' : '✓ New article created and applied to website!');
+        closeBlogModal();
+        setTimeout(() => window.location.reload(), 600);
+      } else {
+        const errData = await res.json().catch(() => ({}));
+        showToast(errData.error || 'Failed to save blog article', true);
+      }
+    } catch (err: any) {
+      showToast(err.message || 'Network error saving blog', true);
+    }
+  });
+
+  attachBlogRowEvents();
+  filterAndPaginateBlogs();
+  recordInitialBlogsState();
+  updatePendingBlogChanges();
+
   // Close modals on backdrop click
   window.addEventListener('click', (e) => {
     if (e.target === productModal) productModal.style.display = 'none';
     if (e.target === categoryModal) categoryModal.style.display = 'none';
     if (e.target === inquiryModal) inquiryModal.style.display = 'none';
+    if (e.target === blogModal) blogModal.style.display = 'none';
   });
 </script>

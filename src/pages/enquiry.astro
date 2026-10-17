@@ -1,9 +1,11 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import { getAllProducts } from '../lib/store';
+import { getAllProducts, getAllCategories } from '../lib/store';
 
 const products = await getAllProducts();
 const activeProducts = products.filter(p => p.is_active);
+const categories = await getAllCategories();
+const activeCategories = categories.filter(c => c.status !== 'Inactive');
 const whatsappNumber = import.meta.env.COMPANY_WHATSAPP || '917623906747';
 ---
 
@@ -67,11 +69,18 @@ const whatsappNumber = import.meta.env.COMPANY_WHATSAPP || '917623906747';
               <div class="select-wrapper">
                 <select id="quoteCategory" name="category" class="form-select" required>
                   <option value="">Select category</option>
-                  <option value="Meat & Poultry Packaging">Meat & Poultry Packaging</option>
-                  <option value="Seafood & Fishery Logistics">Seafood & Fishery Logistics</option>
-                  <option value="Fresh Produce & Berries">Fresh Produce & Berries</option>
-                  <option value="AGS Green Sorb™ High Capacity Series">AGS Green Sorb™ High Capacity Series</option>
-                  <option value="Industrial Cold Chain & Ice Pads">Industrial Cold Chain & Ice Pads</option>
+                  {activeCategories.map(cat => (
+                    <option value={cat.name}>{cat.name}</option>
+                  ))}
+                  {activeCategories.length === 0 && (
+                    <>
+                      <option value="Meat & Poultry Packaging">Meat & Poultry Packaging</option>
+                      <option value="Seafood & Fishery Logistics">Seafood & Fishery Logistics</option>
+                      <option value="Fresh Produce & Berries">Fresh Produce & Berries</option>
+                      <option value="AGS Green Sorb™ High Capacity Series">AGS Green Sorb™ High Capacity Series</option>
+                      <option value="Industrial Cold Chain & Ice Pads">Industrial Cold Chain & Ice Pads</option>
+                    </>
+                  )}
                 </select>
                 <span class="select-arrow">⌵</span>
               </div>

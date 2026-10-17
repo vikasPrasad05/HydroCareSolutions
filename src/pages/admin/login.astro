@@ -56,7 +56,7 @@ if (isAdminAuthenticated(Astro.cookies)) {
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: #F4F7FB;
+    background-color: #F8FAFC;
     padding: 24px;
     box-sizing: border-box;
   }
@@ -66,9 +66,9 @@ if (isAdminAuthenticated(Astro.cookies)) {
     max-width: 420px;
     background: #FFFFFF;
     border: 1px solid #E2E8F0;
-    border-radius: 14px;
+    border-radius: 12px;
     padding: 36px 32px;
-    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05);
+    box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.02);
   }
 
   .login-brand {
@@ -88,7 +88,7 @@ if (isAdminAuthenticated(Astro.cookies)) {
     height: 52px;
     object-fit: contain;
     display: block;
-    filter: drop-shadow(0 4px 10px rgba(0, 53, 128, 0.15));
+    filter: drop-shadow(0 4px 10px rgba(0, 53, 128, 0.12));
   }
 
   .brand-heading {
@@ -103,7 +103,7 @@ if (isAdminAuthenticated(Astro.cookies)) {
     font-size: 11px;
     color: #64748B;
     letter-spacing: 0.1em;
-    font-weight: 500;
+    font-weight: 600;
     margin-top: 3px;
   }
 
@@ -134,18 +134,20 @@ if (isAdminAuthenticated(Astro.cookies)) {
   .form-input {
     width: 100%;
     padding: 10px 14px;
-    border: 1px solid #CBD5E1;
+    border: 1px solid #E2E8F0;
     border-radius: 8px;
     font-size: 14px;
     font-family: 'DM Mono', monospace;
     box-sizing: border-box;
-    transition: border-color 0.15s;
+    transition: border-color 0.15s, box-shadow 0.15s;
+    background-color: #FFFFFF;
+    color: #0F172A;
   }
 
   .form-input:focus {
     outline: none;
-    border-color: #6E2219;
-    box-shadow: 0 0 0 3px rgba(110, 34, 25, 0.15);
+    border-color: #0F172A;
+    box-shadow: 0 0 0 3px rgba(15, 23, 42, 0.08);
   }
 
   .field-hint {
@@ -155,12 +157,12 @@ if (isAdminAuthenticated(Astro.cookies)) {
   }
 
   .field-hint strong {
-    color: #6E2219;
+    color: #0F172A;
   }
 
   .login-error {
-    background: #FEE2E2;
-    border: 1px solid #F87171;
+    background: #FEF2F2;
+    border: 1px solid #FCA5A5;
     color: #991B1B;
     padding: 10px 14px;
     border-radius: 8px;
@@ -170,22 +172,24 @@ if (isAdminAuthenticated(Astro.cookies)) {
 
   .btn-gold-submit {
     width: 100%;
-    padding: 12px;
-    font-size: 14px;
+    padding: 11px 16px;
+    font-size: 13.5px;
     font-weight: 600;
     color: #FFFFFF;
-    background-color: #6E2219;
+    background-color: #0F172A;
     border: none;
     border-radius: 8px;
     cursor: pointer;
-    box-shadow: 0 2px 8px rgba(110, 34, 25, 0.25);
-    transition: background-color 0.2s, transform 0.1s, box-shadow 0.2s;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+    transition: background-color 0.15s ease, transform 0.1s ease;
   }
 
   .btn-gold-submit:hover {
-    background-color: #842A1F;
-    transform: translateY(-1px);
-    box-shadow: 0 4px 14px rgba(110, 34, 25, 0.35);
+    background-color: #1E293B;
+  }
+
+  .btn-gold-submit:active {
+    transform: translateY(1px);
   }
 </style>
 

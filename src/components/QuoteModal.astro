@@ -1,7 +1,9 @@
 ---
-import { getAllProducts } from '../lib/store';
+import { getAllProducts, getAllCategories } from '../lib/store';
 
 const products = await getAllProducts();
+const categories = await getAllCategories();
+const activeCategories = categories.filter(c => c.status !== 'Inactive');
 const whatsappNumber = import.meta.env.COMPANY_WHATSAPP || '917623906747';
 ---
 
@@ -30,14 +32,23 @@ const whatsappNumber = import.meta.env.COMPANY_WHATSAPP || '917623906747';
         <div class="form-grid">
           <!-- Product Selector -->
           <div class="form-group full-width">
-            <label for="inqProduct" class="form-label">Food Absorbent Pad Line *</label>
+            <label for="inqProduct" class="form-label">Food Absorbent Pad Line / Category *</label>
             <select id="inqProduct" name="product_name" class="form-select" required>
-              <option value="">-- Choose One of Our 4 Food Pad Lines --</option>
-              {products.map(p => (
-                <option value={p.name} data-slug={p.slug} data-moq={p.moq || 5000}>
-                  {p.code} — {p.name} (MOQ: {Number(p.moq || 5000).toLocaleString()} pcs)
-                </option>
-              ))}
+              <option value="">-- Choose One of Our Pad Lines / Categories --</option>
+              <optgroup label="Product Lines">
+                {products.map(p => (
+                  <option value={p.name} data-slug={p.slug} data-moq={p.moq || 5000}>
+                    {p.code} — {p.name} (MOQ: {Number(p.moq || 5000).toLocaleString()} pcs)
+                  </option>
+                ))}
+              </optgroup>
+              <optgroup label="Product Categories">
+                {activeCategories.map(c => (
+                  <option value={c.name} data-slug={c.slug} data-moq={5000}>
+                    {c.name} (Category Specification)
+                  </option>
+                ))}
+              </optgroup>
             </select>
           </div>
 
