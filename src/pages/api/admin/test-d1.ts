@@ -1,6 +1,6 @@
 import type { APIRoute } from 'astro';
 import { isAdminAuthenticated } from '../../../lib/auth';
-import { isD1Configured, executeD1Query, getD1Config } from '../../../lib/d1';
+import { isD1Configured, executeD1Query, getD1Config, getNativeD1Binding } from '../../../lib/d1';
 
 export const prerender = false;
 
@@ -12,12 +12,14 @@ export const POST: APIRoute = async ({ cookies }) => {
     });
   }
 
+  const nativeDB = await getNativeD1Binding();
   const config = getD1Config();
+  const configured = Boolean(nativeDB) || isD1Configured();
 
-  if (!isD1Configured()) {
+  if (!configured) {
     return new Response(JSON.stringify({
       ok: false,
-      error: 'Missing credentials in .env. Please check CLOUDFLARE_ACCOUNT_ID, CLOUDFLARE_DATABASE_ID, and CLOUDFLARE_API_TOKEN.',
+      error: 'Cloudflare D1 is not configured. Please check database binding in wrangler.toml or environment variables.',
       config: {
         accountId: config.accountId ? 'Present' : 'Missing',
         databaseId: config.databaseId ? 'Present' : 'Missing',
@@ -47,11 +49,12 @@ export const POST: APIRoute = async ({ cookies }) => {
     return new Response(JSON.stringify({
       ok: true,
       message: 'Cloudflare D1 connected successfully!',
+      mode: nativeDB ? 'Native Cloudflare Binding' : 'Cloudflare REST API',
       tableExists,
       rowCount,
       note: tableExists 
         ? `Table 'inquiries' is ready with ${rowCount} existing records.` 
-        : `Table 'inquiries' does not exist yet. Please run the CREATE TABLE query in your Cloudflare D1 console.`
+        : `Table 'inquiries' does not exist yet. Click 'Test & Sync D1 Tables' to initialize.`
     }), {
       status: 200,
       headers: { 'Content-Type': 'application/json' }

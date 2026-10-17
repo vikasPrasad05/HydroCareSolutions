@@ -1,6 +1,6 @@
 import type { APIRoute } from 'astro';
 import { isAdminAuthenticated } from '../../../lib/auth';
-import { isD1Configured, initD1Schema, testD1Connection, getD1Config } from '../../../lib/d1';
+import { isD1Configured, initD1Schema, testD1Connection, getD1Config, isCloudflareWorker, getNativeD1Binding } from '../../../lib/d1';
 
 export const prerender = false;
 
@@ -12,16 +12,19 @@ export const POST: APIRoute = async ({ cookies }) => {
     });
   }
 
+  const nativeDB = await getNativeD1Binding();
   const config = getD1Config();
+  const configured = Boolean(nativeDB) || isD1Configured();
 
-  if (!isD1Configured()) {
+  if (!configured) {
     return new Response(JSON.stringify({
       ok: false,
-      error: 'Cloudflare D1 credentials missing in .env.',
+      error: 'Cloudflare D1 is not configured. Please check database binding in wrangler.toml or environment variables.',
       config: {
+        runtime: isCloudflareWorker() ? 'Cloudflare Workers' : 'Local Node.js',
+        nativeBinding: nativeDB ? 'Connected' : 'Not Detected',
         accountId: config.accountId ? 'Configured' : 'Missing',
-        databaseId: config.databaseId ? 'Configured' : 'Missing',
-        apiToken: config.apiToken ? 'Configured' : 'Missing'
+        databaseId: config.databaseId ? 'Configured' : 'Missing'
       }
     }), {
       status: 400,
@@ -48,7 +51,8 @@ export const POST: APIRoute = async ({ cookies }) => {
     return new Response(JSON.stringify({
       ok: initResult.ok,
       message: initResult.message,
-      tables: initResult.tables
+      tables: initResult.tables,
+      mode: nativeDB ? 'Cloudflare Native D1 Binding' : 'Cloudflare REST API'
     }), {
       status: initResult.ok ? 200 : 500,
       headers: { 'Content-Type': 'application/json' }

@@ -1,6 +1,6 @@
 -- ========================================================
 -- CLOUDFLARE D1 DATABASE SCHEMA FOR ABSORBENT PADS ADMIN
--- Database: 1bf21ed6-3bc1-4f77-a4bb-8feab0946044
+-- Database: hydrocare_db (5c0fb0e6-7ae7-4fc0-af41-14992f9b78f4)
 -- ========================================================
 
 -- 1. INQUIRIES TABLE
@@ -82,6 +82,23 @@ CREATE TABLE IF NOT EXISTS offers (
 CREATE TABLE IF NOT EXISTS site_settings (
   key TEXT PRIMARY KEY,
   value TEXT NOT NULL,
+  updated_at TEXT DEFAULT CURRENT_TIMESTAMP
+);
+
+-- 7. BLOGS TABLE
+CREATE TABLE IF NOT EXISTS blogs (
+  id TEXT PRIMARY KEY,
+  title TEXT NOT NULL,
+  slug TEXT NOT NULL UNIQUE,
+  excerpt TEXT,
+  content TEXT,
+  image TEXT,
+  author TEXT DEFAULT 'HydroCare Team',
+  date TEXT,
+  category TEXT,
+  read_time TEXT,
+  is_published INTEGER DEFAULT 1,
+  created_at TEXT DEFAULT CURRENT_TIMESTAMP,
   updated_at TEXT DEFAULT CURRENT_TIMESTAMP
 );
 
